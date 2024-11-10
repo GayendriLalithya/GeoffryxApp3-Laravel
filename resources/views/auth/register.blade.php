@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-md-6 signup-section">
                 <h1>Create a new account</h1>
-                <form action="{{ route('register.submit') }}" method="POST">
+                <form action="{{ route('register') }}" method="POST">
                     @csrf  <!-- CSRF token for security -->
                     <div class="mb-3">
                         <label class="form-label">Full Name</label>
@@ -26,14 +26,15 @@
                         <input type="tel" class="form-control" name="contact_no" required>
                     </div>
 
-                    <!-- <div class="mb-3">
+                    <div class="mb-3">
                         <label class="form-label">User type</label>
-                        <select class="form-control" required>
+                        <select class="form-control" name="user_type" required>
                             <option value="" selected disabled>Select user type</option>
-                            <option value="individual">Individual</option>
-                            <option value="business">Business</option>
+                            <option value="customer">Customer</option>
+                            <option value="admin">Admin</option>
+                            <option value="professional">Professional</option>
                         </select>
-                    </div> -->
+                    </div>
 
                     <div class="mb-3">
                         <label class="form-label">Email</label>
@@ -44,6 +45,16 @@
                         <label class="form-label">Password</label>
                         <div class="password-field">
                             <input type="password" class="form-control" name="password" required>
+                            <span class="password-toggle">
+                                <i class="far fa-eye"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Confirm Password</label>
+                        <div class="password-field">
+                            <input type="password" class="form-control" name="password_confirmation" required>
                             <span class="password-toggle">
                                 <i class="far fa-eye"></i>
                             </span>

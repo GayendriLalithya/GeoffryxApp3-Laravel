@@ -9,7 +9,8 @@
         <div class="row">
             <div class="col-md-6 login-section">
                 <h1>Login to your Account</h1>
-                <form>
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf  <!-- CSRF token for security -->
                     <div class="mb-3">
                         <label class="form-label">Email</label>
                         <input type="email" class="form-control" required>
