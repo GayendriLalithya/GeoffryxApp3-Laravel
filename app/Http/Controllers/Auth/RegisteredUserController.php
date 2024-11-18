@@ -52,7 +52,7 @@ class RegisteredUserController extends Controller
     
         Auth::login($user); // Log the user in
     
-        return redirect(RouteServiceProvider::HOME); // Redirect to a defined route after registration
+        return redirect(RouteServiceProvider::DASHBOARD); // Redirect to a defined route after registration
     }
 
 }

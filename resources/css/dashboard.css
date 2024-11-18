@@ -1,0 +1,101 @@
+:root {
+    --teal: #008080;
+    --light-blue: #e6fbff;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+.sidebar {
+    width: 280px;
+    background: white;
+    min-height: 100vh;
+    padding: 20px;
+    position: fixed;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.logo {
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.logo img {
+    max-width: 170px;
+}
+
+.nav-item {
+    margin-bottom: 10px;
+}
+
+.nav-link {
+    color: #333;
+    padding: 12px 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s;
+}
+
+.nav-link i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+.nav-link.active {
+    background-color: var(--light-blue);
+    color: var(--teal);
+}
+
+.nav-link:hover:not(.active) {
+    background-color: #f8f9fa;
+}
+
+.main-content {
+    margin-left: 280px;
+    padding: 20px;
+}
+
+.top-bar {
+    background: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-details {
+    text-align: right;
+}
+
+.user-name {
+    font-weight: 500;
+    margin: 0;
+}
+
+.user-role {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0;
+}

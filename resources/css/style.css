@@ -10,7 +10,7 @@
 }
 
 .navbar-brand img {
-    height: 70px;
+    height: 80px;
 }
 
 .nav-link {
@@ -24,7 +24,7 @@
     border: 2px solid var(--teal);
     border-radius: 5px;
     padding: 0.5rem 2rem;
-    margin-right: 1rem;
+    margin-left: 1rem;
     font-weight: 500;
 }
 

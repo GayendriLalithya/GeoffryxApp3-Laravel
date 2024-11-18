@@ -29,10 +29,19 @@
                         <a class="nav-link" href="#">Services</a>
                     </li>
                 </ul>
-                <div class="d-flex">
-                    <a href="#" class="btn btn-signup">Sign Up</a>
-                    <a href="#" class="btn btn-login">Login</a>
-                </div>
+                @if (Route::has('login'))
+                    <div class="d-flex">
+                        @auth
+                            <a href="{{ url('/dashboard') }}" class="btn btn-login">Dashboard</a>
+                        @else
+                            <a href="{{ route('login') }}" class="btn btn-login">Log in</a>
+
+                            @if (Route::has('register'))
+                                <a href="{{ route('register') }}" class="btn btn-signup">Sign Up</a>
+                            @endif
+                        @endauth
+                    </div>
+                @endif
             </div>
         </div>
     </nav>

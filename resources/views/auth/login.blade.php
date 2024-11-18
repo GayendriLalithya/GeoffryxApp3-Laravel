@@ -13,13 +13,13 @@
                     @csrf  <!-- CSRF token for security -->
                     <div class="mb-3">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-control" required>
+                        <input type="email" class="form-control" name="email" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Password</label>
                         <div class="password-field">
-                            <input type="password" class="form-control" required>
+                            <input type="password" class="form-control" name="password" required>
                             <span class="password-toggle">
                                 <i class="far fa-eye"></i>
                             </span>
