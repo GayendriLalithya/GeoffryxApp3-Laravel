@@ -26,7 +26,7 @@
                         <input type="tel" class="form-control" name="contact_no" required>
                     </div>
 
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label class="form-label">User type</label>
                         <select class="form-control" name="user_type" required>
                             <option value="" selected disabled>Select user type</option>
@@ -34,6 +34,16 @@
                             <option value="admin">Admin</option>
                             <option value="professional">Professional</option>
                         </select>
+                    </div> -->
+
+                    <div class="mb-3">
+                        <label class="form-label">User type</label>
+                        <select class="form-control" name="user_type" required disabled>
+                            <option value="customer" selected>Customer</option>
+                            <option value="admin">Admin</option>
+                            <option value="professional">Professional</option>
+                        </select>
+                        <input type="hidden" name="user_type" value="customer">
                     </div>
 
                     <div class="mb-3">
@@ -68,7 +78,7 @@
             <div class="col-md-6 login-section">
                 <h2>Already have an account?</h2>
                 <p>Sign In and discover great amount of opportunities</p>
-                <a href="#" class="btn btn-signin">Sign In</a>
+                <a href="{{ route('login') }}" class="btn btn-signin">Sign In</a>
             </div>
         </div>
     </div>

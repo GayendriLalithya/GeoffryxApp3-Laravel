@@ -18,7 +18,7 @@
     
             @switch($userType)
                 @case('admin')
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{ route('admin.request') }}">
                         <i class="fas fa-user-plus"></i> Account Requests
                     </a>
                     <a class="nav-link" href="#">
@@ -83,14 +83,13 @@
         <div class="top-bar">
             <div class="user-info">
                 <div class="user-details">
-                    <p class="user-name">Hi Brian James</p>
-                    <p class="user-role">Administrator</p>
+                    <p class="user-name">Hi {{ Auth::user()->name }}</p>
+                    <p class="user-role">{{ ucfirst(Auth::user()->user_type) }}</p>
                 </div>
                 <img src="user-profile.jpg" alt="Profile">
             </div>
         </div>
-        <!-- Add your main content here -->
-    </div>
+        
 @endsection
 
 @section('custom-js')

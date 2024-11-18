@@ -33,7 +33,7 @@
             <div class="col-md-6 signup-section">
                 <h2>New Here?</h2>
                 <p>Sign Up and discover great amount of opportunities</p>
-                <a href="#" class="btn btn-signup">Sign Up</a>
+                <a href="{{ route('register') }}" class="btn btn-signup">Sign Up</a>
             </div>
         </div>
     </div>
