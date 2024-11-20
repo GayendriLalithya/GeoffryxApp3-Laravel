@@ -23,7 +23,7 @@ Route::get('/dashboard', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('layouts.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -34,5 +34,5 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-// Route definition
-Route::get('/admin/request', [DashboardController::class, 'showRequests'])->name('admin.request');
+// Dashboard Routes
+Route::get('/admin/dashboard', [DashboardController::class, 'showDashboard'])->name('admin.dashboard');

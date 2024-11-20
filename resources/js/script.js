@@ -44,3 +44,41 @@ function toggleRequest(button) {
         button.textContent = 'Close';
     }
 }
+
+// Admin Requests toggle button funcionality to expand request details
+// function toggleRequest(button) {
+//     console.log("Toggle function called");
+//     const card = button.closest('.request-card');
+//     const content = card.querySelector('.request-content');
+//     console.log("Found card:", card);
+//     console.log("Found content:", content);
+    
+//     if (content.classList.contains('active')) {
+//         content.classList.remove('active');
+//         button.textContent = 'View Request';
+//     } else {
+//         // Close all other open requests
+//         document.querySelectorAll('.request-content.active').forEach(item => {
+//             item.classList.remove('active');
+//             item.previousElementSibling.querySelector('.btn-view').textContent = 'View Request';
+//         });
+        
+//         content.classList.add('active');
+//         button.textContent = 'Close';
+//     }
+// }
+
+// document.querySelectorAll('.nav-link').forEach(link => {
+//     link.addEventListener('click', function (event) {
+//         event.preventDefault();
+
+//         const url = this.href;
+
+//         fetch(url)
+//             .then(response => response.text())
+//             .then(html => {
+//                 document.querySelector('.dashboard-content').innerHTML = html;
+//             })
+//             .catch(error => console.error('Error loading tab content:', error));
+//     });
+// });

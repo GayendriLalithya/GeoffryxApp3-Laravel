@@ -1,22 +1,17 @@
-:root {
-    --teal: #008080;
-    --light-blue: #e6fbff;
-}
-
-body {
+/* Dashboard Layout */
+.dashboard-wrapper {
+    display: flex;
     min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f9fa;
 }
 
+/* Sidebar Styles */
 .sidebar {
     width: 280px;
     background: white;
     min-height: 100vh;
     padding: 20px;
-    position: fixed;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    position: fixed;
 }
 
 .logo {
@@ -28,39 +23,34 @@ body {
     max-width: 170px;
 }
 
-.nav-item {
-    margin-bottom: 10px;
-}
-
 .nav-link {
     color: #333;
     padding: 12px 20px;
     border-radius: 5px;
     display: flex;
     align-items: center;
-    transition: all 0.3s;
+    margin-bottom: 8px;
 }
 
 .nav-link i {
-    margin-right: 10px;
     width: 20px;
-    text-align: center;
+    margin-right: 10px;
 }
 
 .nav-link.active {
-    background-color: var(--light-blue);
-    color: var(--teal);
+    background-color: #e6fbff;
+    color: #008080;
 }
 
-.nav-link:hover:not(.active) {
+/* Main Content Area */
+.dashboard-content {
+    flex: 1;
+    margin-left: 280px;
+    padding: 20px;
     background-color: #f8f9fa;
 }
 
-.main-content {
-    margin-left: 280px;
-    padding: 20px;
-}
-
+/* Top Bar */
 .top-bar {
     background: white;
     padding: 15px 30px;
@@ -78,24 +68,30 @@ body {
     gap: 10px;
 }
 
-.user-info img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
 .user-details {
     text-align: right;
 }
 
 .user-name {
-    font-weight: 500;
     margin: 0;
+    font-weight: 500;
 }
 
 .user-role {
     color: #666;
     font-size: 0.9rem;
     margin: 0;
+}
+
+/* Table Styles */
+.table-container {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.action-btn {
+    padding: 4px 12px;
+    font-size: 14px;
 }
