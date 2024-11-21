@@ -8,21 +8,25 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public function showDashboard(Request $request)
-{
-    // Default tab view
-    $tabView = 'partials.admin.request'; // Default to "Account Requests"
-
-    // Dynamically set the tabView if a `tab` query parameter is provided
-    if ($request->has('tab')) {
+    {
+        $defaultTab = 'requests';
         $availableTabs = [
-            'requests' => 'partials.admin.request',
-            'users' => 'partials.admin.user', // Add the "Manage Users" tab
+            'requests' => [
+                'view' => 'partials.admin.request',
+                'css' => 'resources/css/request.css',
+            ],
+            'users' => [
+                'view' => 'partials.admin.user',
+                'css' => 'resources/css/user.css',
+            ],
         ];
-
-        $tabView = $availableTabs[$request->tab] ?? $tabView;
+    
+        $tab = $request->get('tab', $defaultTab);
+        $tabData = $availableTabs[$tab] ?? $availableTabs[$defaultTab];
+    
+        return view('layouts.dashboard', [
+            'tabView' => $tabData['view'],
+            'tabCss' => asset($tabData['css']),
+        ]);
     }
-
-    return view('layouts.dashboard', compact('tabView'));
-}
-
 }

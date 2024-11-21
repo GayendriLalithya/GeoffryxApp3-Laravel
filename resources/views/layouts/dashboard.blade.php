@@ -2,7 +2,9 @@
 
 @section('custom-css')
     <link rel="stylesheet" href="{{ asset('resources/css/dashboard.css') }}">
-    @yield('additional-css')
+    @if (isset($tabCss))
+        <link rel="stylesheet" href="{{ $tabCss }}">
+    @endif
 @endsection
 
 @section('content')
