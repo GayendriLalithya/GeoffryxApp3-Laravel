@@ -104,3 +104,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// JavaScript for handling the modal functionality in Customer Professionals
+function toggleDetails(button) {
+    const details = button.nextElementSibling;
+    const isVisible = details.style.display === 'block';
+    details.style.display = isVisible ? 'none' : 'block';
+    button.textContent = isVisible ? 'View More' : 'View Less'; // Toggle button text based on state
+}

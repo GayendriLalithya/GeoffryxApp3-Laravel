@@ -26,49 +26,58 @@
                     </a>
                     @break
     
-            @case('customer')
-                <a class="nav-link {{ request('tab') == 'users' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'projects']) }}">
-                    <i class="fas fa-project-diagram"></i> Projects
-                </a>
-                <a class="nav-link" href="#">
-                    <i class="fas fa-user-tie"></i> Professionals
-                </a>
-                <a class="nav-link" href="#">
-                    <i class="fas fa-folder"></i> Manage File
-                </a>
-                @break
-    
-            @case('professional')
-                <a class="nav-link {{ request('tab') == 'project_requests' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'project_requests']) }}">
-                    <i class="fas fa-envelope-open-text"></i> Project Requests
-                </a>
-                <a class="nav-link" href="#">
-                    <i class="fas fa-chart-pie"></i> Manage Projects
-                </a>
-                <a class="nav-link" href="#">
-                    <i class="fas fa-history"></i> Work History
-                </a>
-                <a class="nav-link" href="#">
-                    <i class="fas fa-folder"></i> My Files
-                </a>
-                @break
-    
-            @default
+                @case('customer')
+                    <a class="nav-link {{ request('tab') == 'projects' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'projects']) }}">
+                        <i class="fas fa-project-diagram"></i> Projects
+                    </a>
+                    <a class="nav-link {{ request('tab') == 'professional' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'professional']) }}">
+                        <i class="fas fa-user-tie"></i> Professionals
+                    </a>
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-folder"></i> Manage File
+                    </a>
+                    @break
+
+                @case('professional')
+                    <a class="nav-link {{ request('tab') == 'project_requests' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'project_requests']) }}">
+                        <i class="fas fa-envelope-open-text"></i> Project Requests
+                    </a>
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-chart-pie"></i> Manage Projects
+                    </a>
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-history"></i> Work History
+                    </a>
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-folder"></i> My Files
+                    </a>
+                    @break
+
+                @default
                 <a class="nav-link" href="#">No Navigation Available</a>
-        @endswitch
+            @endswitch
 
-        <!-- Common Link - Settings for all users -->
-        <a class="nav-link" href="#">
-            <i class="fas fa-cog"></i> Settings
-        </a>
+            <div class="mt-auto">
+                
+                <!-- Common Link - Settings for all users -->
+                <a class="nav-link" href="#">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
 
-        <!-- Logout Link as a Form -->
-        <form action="{{ route('logout') }}" method="POST" style="display: none;" id="logout-form">
-            @csrf
-        </form>
-        <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
+                <!-- Logout Link as a Form -->
+                <form action="{{ route('logout') }}" method="POST" style="display: none;" id="logout-form">
+                    @csrf
+                </form>
+                <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+
+                <!-- Button to Upgrade to Professional Account -->
+                <a class="nav-link" href="#">
+                    <i class="fas fa-user-graduate"></i> Upgrade Account
+                </a>
+            </div>
+
         </nav>
     </div>
 </div>
