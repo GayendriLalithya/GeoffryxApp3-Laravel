@@ -1,15 +1,14 @@
 :root {
     --teal: #008080;
     --light-blue: #e6fbff;
-    --red: #dc3545;
 }
 
 body {
-    min-height: 100vh;
     background-color: #f8f9fa;
+    min-height: 100vh;
 }
 
-.request-card {
+.project-card {
     background: white;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -17,33 +16,24 @@ body {
     overflow: hidden;
 }
 
-.request-header {
-    padding: 15px 20px;
+.project-header {
+    padding: 20px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-}
-
-.request-user {
-    display: flex;
     align-items: center;
-    gap: 15px;
 }
 
-.request-user img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.user-details h3 {
+.project-title {
     margin: 0;
     font-size: 1.2rem;
 }
 
-.user-details p {
-    margin: 0;
+.project-info {
+    display: flex;
+    gap: 30px;
+}
+
+.project-date, .project-budget {
     color: #666;
 }
 
@@ -55,13 +45,13 @@ body {
     border: none;
 }
 
-.request-content {
+.project-content {
     padding: 20px;
     border-top: 1px solid #eee;
     display: none;
 }
 
-.request-content.active {
+.project-content.active {
     display: block;
 }
 
@@ -69,23 +59,11 @@ body {
     margin-bottom: 20px;
 }
 
-.certificate-preview {
-    max-width: 100%;
-    height: auto;
-    margin: 15px 0;
-}
-
-.id-preview {
-    display: flex;
-    gap: 20px;
-    margin: 15px 0;
-}
-
-.id-card {
-    width: 300px;
-    height: auto;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+.close-btn {
+    float: right;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
 }
 
 .action-buttons {
@@ -96,7 +74,7 @@ body {
 }
 
 .btn-reject {
-    background-color: var(--red);
+    background-color: #dc3545;
     color: white;
     padding: 8px 30px;
     border-radius: 25px;

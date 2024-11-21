@@ -45,40 +45,62 @@ function toggleRequest(button) {
     }
 }
 
-// Admin Requests toggle button funcionality to expand request details
-// function toggleRequest(button) {
-//     console.log("Toggle function called");
-//     const card = button.closest('.request-card');
-//     const content = card.querySelector('.request-content');
-//     console.log("Found card:", card);
-//     console.log("Found content:", content);
+// Professional Project Requests toggle button funcionality
+function toggleProject(button) {
+    const card = button.closest('.project-card');
+    const content = card.querySelector('.project-content');
     
-//     if (content.classList.contains('active')) {
-//         content.classList.remove('active');
-//         button.textContent = 'View Request';
-//     } else {
-//         // Close all other open requests
-//         document.querySelectorAll('.request-content.active').forEach(item => {
-//             item.classList.remove('active');
-//             item.previousElementSibling.querySelector('.btn-view').textContent = 'View Request';
-//         });
+    if (content.classList.contains('active')) {
+        content.classList.remove('active');
+        button.textContent = 'View Project';
+    } else {
+        // Close all other open projects
+        document.querySelectorAll('.project-content.active').forEach(item => {
+            item.classList.remove('active');
+            item.previousElementSibling.querySelector('.btn-view').textContent = 'View Project';
+        });
         
-//         content.classList.add('active');
-//         button.textContent = 'Close';
-//     }
-// }
+        content.classList.add('active');
+        button.textContent = 'Close';
+    }
+}
 
-// document.querySelectorAll('.nav-link').forEach(link => {
-//     link.addEventListener('click', function (event) {
-//         event.preventDefault();
+function closeProject(closeBtn) {
+    const content = closeBtn.closest('.project-content');
+    const button = content.previousElementSibling.querySelector('.btn-view');
+    content.classList.remove('active');
+    button.textContent = 'View Project';
+}
 
-//         const url = this.href;
+// Customer Projects create new projects and view previouse project toggle function
+document.addEventListener('DOMContentLoaded', function() {
+    // New Project button functionality
+    const newProjectBtn = document.querySelector('.new-project-btn');
+    const projectForm = document.querySelector('.project-form');
 
-//         fetch(url)
-//             .then(response => response.text())
-//             .then(html => {
-//                 document.querySelector('.dashboard-content').innerHTML = html;
-//             })
-//             .catch(error => console.error('Error loading tab content:', error));
-//     });
-// });
+    newProjectBtn.addEventListener('click', function() {
+        projectForm.style.display = projectForm.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Close buttons functionality
+    document.querySelectorAll('.close-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const formToClose = this.closest('.project-form, .project-details');
+            if (formToClose) {
+                formToClose.style.display = 'none';
+            }
+        });
+    });
+
+    // View More buttons functionality
+    document.querySelectorAll('.view-more').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const card = this.closest('.project-card');
+            const details = card.querySelector('.project-details');
+            if (details) {
+                details.style.display = details.style.display === 'block' ? 'none' : 'block';
+                this.textContent = details.style.display === 'block' ? 'View Less' : 'View More';
+            }
+        });
+    });
+});

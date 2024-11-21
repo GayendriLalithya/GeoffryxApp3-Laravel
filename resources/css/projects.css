@@ -1,0 +1,143 @@
+:root {
+    --primary-color: #008B8B;
+    --light-bg: #e6fbff;
+}
+
+body {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.dashboard-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    color: #333;
+    text-decoration: none;
+    margin-bottom: 10px;
+    border-radius: 25px;
+}
+
+.menu-item i {
+    margin-right: 10px;
+}
+
+.menu-item.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.new-project-btn {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    background: transparent;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.new-project-btn i {
+    margin-right: 8px;
+}
+
+/* Project Cards */
+.project-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.project-details {
+    display: none;
+    padding: 20px;
+    margin-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.status {
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.status.pending { color: #ffc107; }
+.status.not-started { color: #dc3545; }
+.status.completed { color: #198754; }
+
+.btn-teal {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-teal:hover {
+    background-color: #007272;
+    color: white;
+}
+
+/* Project Form */
+.project-form {
+    display: none;
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close-btn {
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.close-btn {
+    cursor: pointer;
+    float: right;
+    font-size: 1.5rem;
+}
+
+.btn-teal {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 25px;
+}
+
+.btn-teal:hover {
+    background-color: #007272;
+    color: white;
+}

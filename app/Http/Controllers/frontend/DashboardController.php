@@ -19,6 +19,14 @@ class DashboardController extends Controller
                 'view' => 'partials.admin.user',
                 'css' => 'resources/css/user.css',
             ],
+            'project_requests' => [
+                'view' => 'partials.professional.project_request',
+                'css' => 'resources/css/project_request.css',
+            ],
+            'projects' => [
+                'view' => 'partials.customer.projects',
+                'css' => 'resources/css/projects.css',
+            ],
         ];
     
         $tab = $request->get('tab', $defaultTab);

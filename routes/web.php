@@ -35,4 +35,4 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 // Dashboard Routes
-Route::get('/admin/dashboard', [DashboardController::class, 'showDashboard'])->name('admin.dashboard');
+Route::get('/user/dashboard', [DashboardController::class, 'showDashboard'])->name('user.dashboard');
