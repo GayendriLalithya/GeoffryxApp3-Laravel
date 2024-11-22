@@ -31,7 +31,8 @@ body {
 
 .professional-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    /* grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
 }
 
@@ -46,7 +47,8 @@ body {
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    width: 400px;
+    /* width: 400px; */
+    width: 280px;
 }
 
 .professional-image {

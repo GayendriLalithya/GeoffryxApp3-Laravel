@@ -72,10 +72,6 @@
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
 
-                <!-- Button to Upgrade to Professional Account -->
-                <a class="nav-link" href="#">
-                    <i class="fas fa-user-graduate"></i> Upgrade Account
-                </a>
             </div>
 
         </nav>

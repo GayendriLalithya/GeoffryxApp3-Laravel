@@ -8,6 +8,6 @@
             <p class="user-name">Hi {{ Auth::user()->name }}</p>
             <p class="user-role">{{ ucfirst(Auth::user()->user_type) }}</p>
         </div>
-        <img src="#" alt="Profile" width="45" height="45" class="rounded-circle">
+        <img src="{{ asset('resources/images/sample.png') }}" alt="Profile" width="45" height="45" class="rounded-circle">
     </div>
 </div>

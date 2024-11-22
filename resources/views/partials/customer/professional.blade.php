@@ -16,7 +16,7 @@
         <div class="professional-grid">
             <!-- Professional Cards -->
             <div class="professional-card">
-                <img src="path-to-ann-fox.jpg" alt="Ann Fox" class="professional-image">
+                <img src="{{ asset('resources/images/sample.png') }}" alt="Ann Fox" class="professional-image">
                 <div class="professional-name">Ann Fox</div>
                 <div class="professional-title">Charted Architect</div>
                 <button class="view-more-btn" onclick="toggleDetails(this)">View More</button>
@@ -31,5 +31,6 @@
                 </div>
             </div>
             <!-- Repeat similar cards for other professionals -->
+             
         </div>
     </div>
