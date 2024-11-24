@@ -1,7 +1,7 @@
 @extends('main.app')
 
 @section('custom-css')
-    <link rel="stylesheet" href="{{ asset('resources/css/register.css') }}">
+    <link rel="stylesheet" href="{{ asset('resources/css/auth/register.css') }}">
 @endsection
 
 @section('content')

@@ -72,6 +72,35 @@ h1 {
     color: #666;
 }
 
+.form-check-label {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.form-check-input:checked {
+    background-color: var(--teal);
+    border-color: var(--teal);
+}
+
+.forgot-password {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s;
+}
+
+.forgot-password:hover {
+    color: var(--turquoise);
+    text-decoration: underline;
+}
+
+.auth-extras {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
 .btn-signin {
     background-color: var(--teal);
     color: white;
@@ -112,5 +141,11 @@ h1 {
 @media (max-width: 768px) {
     .login-section, .signup-section {
         padding: 40px;
+    }
+    
+    .auth-extras {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
     }
 }

@@ -1,7 +1,7 @@
 @extends('main.app')
 
 @section('custom-css')
-    <link rel="stylesheet" href="{{ asset('resources/css/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('resources/css/auth/login.css') }}">
 @endsection
 
 @section('content')
@@ -25,6 +25,21 @@
                             </span>
                         </div>
                     </div>
+
+                    <!-- Hiding the Remember me and forgot password for now -->
+                    <!-- <div class="auth-extras" style="display: none;">
+                        <div class="form-check">
+                            <label class="form-check-label" for="remember_me">
+                                <input class="form-check-input" id="remember_me" type="checkbox" name="remember">
+                                Remember me
+                            </label>
+                        </div>
+
+                        @if (Route::has('password.request'))
+                            <a href="{{ route('password.request') }}" class="forgot-password">Forgot password?</a>
+                        @endif
+
+                    </div> -->
 
                     <button type="submit" class="btn btn-signin">Sign In</button>
                 </form>
