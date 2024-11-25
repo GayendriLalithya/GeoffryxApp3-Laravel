@@ -6,11 +6,16 @@
 
 @section('content')
     <div class="container-fluid">
+        
         <div class="row">
+
             <div class="col-md-6 login-section">
+
                 <h1>Login to your Account</h1>
+
                 <form method="POST" action="{{ route('login') }}">
                     @csrf  <!-- CSRF token for security -->
+
                     <div class="mb-3">
                         <label class="form-label">Email</label>
                         <input type="email" class="form-control" name="email" required>
@@ -26,8 +31,7 @@
                         </div>
                     </div>
 
-                    <!-- Hiding the Remember me and forgot password for now -->
-                    <!-- <div class="auth-extras" style="display: none;">
+                    <div class="auth-extras">
                         <div class="form-check">
                             <label class="form-check-label" for="remember_me">
                                 <input class="form-check-input" id="remember_me" type="checkbox" name="remember">
@@ -39,7 +43,7 @@
                             <a href="{{ route('password.request') }}" class="forgot-password">Forgot password?</a>
                         @endif
 
-                    </div> -->
+                    </div>
 
                     <button type="submit" class="btn btn-signin">Sign In</button>
                 </form>

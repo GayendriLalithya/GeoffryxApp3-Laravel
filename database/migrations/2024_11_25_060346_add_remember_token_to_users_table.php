@@ -11,28 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id('user_id');
-            $table->string('name');
-            $table->string('contact_no', 15);
-            $table->text('address');
-            $table->string('email', 255)->unique();
-            $table->string('password');
-            $table->enum('user_type', ['professional', 'customer', 'admin'])->default('customer');
+        Schema::table('users', function (Blueprint $table) {
             $table->rememberToken()->after('password');
-            $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
      */
-
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('remember_token');
         });
     }
-
 };
