@@ -225,3 +225,24 @@
 .add-cert-container {
     margin: 20px 0;
 }
+
+/* Notification */
+.notification {
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-top: 10px;
+    display: inline-block;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.notification.success {
+    background-color: #4caf50; /* Green background */
+    color: white; /* White text */
+}
+
+.notification.hidden {
+    opacity: 0;
+    pointer-events: none;
+}

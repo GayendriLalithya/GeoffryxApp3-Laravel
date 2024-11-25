@@ -13,12 +13,15 @@
 
         <p class="text-muted">Ensure your account is using a long random password to stay secure.</p>
 
-        <form>
+        <form method="post" action="{{ route('password.update') }}">
+            @csrf
+            @method('put')
+
             <div class="mb-3">
                 <label class="form-label">Current Password</label>
 
                 <div class="password-field">
-                    <input type="password" class="form-control">
+                    <input id="update_password_current_password" type="password" class="form-control">
                     <span class="password-toggle">
                         <i class="far fa-eye"></i>
                     </span>
@@ -29,7 +32,7 @@
                 <label class="form-label">New Password</label>
 
                 <div class="password-field">
-                    <input type="password" class="form-control">
+                    <input id="update_password_password" type="password" class="form-control">
                     <span class="password-toggle">
                         <i class="far fa-eye"></i>
                     </span>
@@ -40,7 +43,7 @@
                 <label class="form-label">Confirm Password</label>
 
                 <div class="password-field">
-                    <input type="password" class="form-control">
+                    <input id="update_password_password_confirmation" type="password" class="form-control">
                     <span class="password-toggle">
                         <i class="far fa-eye"></i>
                     </span>
@@ -48,6 +51,13 @@
             </div>
             
             <button class="btn btn-teal">Save</button>
+
+            @if (session('status') === 'password-updated')
+                <div id="notification" class="notification success">
+                    {{ __('Saved.') }}
+                </div>
+            @endif
+            
         </form>
 
     </div>

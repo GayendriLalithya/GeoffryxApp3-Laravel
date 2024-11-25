@@ -12,27 +12,27 @@ class DashboardController extends Controller
         $defaultTab = 'requests';
         $availableTabs = [
             'requests' => [
-                'view' => 'partials.admin.request',
+                'view' => 'pages.admin.request',
                 'css' => 'resources/css/request.css',
             ],
             'users' => [
-                'view' => 'partials.admin.user',
+                'view' => 'pages.admin.user',
                 'css' => 'resources/css/user.css',
             ],
             'project_requests' => [
-                'view' => 'partials.professional.project_request',
+                'view' => 'pages.professional.project_request',
                 'css' => 'resources/css/project_request.css',
             ],
             'projects' => [
-                'view' => 'partials.customer.projects',
+                'view' => 'pages.customer.projects',
                 'css' => 'resources/css/projects.css',
             ],
             'professional' => [
-                'view' => 'partials.customer.professional',
+                'view' => 'pages.customer.professional',
                 'css' => 'resources/css/professional.css',
             ],
             'profile' => [
-                'view' => 'partials.common.profile',
+                'view' => 'pages.common.profile',
                 'css' => 'resources/css/profile.css',
             ],
         ];

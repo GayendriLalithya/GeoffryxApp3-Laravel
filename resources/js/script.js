@@ -181,3 +181,13 @@ function handleFile(file, uploadArea, placeholder, removeBtn) {
         reader.readAsDataURL(file);
     }
 }
+
+// Notifications
+document.addEventListener('DOMContentLoaded', () => {
+    const notification = document.getElementById('notification');
+    if (notification) {
+        setTimeout(() => {
+            notification.classList.add('hidden');
+        }, 2000); // 2 seconds
+    }
+});
