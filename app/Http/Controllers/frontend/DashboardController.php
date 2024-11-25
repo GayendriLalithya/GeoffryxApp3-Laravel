@@ -31,6 +31,10 @@ class DashboardController extends Controller
                 'view' => 'partials.customer.professional',
                 'css' => 'resources/css/professional.css',
             ],
+            'profile' => [
+                'view' => 'partials.common.profile',
+                'css' => 'resources/css/profile.css',
+            ],
         ];
     
         $tab = $request->get('tab', $defaultTab);

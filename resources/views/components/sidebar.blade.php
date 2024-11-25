@@ -60,7 +60,7 @@
             <div class="mt-auto">
                 
                 <!-- Common Link - Settings for all users -->
-                <a class="nav-link" href="#">
+                <a class="nav-link {{ request('tab') == 'profile' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'profile']) }}">
                     <i class="fas fa-cog"></i> Settings
                 </a>
 
