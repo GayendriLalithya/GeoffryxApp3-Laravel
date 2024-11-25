@@ -116,48 +116,54 @@ function toggleDetails(button) {
 
 // Profile Js
 // File upload handling
-const uploadArea = document.getElementById('profileUploadArea');
-const fileInput = document.getElementById('profileFileInput');
-const removeBtn = document.getElementById('profileRemoveBtn');
-const placeholder = uploadArea.querySelector('.upload-placeholder');
+const uploadAreas = [
+    { uploadArea: document.getElementById('upload-area-profile-pic'), fileInput: document.getElementById('profileInput'), removeBtn: document.getElementById('profileRemoveBtn') },
+    { uploadArea: document.getElementById('upload-area-nic-front'), fileInput: document.getElementById('nicFrontInput'), removeBtn: document.getElementById('nicFrontRemoveBtn') },
+    { uploadArea: document.getElementById('upload-area-nic-back'), fileInput: document.getElementById('nicBackInput'), removeBtn: document.getElementById('nicBackRemoveBtn') },
+    { uploadArea: document.getElementById('upload-area-cert'), fileInput: document.getElementById('certInput'), removeBtn: document.getElementById('certRemoveBtn') }
+];
 
-uploadArea.addEventListener('click', () => fileInput.click());
+uploadAreas.forEach(({ uploadArea, fileInput, removeBtn }) => {
+    const placeholder = uploadArea.querySelector('.upload-placeholder');
 
-uploadArea.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    uploadArea.classList.add('dragover');
+    uploadArea.addEventListener('click', () => fileInput.click());
+
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length) {
+            handleFile(files[0], uploadArea, placeholder, removeBtn);
+        }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+            handleFile(e.target.files[0], uploadArea, placeholder, removeBtn);
+        }
+    });
+
+    removeBtn.addEventListener('click', () => {
+        fileInput.value = '';
+        placeholder.style.display = 'flex';
+        removeBtn.style.display = 'none';
+        const existingPreview = uploadArea.querySelector('.preview-image');
+        if (existingPreview) {
+            existingPreview.remove();
+        }
+    });
 });
 
-uploadArea.addEventListener('dragleave', () => {
-    uploadArea.classList.remove('dragover');
-});
-
-uploadArea.addEventListener('drop', (e) => {
-    e.preventDefault();
-    uploadArea.classList.remove('dragover');
-    const files = e.dataTransfer.files;
-    if (files.length) {
-        handleFile(files[0]);
-    }
-});
-
-fileInput.addEventListener('change', (e) => {
-    if (e.target.files.length) {
-        handleFile(e.target.files[0]);
-    }
-});
-
-removeBtn.addEventListener('click', () => {
-    fileInput.value = '';
-    placeholder.style.display = 'flex';
-    removeBtn.style.display = 'none';
-    const existingPreview = uploadArea.querySelector('.preview-image');
-    if (existingPreview) {
-        existingPreview.remove();
-    }
-});
-
-function handleFile(file) {
+function handleFile(file, uploadArea, placeholder, removeBtn) {
     if (file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -175,57 +181,3 @@ function handleFile(file) {
         reader.readAsDataURL(file);
     }
 }
-
-// Password toggle functionality
-document.querySelectorAll('.password-toggle').forEach(toggle => {
-    toggle.addEventListener('click', function() {
-        const input = this.previousElementSibling;
-        if (input.type === 'password') {
-            input.type = 'text';
-            this.classList.remove('fa-eye');
-            this.classList.add('fa-eye-slash');
-        } else {
-            input.type = 'password';
-            this.classList.remove('fa-eye-slash');
-            this.classList.add('fa-eye');
-        }
-    });
-});
-
-// Request Professional Account
-// File input handling for NIC and Certificate uploads
-document.querySelectorAll('.file-input-nic, .file-input-cert').forEach(input => {
-    const container = input.closest('.upload-area-nic, .upload-area-cert');
-    const fileNameDisplay = container.querySelector('.file-name');
-    const chooseFileBtn = container.querySelector('.choose-file-btn');
-
-    chooseFileBtn.addEventListener('click', () => input.click());
-
-    input.addEventListener('change', (e) => {
-        if (e.target.files.length) {
-            fileNameDisplay.textContent = e.target.files[0].name;
-        } else {
-            fileNameDisplay.textContent = 'No file chosen';
-        }
-    });
-});
-
-// Remove button functionality
-document.querySelectorAll('.btn-remove').forEach(button => {
-    button.addEventListener('click', () => {
-        const container = button.closest('.nic-upload-box, .mb-4');
-        const fileInput = container.querySelector('.file-input-nic, .file-input-cert');
-        const fileNameDisplay = container.querySelector('.file-name');
-        
-        if (fileInput) {
-            fileInput.value = '';
-            fileNameDisplay.textContent = 'No file chosen';
-        }
-    });
-});
-
-// Add Certifications button functionality
-document.querySelector('.btn-add-cert').addEventListener('click', () => {
-    // Implementation for adding new certificate fields
-    console.log('Add new certificate fields');
-});
