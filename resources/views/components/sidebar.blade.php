@@ -42,7 +42,7 @@
                     <a class="nav-link {{ request('tab') == 'project_requests' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'project_requests']) }}">
                         <i class="fas fa-envelope-open-text"></i> Project Requests
                     </a>
-                    <a class="nav-link" href="#">
+                    <a class="nav-link {{ request('tab') == 'manage_projects' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'manage_projects']) }}">
                         <i class="fas fa-chart-pie"></i> Manage Projects
                     </a>
                     <a class="nav-link" href="#">

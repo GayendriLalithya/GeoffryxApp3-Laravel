@@ -32,4 +32,5 @@
     <script src="{{ asset('resources/js/upload.js') }}"></script>
     <script src="{{ asset('resources/js/modal.js') }}"></script>
     <script src="{{ asset('resources/js/notification.js') }}"></script>
+    <!-- <script src="{{ asset('resources/js/view.js') }}"></script> -->
 @endsection
