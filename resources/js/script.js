@@ -106,12 +106,30 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // JavaScript for handling the modal functionality in Customer Professionals
-function toggleDetails(button) {
-    const details = button.nextElementSibling;
-    const isVisible = details.style.display === 'block';
-    details.style.display = isVisible ? 'none' : 'block';
-    button.textContent = isVisible ? 'View More' : 'View Less'; // Toggle button text based on state
-}
+// function toggleDetails(button) {
+//     const details = button.nextElementSibling;
+//     const isVisible = details.style.display === 'block';
+//     details.style.display = isVisible ? 'none' : 'block';
+//     button.textContent = isVisible ? 'View More' : 'View Less'; // Toggle button text based on state
+// }
+
+document.querySelector('.view-more-btn').addEventListener('click', function() {
+    const modal = new bootstrap.Modal(document.getElementById('architectModal'));
+    modal.show();
+});
+
+document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('click', function() {
+        const content = this.querySelector('.project-content');
+        const icon = this.querySelector('.fas');
+        
+        if (content) {
+            content.style.display = content.style.display === 'none' ? 'block' : 'none';
+            icon.classList.toggle('fa-chevron-up');
+            icon.classList.toggle('fa-chevron-down');
+        }
+    });
+});
 
 
 // Profile Js
@@ -191,3 +209,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2000); // 2 seconds
     }
 });
+

@@ -82,9 +82,89 @@
                                 <label class="form-label">Requirements</label>
                                 <textarea class="form-control" rows="6" readonly>Project requires a modern Mediterranean architectural style with an open floor plan, 4-5 bedrooms, and 3-4 bathrooms per villa, featuring high ceilings and large windows for natural light. Sustainable, eco-friendly materials, local stone, and wood are to be used, along with energy-efficient windows and doors. Each villa will include private swimming pools, landscaped gardens, outdoor living spaces, and a garage for at least two vehicles. Smart home systems, high-speed internet, and solar panels are essential. Environmental considerations include rainwater harvesting and low-water landscaping. Compliance with local building codes, fire, and security alarm installations, and accessibility features are mandatory.</textarea>
                             </div>
-                            <div class="action-buttons">
+                            <!-- <div class="action-buttons">
                                 <button type="button" class="btn btn-teal">View Team</button>
+                            </div> -->
+                            <div class="action-buttons">
+                                <button type="button" class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#teamModal">View Team</button>
                             </div>
+
+                            <!-- Team Members Modal -->
+                            <div class="modal fade" id="teamModal" tabindex="-1">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Sunset Villas</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="modal-card">
+                                                <h5>Team Members</h5>
+                                                <div id="teamList">
+                                                    <div class="mb-3">
+                                                        <label>Charted Architect</label>
+                                                        <input type="text" class="form-control" value="Ann Fox" readonly>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label>Structural Engineer</label>
+                                                        <input type="text" class="form-control" value="Sam Fox" readonly>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label>Contractor</label>
+                                                        <input type="text" class="form-control" value="Thomas Middleton" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <select class="form-select" id="memberType">
+                                                            <option value="">Type</option>
+                                                            <option value="architect">Architect</option>
+                                                            <option value="engineer">Engineer</option>
+                                                            <option value="contractor">Contractor</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" id="memberName" placeholder="Name">
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <button class="btn btn-teal" onclick="addTeamMember()">Add</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-card">
+                                                <h5>WhatsApp Group Link</h5>
+                                                <p>Here is the group link for Sunset Villas Project. Click the link Below to join</p>
+                                                <p class="text-primary">GSJC6A63%&$3HDHBCWH&*($#VG.com</p>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-teal" onclick="showRatingsModal()">Make Payment</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ratings Modal -->
+                            <div class="modal fade" id="ratingsModal" tabindex="-1">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Sunset Villas</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body" id="ratingsContent">
+                                            <!-- Ratings content will be dynamically generated -->
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-teal">Rate Professionals</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </form>
                     </div>
                 </div>

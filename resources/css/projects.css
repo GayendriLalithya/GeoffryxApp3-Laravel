@@ -141,3 +141,26 @@ body {
     background-color: #007272;
     color: white;
 }
+
+/* Modal CSS */
+.modal-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.btn-teal {
+    background-color: #008080;
+    color: white;
+}
+.btn-teal:hover {
+    background-color: #006666;
+    color: white;
+}
+.star-rating {
+    color: #ffd700;
+    font-size: 24px;
+}
+.star-rating .far {
+    color: #ccc;
+}
