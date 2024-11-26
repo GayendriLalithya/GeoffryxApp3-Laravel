@@ -44,6 +44,7 @@
                     </div>
                     <div class="action-buttons">
                         <button type="button" class="btn-reject">Reject Work</button>
+                        <button type="button" class="btn-refer">Refer Work</button>
                         <button type="button" class="btn-accept">Accept Work</button>
                     </div>
                 </form>

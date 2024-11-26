@@ -1,0 +1,64 @@
+.filter-btn {
+    border: none;
+    padding: 8px 24px;
+    border-radius: 4px;
+    background: #f0f0f0;
+    margin-right: 10px;
+}
+
+.filter-btn.active {
+    background: #e1f7f7;
+    color: #008080;
+}
+
+.notification-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.notification-card.unread {
+    border-color: #008080;
+}
+
+.notification-date {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.unread-indicator {
+    width: 10px;
+    height: 10px;
+    background: #008080;
+    border-radius: 50%;
+}
+
+.filters {
+    margin: 20px 0;
+}
+
+.modal-content {
+    border-radius: 12px;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.close-btn {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 4px;
+}

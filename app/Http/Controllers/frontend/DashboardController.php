@@ -35,6 +35,10 @@ class DashboardController extends Controller
                 'view' => 'pages.common.profile',
                 'css' => 'resources/css/profile.css',
             ],
+            'notification' => [
+                'view' => 'pages.common.notification',
+                'css' => 'resources/css/notification.css',
+            ],
         ];
     
         $tab = $request->get('tab', $defaultTab);

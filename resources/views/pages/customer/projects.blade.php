@@ -14,7 +14,7 @@
                 </div>
                 <form>
                     <div class="mb-3">
-                        <label class="form-label">Client Name</label>
+                        <label class="form-label">Project Name</label>
                         <input type="text" class="form-control">
                     </div>
                     <div class="mb-3">
@@ -83,8 +83,7 @@
                                 <textarea class="form-control" rows="6" readonly>Project requires a modern Mediterranean architectural style with an open floor plan, 4-5 bedrooms, and 3-4 bathrooms per villa, featuring high ceilings and large windows for natural light. Sustainable, eco-friendly materials, local stone, and wood are to be used, along with energy-efficient windows and doors. Each villa will include private swimming pools, landscaped gardens, outdoor living spaces, and a garage for at least two vehicles. Smart home systems, high-speed internet, and solar panels are essential. Environmental considerations include rainwater harvesting and low-water landscaping. Compliance with local building codes, fire, and security alarm installations, and accessibility features are mandatory.</textarea>
                             </div>
                             <div class="action-buttons">
-                                <button type="button" class="btn btn-teal">Suggest Professionals</button>
-                                <button type="button" class="btn btn-teal">Find Professionals</button>
+                                <button type="button" class="btn btn-teal">View Team</button>
                             </div>
                         </form>
                     </div>
