@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('profile_picture', function (Blueprint $table) {
             $table->id('profile_picture_id');
-            $table->string('profile_pic');
+            $table->string('profile_pic')->nullable(); // Nullable for default state
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
         
             $table->foreign('user_id')->references('user_id')->on('users');
         });
-        
     }
 
     /**

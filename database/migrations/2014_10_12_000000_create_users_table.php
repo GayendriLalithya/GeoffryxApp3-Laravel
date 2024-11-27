@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email', 255)->unique();
             $table->string('password');
             $table->enum('user_type', ['professional', 'customer', 'admin'])->default('customer');
-            $table->rememberToken()->after('password');
+            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -30,9 +30,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('remember_token');
-        });
+        // Drop the entire 'users' table
+        Schema::dropIfExists('users');
     }
-
 };

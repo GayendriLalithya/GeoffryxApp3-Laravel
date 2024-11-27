@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Models\ProfilePicture;
 
 class RegisteredUserController extends Controller
 {
@@ -38,7 +39,8 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'user_type' => ['required', 'string', 'in:professional,customer,admin'],
         ]);
-    
+
+        // Create user record
         $user = User::create([
             'name' => $request->name,
             'contact_no' => $request->contact_no,
@@ -47,12 +49,17 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'user_type' => $request->user_type,
         ]);
-        
+
+        // Create profile picture record with null value
+        ProfilePicture::create([
+            'user_id' => $user->user_id, // Make sure this is the correct field for user ID
+            'profile_pic' => null,       // Default value is null
+        ]);
+
         event(new Registered($user)); // Trigger registration event
-    
+
         Auth::login($user); // Log the user in
-    
+
         return redirect(RouteServiceProvider::DASHBOARD); // Redirect to a defined route after registration
     }
-
 }

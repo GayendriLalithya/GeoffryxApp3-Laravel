@@ -36,3 +36,12 @@ require __DIR__.'/auth.php';
 
 // Dashboard Routes
 Route::get('/user/dashboard', [DashboardController::class, 'showDashboard'])->name('user.dashboard');
+
+
+use App\Http\Controllers\ProfilePictureController;
+
+Route::post('/profile-picture/upload', [ProfilePictureController::class, 'store'])
+    ->name('profile-picture.store')
+    ->middleware('auth');
+
+// Route::post('/profile-picture', [ProfilePictureController::class, 'store'])->name('profile-picture.store');

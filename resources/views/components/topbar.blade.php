@@ -16,7 +16,21 @@
             <p class="user-role">{{ ucfirst(Auth::user()->user_type) }}</p>
         </div>
 
-        <img src="{{ asset('resources/images/sample.png') }}" alt="Profile" width="45" height="45" class="rounded-circle">
+        @if(Auth::user()->profilePicture && Auth::user()->profilePicture->profile_pic)
+            <img 
+                src="{{ asset('resources/images/profile_pic/' . Auth::user()->profilePicture->profile_pic) }}" 
+                alt="Profile Picture" 
+                width="45" 
+                height="45" 
+                class="rounded-circle profile-pic">
+        @else
+            <img 
+                src="{{ asset('resources/images/sample.png') }}" 
+                alt="Default Profile Picture" 
+                width="45" 
+                height="45" 
+                class="rounded-circle profile-pic">
+        @endif
         
     </div>
 </div>

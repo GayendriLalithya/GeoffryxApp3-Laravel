@@ -139,6 +139,16 @@
     margin: 0;
 }
 
+.profile-pic {
+    object-fit: cover; /* Ensures the image covers the area */
+    width: 45px;       /* Width of the image */
+    height: 45px;      /* Height of the image */
+    border-radius: 50%; /* Ensures the image is a circle */
+    overflow: hidden;   /* Prevents overflow of the image */
+    display: block;     /* Ensures proper alignment */
+}
+
+
 /* Table Styles */
 .table-container {
     background: white;
