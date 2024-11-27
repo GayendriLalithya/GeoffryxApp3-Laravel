@@ -37,14 +37,6 @@
                         <input type="email" class="form-control" value="annfox@example.com" readonly>
                     </div>
                     <div class="form-group">
-                        <label>Certificate Name</label>
-                        <input type="text" class="form-control" value="Construction Trainee Certificate" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label>Certificate</label>
-                        <img src="{{ asset('resources/images/sample.png') }}" class="certificate-preview">
-                    </div>
-                    <div class="form-group">
                         <label>NIC No</label>
                         <input type="text" class="form-control" value="123456789012" readonly>
                     </div>
@@ -55,6 +47,17 @@
                             <img src="{{ asset('resources/images/sample.png') }}" class="id-card">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label>Certificates</label>
+                    </div>
+                    <div class="form-group">
+                        <label>Certificate Name</label>
+                        <input type="text" class="form-control" value="Construction Trainee Certificate" readonly>
+                    </div>
+                    <div class="form-group">
+                        <img src="{{ asset('resources/images/sample.png') }}" class="certificate-preview">
+                    </div>
+                    
                     <div class="action-buttons">
                         <button type="button" class="btn-reject">Reject Request</button>
                         <button type="button" class="btn-accept">Accept Request</button>

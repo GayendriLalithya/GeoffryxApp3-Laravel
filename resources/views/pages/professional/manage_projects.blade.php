@@ -116,3 +116,47 @@
                 </div>
             </div>
         </div>
+
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Get all "View More" buttons
+                const viewMoreButtons = document.querySelectorAll('.btn-view-more');
+                        
+                viewMoreButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        // Find the closest project card and its details section
+                        const projectCard = this.closest('.project-card');
+                        const projectDetails = projectCard.querySelector('.project-details');
+                        
+                        // Toggle the details visibility
+                        if (projectDetails.style.display === 'none' || !projectDetails.style.display) {
+                            projectDetails.style.display = 'block';
+                            this.textContent = 'View Less';
+                        } else {
+                            projectDetails.style.display = 'none';
+                            this.textContent = 'View More';
+                        }
+                    });
+                });
+            
+                // Initialize Bootstrap modals
+                const teamModal = new bootstrap.Modal(document.getElementById('teamModal'));
+                
+                // Add click event for team modal button
+                const teamModalButtons = document.querySelectorAll('[data-bs-target="#teamModal"]');
+                teamModalButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        teamModal.show();
+                    });
+                });
+            
+                // Add click event for modal close buttons
+                const modalCloseButtons = document.querySelectorAll('[data-bs-dismiss="modal"]');
+                modalCloseButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        teamModal.hide();
+                    });
+                });
+            });
+        </script>
