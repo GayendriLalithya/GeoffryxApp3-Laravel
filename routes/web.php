@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\DashboardController;
+use App\Http\Controllers\ProfilePictureController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,11 +39,6 @@ require __DIR__.'/auth.php';
 // Dashboard Routes
 Route::get('/user/dashboard', [DashboardController::class, 'showDashboard'])->name('user.dashboard');
 
-
-use App\Http\Controllers\ProfilePictureController;
-
 Route::post('/profile-picture/upload', [ProfilePictureController::class, 'store'])
     ->name('profile-picture.store')
     ->middleware('auth');
-
-// Route::post('/profile-picture', [ProfilePictureController::class, 'store'])->name('profile-picture.store');

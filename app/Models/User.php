@@ -10,34 +10,38 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use Notifiable;
 
+    // Specify the primary key
     protected $primaryKey = 'user_id';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'name',
-        'contact_no', 
-        'address', 
+        'name', 
         'email', 
-        'password', 
+        'contact_no', 
+        'address',
+        'password',
         'user_type'
     ];
 
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password', 
+        'remember_token'
     ];
-
-    // public function profilePicture()
-    // {
-    //     return $this->hasOne(ProfilePicture::class, 'user_id', 'id');
-    // }
 
     public function profilePicture()
     {
         return $this->hasOne(ProfilePicture::class, 'user_id');
     }
-
-
 }
 

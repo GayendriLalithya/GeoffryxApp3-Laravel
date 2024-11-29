@@ -117,7 +117,7 @@
             </div>
         </div>
 
-
+        <!-- Because of the JS conflicts, had to include the js code -->
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 // Get all "View More" buttons
