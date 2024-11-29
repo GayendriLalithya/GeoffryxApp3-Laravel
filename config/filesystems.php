@@ -36,10 +36,10 @@ return [
             'throw' => false,
         ],
 
-        'resources' => [
-            'driver' => 'local',
-            'root' => resource_path(''),
-        ],
+        // 'resources' => [
+        //     'driver' => 'local',
+        //     'root' => resource_path(''),
+        // ],
 
         'public' => [
             'driver' => 'local',

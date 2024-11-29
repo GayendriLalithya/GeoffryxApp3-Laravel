@@ -5,38 +5,80 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ProfilePicture;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class ProfilePictureController extends Controller
 {
+    /**
+     * Store or update the profile picture.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
-        // Validate the incoming request
-        $request->validate([
-            'profile_pic' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
         // Get the logged-in user's ID
         $userId = Auth::id();
 
         // Find the existing profile picture record for the user
         $profilePicture = ProfilePicture::where('user_id', $userId)->first();
 
-        if ($profilePicture) {
-            // Handle file upload
-            if ($request->hasFile('profile_pic')) {
-                $file = $request->file('profile_pic');
-                $filename = time() . '_' . $file->getClientOriginalName();
-
-                // Save the file to the resources/images/profile_pic directory
-                $file->storeAs('images/profile_pic', $filename, 'resources');
-
-                // Update the profile_pic column in the database
-                $profilePicture->update(['profile_pic' => $filename]);
-            }
-
-            return redirect()->back()->with('success', 'Profile picture updated successfully.');
+        // If no profile picture record exists, create a new one
+        if (!$profilePicture) {
+            $profilePicture = new ProfilePicture();
+            $profilePicture->user_id = $userId;
         }
 
-        return redirect()->back()->with('error', 'Profile picture record not found.');
+        // If no file is uploaded and we want to remove the existing profile picture
+        if (!$request->hasFile('profile_pic')) {
+            if ($profilePicture->profile_pic) {
+                // Delete the old image if it exists
+                $this->deleteOldImage($profilePicture->profile_pic);
+                // Remove profile picture from the database
+                $profilePicture->profile_pic = null;
+                $profilePicture->save();
+            }
+            return redirect()->back()->with('success', 'Profile picture removed successfully.');
+        }
+
+        // Validate the uploaded file
+        $request->validate([
+            'profile_pic' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Handle the file upload
+        $file = $request->file('profile_pic');
+        $filename = time() . '_' . $file->getClientOriginalName();
+
+        // Optionally, delete the old image from storage if it exists
+        if ($profilePicture->profile_pic) {
+            $this->deleteOldImage($profilePicture->profile_pic);
+        }
+
+        // Store the new image
+        $file->storeAs('images/profile_pic', $filename, 'public');  // Store it publicly
+
+        // Update the profile_pic column in the database
+        $profilePicture->profile_pic = $filename;
+        $profilePicture->save();
+
+        return redirect()->back()->with('success', 'Profile picture updated successfully.');
+    }
+
+    /**
+     * Delete the old image from storage.
+     *
+     * @param string $filename
+     * @return void
+     */
+    protected function deleteOldImage($filename)
+    {
+        $oldImagePath = storage_path('app/public/images/profile_pic/' . $filename);
+
+        // Check if the old image exists and delete it
+        if (File::exists($oldImagePath)) {
+            File::delete($oldImagePath);
+        }
     }
 }

@@ -28,10 +28,16 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    // public function profilePicture()
+    // {
+    //     return $this->hasOne(ProfilePicture::class, 'user_id', 'id');
+    // }
+
     public function profilePicture()
     {
-        return $this->hasOne(ProfilePicture::class, 'user_id', 'id');
+        return $this->hasOne(ProfilePicture::class, 'user_id');
     }
+
 
 }
 

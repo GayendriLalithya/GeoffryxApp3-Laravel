@@ -10,8 +10,10 @@ const uploadAreas = [
 uploadAreas.forEach(({ uploadArea, fileInput, removeBtn }) => {
     const placeholder = uploadArea.querySelector('.upload-placeholder');
 
+    // Click to open the file input dialog
     uploadArea.addEventListener('click', () => fileInput.click());
 
+    // Drag and Drop functionality
     uploadArea.addEventListener('dragover', (e) => {
         e.preventDefault();
         uploadArea.classList.add('dragover');
@@ -30,40 +32,76 @@ uploadAreas.forEach(({ uploadArea, fileInput, removeBtn }) => {
         }
     });
 
+    // File input change handler
     fileInput.addEventListener('change', (e) => {
         if (e.target.files.length) {
             handleFile(e.target.files[0], uploadArea, placeholder, removeBtn);
         }
     });
 
+    // Remove file handler
     removeBtn.addEventListener('click', () => {
         fileInput.value = '';
-        placeholder.style.display = 'flex';
-        removeBtn.style.display = 'none';
-        const existingPreview = uploadArea.querySelector('.preview-image');
-        if (existingPreview) {
-            existingPreview.remove();
-        }
+        resetPreview(uploadArea, placeholder, removeBtn);
     });
+
+    // Check if there is an image already loaded (on page load)
+    checkImageChosen(uploadArea, fileInput, removeBtn, placeholder);
 });
 
+// Function to handle file (show image preview)
 function handleFile(file, uploadArea, placeholder, removeBtn) {
     if (file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = (e) => {
+            // Hide the placeholder
             placeholder.style.display = 'none';
+
+            // Remove any existing preview image
             const existingPreview = uploadArea.querySelector('.preview-image');
             if (existingPreview) {
                 existingPreview.remove();
             }
+
+            // Create a new image preview
             const img = document.createElement('img');
             img.src = e.target.result;
             img.classList.add('preview-image');
             uploadArea.appendChild(img);
+
+            // Show the remove button
             removeBtn.style.display = 'block';
         };
         reader.readAsDataURL(file);
     }
+}
+
+// Function to check if an image is chosen
+function checkImageChosen(uploadArea, fileInput, removeBtn, placeholder) {
+    const existingPreview = uploadArea.querySelector('.preview-image');
+    if (existingPreview) {
+        // Image exists, so show the remove button
+        removeBtn.style.display = 'block';
+        placeholder.style.display = 'none';
+    } else if (fileInput.value) {
+        // If there's a file selected (without drag-drop), show the remove button
+        removeBtn.style.display = 'block';
+        placeholder.style.display = 'none';
+    } else {
+        // No image and no file selected
+        removeBtn.style.display = 'none';
+        placeholder.style.display = 'flex';
+    }
+}
+
+// Function to reset the preview and remove button
+function resetPreview(uploadArea, placeholder, removeBtn) {
+    const existingPreview = uploadArea.querySelector('.preview-image');
+    if (existingPreview) {
+        existingPreview.remove();
+    }
+    placeholder.style.display = 'flex'; // Show placeholder again
+    removeBtn.style.display = 'none'; // Hide remove button
 }
 
 // Notifications
@@ -75,4 +113,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2000); // 2 seconds
     }
 });
-

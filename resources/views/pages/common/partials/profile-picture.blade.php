@@ -11,17 +11,31 @@
     
         <div class="card-body">
     
-            <p class="text-muted">Upload a photo and make it your profile picture.</p>
+            <p class="text-muted">Upload a photo and make it your profile picture. <b>Also you can remove the profile picture by saving the blank field.</b></p>
     
             <form action="{{ route('profile-picture.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
     
                 <div class="upload-area" id="upload-area-profile-pic">
-                    <div class="upload-placeholder">
-                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                        <div class="upload-text">Click or drag files to upload</div>
-                    </div>
+                    @php
+                        $profilePicture = auth()->user()->profilePicture;
+                    @endphp
+
+                    @if ($profilePicture && $profilePicture->profile_pic)
+                        <!-- Display the profile picture -->
+                        <div class="preview-image-container">
+                            <img src="{{ asset('public/storage/images/profile_pic/' . $profilePicture->profile_pic) }}" class="preview-image" id="profile-image">
+                        </div>
+                    @else
+                        <!-- Show placeholder if no image exists -->
+                        <div class="upload-placeholder">
+                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                            <div class="upload-text">Click or drag files to upload</div>
+                        </div>
+                    @endif
+
                 </div>
+
     
                 <input type="file" name="profile_pic" class="file-input" id="profileInput" accept="image/*">
     
