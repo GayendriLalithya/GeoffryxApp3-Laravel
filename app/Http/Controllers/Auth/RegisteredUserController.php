@@ -48,6 +48,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'user_type' => $request->user_type,
+            'deleted' => false, // Set deleted to false by default
         ]);
 
         // Create profile picture record with null value

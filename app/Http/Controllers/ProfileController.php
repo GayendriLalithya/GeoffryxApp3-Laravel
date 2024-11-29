@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 
 class ProfileController extends Controller
 {
@@ -53,7 +54,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Delete the user's account.
+     * Mark the user's account as deleted (soft delete).
      */
     public function destroy(Request $request): RedirectResponse
     {
@@ -63,13 +64,24 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
+        // Check if the user is already deleted
+        if ($user->deleted) {
+            return redirect()->back()->with('status', 'account-already-deleted');
+        }
+
+        // Mark the user as deleted (soft delete)
+        $user->update([
+            'deleted' => true
+        ]);
+
+        // Log the user out
         Auth::logout();
 
-        $user->delete();
-
+        // Invalidate the session and regenerate the token
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        // Redirect to home page or login page after account deletion
+        return redirect('/');
     }
 }

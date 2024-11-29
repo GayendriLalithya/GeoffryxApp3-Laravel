@@ -17,7 +17,7 @@
     </div>
 
     <!-- Delete Account Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1">
+    <div name="confirm-user-deletion" class="modal fade" id="deleteModal" tabindex="-1">
 
         <div class="modal-dialog">
 
@@ -40,7 +40,7 @@
                         <br>
 
                         <div class="password-field">
-                            <input type="password" id="password" class="form-control" placeholder="Password">
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Password">
                             <span class="password-toggle">
                                 <i class="far fa-eye"></i>
                             </span>
@@ -51,7 +51,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-danger">Delete Account</button>
+                        <button type="submit" class="btn btn-danger">Delete Account</button>
                     </div>
 
                 </form>

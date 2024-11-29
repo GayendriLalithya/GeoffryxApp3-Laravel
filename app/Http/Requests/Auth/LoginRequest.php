@@ -41,11 +41,25 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        // Attempt to authenticate the user using email and password
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
+            ]);
+        }
+
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Check if the user is marked as deleted (deleted == 1)
+        if ($user->deleted) {
+            // If the user is deleted, log them out and throw a validation exception
+            Auth::logout();
+
+            throw ValidationException::withMessages([
+                'email' => 'Your account has been deleted.',
             ]);
         }
 

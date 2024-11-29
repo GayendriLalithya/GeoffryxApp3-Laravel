@@ -26,7 +26,8 @@ class User extends Authenticatable
         'contact_no', 
         'address',
         'password',
-        'user_type'
+        'user_type',
+        'deleted',  // Added deleted to the fillable attributes
     ];
 
     /**
@@ -39,9 +40,27 @@ class User extends Authenticatable
         'remember_token'
     ];
 
+    /**
+     * Get the profile picture associated with the user.
+     */
     public function profilePicture()
     {
         return $this->hasOne(ProfilePicture::class, 'user_id');
     }
-}
 
+    /**
+     * Local scope to get non-deleted users.
+     */
+    public function scopeNotDeleted($query)
+    {
+        return $query->where('deleted', false);
+    }
+
+    /**
+     * Scope to get deleted users.
+     */
+    public function scopeOnlyDeleted($query)
+    {
+        return $query->where('deleted', true);
+    }
+}
