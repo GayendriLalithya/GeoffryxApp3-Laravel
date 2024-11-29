@@ -21,7 +21,7 @@
                 <label class="form-label">Current Password</label>
 
                 <div class="password-field">
-                    <input id="update_password_current_password" type="password" class="form-control">
+                    <input id="update_password_current_password" name="current_password" type="password" class="form-control">
                     <span class="password-toggle">
                         <i class="far fa-eye"></i>
                     </span>
@@ -32,7 +32,7 @@
                 <label class="form-label">New Password</label>
 
                 <div class="password-field">
-                    <input id="update_password_password" type="password" class="form-control">
+                    <input id="update_password_password" name="password" type="password" class="form-control">
                     <span class="password-toggle">
                         <i class="far fa-eye"></i>
                     </span>
@@ -43,7 +43,7 @@
                 <label class="form-label">Confirm Password</label>
 
                 <div class="password-field">
-                    <input id="update_password_password_confirmation" type="password" class="form-control">
+                    <input id="update_password_password_confirmation" name="password_confirmation" type="password" class="form-control">
                     <span class="password-toggle">
                         <i class="far fa-eye"></i>
                     </span>
