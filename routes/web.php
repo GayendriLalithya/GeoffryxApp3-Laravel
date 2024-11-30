@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\DashboardController;
 use App\Http\Controllers\ProfilePictureController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfessionalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,3 +43,7 @@ Route::get('/user/dashboard', [DashboardController::class, 'showDashboard'])->na
 Route::post('/profile-picture/upload', [ProfilePictureController::class, 'store'])
     ->name('profile-picture.store')
     ->middleware('auth');
+
+// User - Professional Acccount Request
+Route::post('/request-verification', [ProfessionalController::class, 'requestVerification'])->name('requestVerification');
+
