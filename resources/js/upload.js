@@ -1,15 +1,21 @@
 // Profile Js
-// File upload handling
+// Modular File upload handling
+
 const uploadAreas = [
-    { uploadArea: document.getElementById('upload-area-profile-pic'), fileInput: document.getElementById('profileInput'), removeBtn: document.getElementById('profileRemoveBtn') },
-    { uploadArea: document.getElementById('upload-area-nic-front'), fileInput: document.getElementById('nicFrontInput'), removeBtn: document.getElementById('nicFrontRemoveBtn') },
-    { uploadArea: document.getElementById('upload-area-nic-back'), fileInput: document.getElementById('nicBackInput'), removeBtn: document.getElementById('nicBackRemoveBtn') },
-    { uploadArea: document.getElementById('upload-area-cert'), fileInput: document.getElementById('certInput'), removeBtn: document.getElementById('certRemoveBtn') }
+    {
+        uploadArea: document.getElementById('upload-area-profile-pic'),
+        fileInput: document.getElementById('profileInput'),
+        removeBtn: document.getElementById('profileRemoveBtn'),
+        placeholder: document.getElementById('profilePlaceholder') // Add this placeholder if missing in HTML
+    }
 ];
 
-uploadAreas.forEach(({ uploadArea, fileInput, removeBtn }) => {
-    const placeholder = uploadArea.querySelector('.upload-placeholder');
+uploadAreas.forEach(({ uploadArea, fileInput, removeBtn, placeholder }) => {
+    initFileUpload(uploadArea, fileInput, removeBtn, placeholder);
+});
 
+// Initialize File Upload Logic for each area
+function initFileUpload(uploadArea, fileInput, removeBtn, placeholder) {
     // Click to open the file input dialog
     uploadArea.addEventListener('click', () => fileInput.click());
 
@@ -47,7 +53,7 @@ uploadAreas.forEach(({ uploadArea, fileInput, removeBtn }) => {
 
     // Check if there is an image already loaded (on page load)
     checkImageChosen(uploadArea, fileInput, removeBtn, placeholder);
-});
+}
 
 // Function to handle file (show image preview)
 function handleFile(file, uploadArea, placeholder, removeBtn) {
@@ -76,7 +82,7 @@ function handleFile(file, uploadArea, placeholder, removeBtn) {
     }
 }
 
-// Function to check if an image is chosen
+// Function to check if an image is already chosen
 function checkImageChosen(uploadArea, fileInput, removeBtn, placeholder) {
     const existingPreview = uploadArea.querySelector('.preview-image');
     if (existingPreview) {
@@ -113,3 +119,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2000); // 2 seconds
     }
 });
+
+// Other Upload areas

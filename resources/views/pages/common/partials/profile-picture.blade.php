@@ -28,7 +28,7 @@
                         </div>
                     @else
                         <!-- Show placeholder if no image exists -->
-                        <div class="upload-placeholder">
+                        <div class="upload-placeholder" id="profilePlaceholder">
                             <i class="fas fa-cloud-upload-alt upload-icon"></i>
                             <div class="upload-text">Click or drag files to upload</div>
                         </div>

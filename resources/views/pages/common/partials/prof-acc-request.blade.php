@@ -13,8 +13,12 @@
                             </div>
             
                             <div class="mb-3">
-                                <label class="form-label">Professional Type</label>
-                                <input type="text" class="form-control">
+                                <label class="form-label">User type</label>
+                                <select class="form-control" name="professional_type" required>
+                                    <option value="charted_architect" selected>Charted Architect</option>
+                                    <option value="structural_engineer">Structural Engineer</option>
+                                    <option value="contractorl">Contractor</option>
+                                </select>
                             </div>
             
                             <div class="mb-3">
@@ -44,7 +48,7 @@
                                             
                                             <!-- <p class="nic-label">NIC Front</p> -->
                                             
-                                            <div class="upload-placeholder">
+                                            <div class="upload-placeholder" id="nicFrontPlaceholder">
                                                 <i class="fas fa-cloud-upload-alt upload-icon"></i>
                                                 <div class="upload-text">Click or drag files to upload</div>
                                             </div>
@@ -67,7 +71,7 @@
 
                                             <!-- <p class="nic-label">NIC Back</p> -->
                                             
-                                            <div class="upload-placeholder">
+                                            <div class="upload-placeholder" id="nicBackPlaceholder">
                                                 <i class="fas fa-cloud-upload-alt upload-icon"></i>
                                                 <div class="upload-text">Click or drag files to upload</div>
                                             </div>
@@ -98,7 +102,7 @@
 
                                     <div class="upload-area" id="upload-area-cert">
 
-                                        <div class="upload-placeholder">
+                                        <div class="upload-placeholder" id="certPlaceholder">
                                             <i class="fas fa-cloud-upload-alt upload-icon"></i>
                                             <div class="upload-text">Click or drag files to upload</div>
                                         </div>
@@ -118,7 +122,7 @@
             
                             <div class="add-cert-container">
                                 <button type="button" class="btn-add-cert">
-                                    + Add Certifications
+                                    + Add More Certifications
                                 </button>
                             </div>
             
@@ -129,3 +133,6 @@
                     </div>
                 </div>
             </div>
+          
+            <script src="{{ asset('resources/js/certificate.js') }}"></script>
+            <script src="{{ asset('resources/js/req_upload.js') }}"></script>
