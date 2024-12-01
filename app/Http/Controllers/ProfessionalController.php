@@ -75,11 +75,12 @@ class ProfessionalController extends Controller
     {
         // Generate a unique filename
         $filename = time() . '_' . $file->getClientOriginalName();
-
-        // Store the file and get the relative path
-        $file->storeAs('public/' . $folder, $filename);
-
-        // Return the path to be stored in the database
-        return $folder . '/' . $filename;
+    
+        // Store the file in the public directory (using 'public' disk)
+        $file->storeAs('images/' . $folder, $filename, 'public');
+    
+        // Return the relative path to be stored in the database
+        return 'images/' . $folder . '/' . $filename;
     }
+
 }

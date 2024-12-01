@@ -48,8 +48,8 @@
                     <div class="form-group">
                         <label>NIC</label>
                         <div class="id-preview">
-                            <img src="{{ asset('public/storage/images/' . $verify->nic_front) }}" class="id-card" alt="NIC Front">
-                            <img src="{{ asset('public/storage/images/' . $verify->nic_back) }}" class="id-card" alt="NIC Back">
+                            <img src="{{ asset('public/storage/' . $verify->nic_front) }}" class="id-card" alt="NIC Front">
+                            <img src="{{ asset('public/storage/' . $verify->nic_back) }}" class="id-card" alt="NIC Back">
                         </div>
                     </div>
                     <div class="form-group">
