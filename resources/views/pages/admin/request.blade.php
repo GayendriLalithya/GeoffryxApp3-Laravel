@@ -1,18 +1,23 @@
 @section('additional-css')
     <link rel="stylesheet" href="{{ asset('resources/css/request.css') }}">
 @endsection
+@php
+    use App\Models\VerifyRequest;
+    
+    // Directly query and set the verifications variable
+    $verifications = VerifyRequest::all();
+@endphp
 
-
-    <!-- Request Cards -->
-    <div class="requests-container">
-        <!-- Ann Fox -->
+<!-- Request Cards -->
+<div class="requests-container">
+    @forelse ($verifications as $verify) <!-- $verifications is plural -->
         <div class="request-card">
             <div class="request-header">
                 <div class="request-user">
-                    <img src="{{ asset('resources/images/sample.png') }}" alt="Ann Fox">
+                    <img src="{{ asset('public/storage/images/profile_pic/' . $verify->profile_pic ?? 'resources/images/sample.png') }}" alt="{{ $verify->user->name }}">
                     <div class="user-details">
-                        <h3>Ann Fox</h3>
-                        <p>Charted Architect</p>
+                        <h3>{{ $verify->user->name }}</h3>
+                        <p>{{ $verify->professional_type }}</p>
                     </div>
                 </div>
                 <button class="btn-view" onclick="toggleRequest(this)">View Request</button>
@@ -22,29 +27,29 @@
                 <form>
                     <div class="form-group">
                         <label>Name</label>
-                        <input type="text" class="form-control" value="Ann Fox" readonly>
+                        <input type="text" class="form-control" value="{{ $verify->user->name }}" readonly>
                     </div>
                     <div class="form-group">
                         <label>Address</label>
-                        <input type="text" class="form-control" value="111 Builder's Avenue, Colombo 11" readonly>
+                        <input type="text" class="form-control" value="{{ $verify->user->address }}" readonly>
                     </div>
                     <div class="form-group">
                         <label>Contact No</label>
-                        <input type="text" class="form-control" value="+94 111 111 111" readonly>
+                        <input type="text" class="form-control" value="{{ $verify->user->contact_no }}" readonly>
                     </div>
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="email" class="form-control" value="annfox@example.com" readonly>
+                        <input type="email" class="form-control" value="{{ $verify->user->email }}" readonly>
                     </div>
                     <div class="form-group">
                         <label>NIC No</label>
-                        <input type="text" class="form-control" value="123456789012" readonly>
+                        <input type="text" class="form-control" value="{{ $verify->nic_no }}" readonly>
                     </div>
                     <div class="form-group">
                         <label>NIC</label>
                         <div class="id-preview">
-                            <img src="{{ asset('resources/images/sample.png') }}" class="id-card">
-                            <img src="{{ asset('resources/images/sample.png') }}" class="id-card">
+                            <img src="{{ asset('public/storage/images/' . $verify->nic_front) }}" class="id-card" alt="NIC Front">
+                            <img src="{{ asset('public/storage/images/' . $verify->nic_back) }}" class="id-card" alt="NIC Back">
                         </div>
                     </div>
                     <div class="form-group">
@@ -52,7 +57,7 @@
                     </div>
                     <div class="form-group">
                         <label>Certificate Name</label>
-                        <input type="text" class="form-control" value="Construction Trainee Certificate" readonly>
+                        <input type="text" class="form-control" value="{{ $verify->certificate_name }}" readonly>
                     </div>
                     <div class="form-group">
                         <img src="{{ asset('resources/images/sample.png') }}" class="certificate-preview">
@@ -65,24 +70,5 @@
                 </form>
             </div>
         </div>
-
-        <!-- Repeat similar structure for other users -->
-        <!-- John Doe -->
-        <div class="request-card">
-            <div class="request-header">
-                <div class="request-user">
-                    <img src="{{ asset('resources/images/sample.png') }}" alt="John Doe">
-                    <div class="user-details">
-                        <h3>John Doe</h3>
-                        <p>Structural Engineer</p>
-                    </div>
-                </div>
-                <button class="btn-view" onclick="toggleRequest(this)">View Request</button>
-            </div>
-            <div class="request-content">
-                <!-- Similar form content as Ann Fox -->
-            </div>
-
-        </div>
-        <!-- Add more request cards for Jasmin Smith and Jane Alexander -->
-    </div>
+    @endforeach
+</div>

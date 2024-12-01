@@ -22,6 +22,7 @@ class Verify extends Model
         'nic_front',         // NIC Front Image
         'nic_back',          // NIC Back Image
         'professional_type', // Professional Type (e.g., Chartered Architect)
+        'status', // Added status
     ];
 
     // Relationship with the User model

@@ -18,9 +18,9 @@
                 <div class="mb-3">
                     <label class="form-label">User type</label>
                     <select class="form-control" name="professional_type" required>
-                        <option value="charted_architect">Charted Architect</option>
-                        <option value="structural_engineer">Structural Engineer</option>
-                        <option value="contractor">Contractor</option> <!-- Fixed typo here -->
+                        <option value="Charted Architect">Charted Architect</option>
+                        <option value="Structural Engineer">Structural Engineer</option>
+                        <option value="Contractor">Contractor</option> <!-- Fixed typo here -->
                     </select>
                 </div>
 

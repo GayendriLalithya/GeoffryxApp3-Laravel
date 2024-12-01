@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             <div class="mb-3">
                 <label class="form-label">Certificate Name</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="certificate_name[]">
             </div>
 
             <div class="certificate-upload-container">
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
 
-                <input type="file" class="file-input-cert" id="${inputId}" accept="image/*">
+                <input type="file" class="file-input-cert" id="${inputId}" name="certificates[]" accept="image/*">
 
                 <div class="d-flex gap-2">
                     <button type="button" class="remove-btn" id="${removeBtnId}" style="display: none;">Remove File</button>

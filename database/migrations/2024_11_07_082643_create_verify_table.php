@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('verify', function (Blueprint $table) {
             $table->id('verify_id');
-            $table->unsignedBigInteger('professional_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('nic_no');
             $table->string('nic_front');
             $table->string('nic_back');
-            $table->string('certificate');
             $table->timestamps();
         
-            $table->foreign('professional_id')->references('professional_id')->on('professionals');
+            $table->foreign('user_id')->references('user_id')->on('users');
         });
         
     }

@@ -5,6 +5,8 @@ use App\Http\Controllers\Frontend\DashboardController;
 use App\Http\Controllers\ProfilePictureController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfessionalController;
+// use App\Http\Controllers\PendingRequestsController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -46,4 +48,11 @@ Route::post('/profile-picture/upload', [ProfilePictureController::class, 'store'
 
 // User - Professional Acccount Request
 Route::post('/request-verification', [ProfessionalController::class, 'requestVerification'])->name('requestVerification');
+
+// Admin - Pending Professional Account Requests
+// Route::get('/admin/verify-requests', [PendingRequestsController::class, 'showPendingRequests']);
+
+use App\Http\Controllers\Admin\VerifyController;
+
+Route::get('/admin/requests', [App\Http\Controllers\Admin\VerifyController::class, 'showRequests'])->name('admin.requests');
 

@@ -63,4 +63,34 @@ class User extends Authenticatable
     {
         return $query->where('deleted', true);
     }
+
+    /**
+     * Define the relationship to the Verify model.
+     */
+    public function verifies()
+    {
+        return $this->hasMany(Verify::class, 'user_id');
+    }
+
+    /**
+     * Define the relationship to the Certificate model.
+     * Since the certificates are now related to the verify table, we need to adjust the relationship.
+     */
+    public function certificates()
+    {
+        // Instead of user_id, it uses verify_id to get certificates related to the user through the verify table.
+        return $this->hasManyThrough(Certificate::class, Verify::class, 'user_id', 'verify_id');
+    }
+
+    public function user() { 
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * A user can have many verify requests (This is a new relationship).
+     */
+    public function verifyRequests()
+    {
+        return $this->hasMany(VerifyRequest::class);
+    }
 }

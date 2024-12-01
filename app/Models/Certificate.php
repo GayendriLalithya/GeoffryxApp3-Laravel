@@ -17,14 +17,20 @@ class Certificate extends Model
 
     // Define which fields are mass assignable
     protected $fillable = [
-        'user_id',        // Foreign key to User
-        'certificate_name', // Certificate Name (e.g., Chartered Engineer)
-        'certificate',      // Certificate File Path
+        'verify_id',          // Foreign key to Verify
+        'certificate_name',    // Certificate Name (e.g., Chartered Engineer)
+        'certificate',         // Certificate File Path
     ];
 
-    // Relationship with the User model
+    // Relationship with the Verify model (since verify_id now references verify table)
+    public function verify()
+    {
+        return $this->belongsTo(Verify::class, 'verify_id', 'verify_id');  // Define foreign key & local key
+    }
+
+    // If you still need a relationship with the User model, you can define it like this:
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');  // Define foreign key & local key
+        return $this->belongsTo(User::class, 'verify_id', 'user_id');
     }
 }
