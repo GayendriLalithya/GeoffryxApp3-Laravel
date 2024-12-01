@@ -41,16 +41,21 @@ class ProfileController extends Controller
             'address' => ['nullable', 'string']
         ]);
 
-        // Update the user's profile
-        $user->update([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'contact_no' => $validatedData['contact_no'] ?? $user->contact_no,
-            'address' => $validatedData['address'] ?? $user->address
-        ]);
+        try {
+            // Update the user's profile
+            $user->update([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'contact_no' => $validatedData['contact_no'] ?? $user->contact_no,
+                'address' => $validatedData['address'] ?? $user->address
+            ]);
 
-        // Redirect back with a success message
-        return redirect()->back()->with('status', 'profile-updated');
+            // Flash a success message
+            return redirect()->back()->with('alert-success', 'Profile updated successfully!');
+        } catch (\Exception $e) {
+            // Flash an error message if something goes wrong
+            return redirect()->back()->with('alert-error', 'Failed to update profile. Please try again.');
+        }
     }
 
     /**
@@ -66,22 +71,27 @@ class ProfileController extends Controller
 
         // Check if the user is already deleted
         if ($user->deleted) {
-            return redirect()->back()->with('status', 'account-already-deleted');
+            return redirect()->back()->with('alert-info', 'Your account is already deleted.');
         }
 
-        // Mark the user as deleted (soft delete)
-        $user->update([
-            'deleted' => true
-        ]);
+        try {
+            // Mark the user as deleted (soft delete)
+            $user->update([
+                'deleted' => true
+            ]);
 
-        // Log the user out
-        Auth::logout();
+            // Log the user out
+            Auth::logout();
 
-        // Invalidate the session and regenerate the token
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+            // Invalidate the session and regenerate the token
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
-        // Redirect to home page or login page after account deletion
-        return redirect('/');
+            // Redirect to home page or login page after account deletion
+            return redirect('/')->with('alert-success', 'Your account has been successfully deleted.');
+        } catch (\Exception $e) {
+            // In case of failure, flash an error message
+            return redirect()->back()->with('alert-error', 'There was an error deleting your account. Please try again.');
+        }
     }
 }

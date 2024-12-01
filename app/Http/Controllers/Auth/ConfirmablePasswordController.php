@@ -25,17 +25,25 @@ class ConfirmablePasswordController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // Validate the password using the provided email and password
         if (! Auth::guard('web')->validate([
             'email' => $request->user()->email,
             'password' => $request->password,
         ])) {
-            throw ValidationException::withMessages([
-                'password' => __('auth.password'),
-            ]);
+            // Flash an error message if the password is incorrect
+            session()->flash('alert-error', 'Incorrect password. Please try again.');
+
+            // Redirect back to the confirm password page
+            return back();
         }
 
+        // Store the time of password confirmation
         $request->session()->put('auth.password_confirmed_at', time());
 
+        // Flash a success message that the password was confirmed
+        session()->flash('alert-success', 'Password confirmed successfully!');
+
+        // Redirect to the intended route
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 }

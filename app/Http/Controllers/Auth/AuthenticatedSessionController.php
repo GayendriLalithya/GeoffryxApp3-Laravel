@@ -25,11 +25,22 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        // Attempt to authenticate the user
+        if (Auth::attempt($request->only('email', 'password'))) {
+            // If authentication is successful, regenerate the session and redirect to the dashboard
+            $request->session()->regenerate();
 
-        $request->session()->regenerate();
+            // Flash a success message
+            session()->flash('alert-success', 'Login successful! Welcome back.');
 
-        return redirect()->intended(RouteServiceProvider::DASHBOARD);
+            return redirect()->intended(RouteServiceProvider::DASHBOARD);
+        }
+
+        // Flash an error message if authentication fails
+        session()->flash('alert-error', 'Invalid credentials. Please try again.');
+
+        // Redirect back to the login page
+        return back()->withInput($request->only('email'));
     }
 
     /**
@@ -37,12 +48,19 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // Logout the user
         Auth::guard('web')->logout();
 
+        // Invalidate the session
         $request->session()->invalidate();
 
+        // Regenerate the CSRF token to prevent CSRF attacks
         $request->session()->regenerateToken();
 
+        // Flash a success message that the user has logged out
+        session()->flash('alert-success', 'You have been logged out successfully.');
+
+        // Redirect to the home page
         return redirect('/');
     }
 }

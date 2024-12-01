@@ -39,7 +39,8 @@ class ProfilePictureController extends Controller
                 $profilePicture->profile_pic = null;
                 $profilePicture->save();
             }
-            return redirect()->back()->with('success', 'Profile picture removed successfully.');
+            // Redirect with success alert if the picture is removed
+            return redirect()->back()->with('alert-success', 'Profile picture removed successfully.');
         }
 
         // Validate the uploaded file
@@ -47,23 +48,29 @@ class ProfilePictureController extends Controller
             'profile_pic' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Handle the file upload
-        $file = $request->file('profile_pic');
-        $filename = time() . '_' . $file->getClientOriginalName();
+        try {
+            // Handle the file upload
+            $file = $request->file('profile_pic');
+            $filename = time() . '_' . $file->getClientOriginalName();
 
-        // Optionally, delete the old image from storage if it exists
-        if ($profilePicture->profile_pic) {
-            $this->deleteOldImage($profilePicture->profile_pic);
+            // Optionally, delete the old image from storage if it exists
+            if ($profilePicture->profile_pic) {
+                $this->deleteOldImage($profilePicture->profile_pic);
+            }
+
+            // Store the new image
+            $file->storeAs('images/profile_pic', $filename, 'public');  // Store it publicly
+
+            // Update the profile_pic column in the database
+            $profilePicture->profile_pic = $filename;
+            $profilePicture->save();
+
+            // Redirect with success alert
+            return redirect()->back()->with('alert-success', 'Profile picture updated successfully.');
+        } catch (\Exception $e) {
+            // If an error occurs, return with an error message
+            return redirect()->back()->with('alert-error', 'Failed to upload the profile picture. Please try again.');
         }
-
-        // Store the new image
-        $file->storeAs('images/profile_pic', $filename, 'public');  // Store it publicly
-
-        // Update the profile_pic column in the database
-        $profilePicture->profile_pic = $filename;
-        $profilePicture->save();
-
-        return redirect()->back()->with('success', 'Profile picture updated successfully.');
     }
 
     /**
