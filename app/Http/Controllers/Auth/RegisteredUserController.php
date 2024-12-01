@@ -30,17 +30,19 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'contact_no' => ['required', 'string', 'max:15'],
-            'address' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'user_type' => ['required', 'string', 'in:professional,customer,admin'],
-        ]);
+{
+    // Validate the incoming request
+    $validated = $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'contact_no' => ['required', 'string', 'max:15'],
+        'address' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        'user_type' => ['required', 'string', 'in:professional,customer,admin'],
+    ]);
 
-        // Create user record
+    try {
+        // Create the user record
         $user = User::create([
             'name' => $request->name,
             'contact_no' => $request->contact_no,
@@ -53,14 +55,29 @@ class RegisteredUserController extends Controller
 
         // Create profile picture record with null value
         ProfilePicture::create([
-            'user_id' => $user->user_id, // Make sure this is the correct field for user ID
-            'profile_pic' => null,       // Default value is null
+            'user_id' => $user->user_id, // Corrected to 'id' field
+            'profile_pic' => null,  // Default value is null
         ]);
 
-        event(new Registered($user)); // Trigger registration event
+        // Trigger registration event
+        event(new Registered($user));
 
-        Auth::login($user); // Log the user in
+        // Log the user in
+        Auth::login($user);
 
-        return redirect(RouteServiceProvider::DASHBOARD); // Redirect to a defined route after registration
+        // Flash success message to session
+        session()->flash('alert-success', 'Registration successful! Welcome aboard.');
+
+        // Redirect to the dashboard after successful registration
+        return redirect(RouteServiceProvider::DASHBOARD);
+
+    } catch (\Exception $e) {
+        // If any error occurs, flash an error message
+        session()->flash('alert-error', 'An error occurred while registering. Please try again.');
+
+        // Return back to the registration form
+        return back()->withInput();
     }
+}
+
 }
