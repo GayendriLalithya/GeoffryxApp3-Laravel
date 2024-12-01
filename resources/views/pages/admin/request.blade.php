@@ -3,9 +3,13 @@
 @endsection
 @php
     use App\Models\VerifyRequest;
+    use App\Models\Certificate;
     
     // Directly query and set the verifications variable
     $verifications = VerifyRequest::all();
+
+    // Directly query and set the verifications variable
+    $certificates = Certificate::all();
 @endphp
 
 <!-- Request Cards -->
@@ -55,12 +59,25 @@
                     <div class="form-group">
                         <label>Certificates</label>
                     </div>
-                    <div class="form-group">
-                        <label>Certificate Name</label>
-                        <input type="text" class="form-control" value="{{ $verify->certificate_name }}" readonly>
-                    </div>
-                    <div class="form-group">
-                        <img src="{{ asset('resources/images/sample.png') }}" class="certificate-preview">
+                    <!-- Certificates Section -->
+                    <div class="certificates-container">
+                        @foreach ($certificates->where('verify_id', $verify->verify_id) as $certificate)
+                            <div class="certificate-card">
+                                <div class="certificate-header">
+                                    <!-- <h3>{{ $certificate->certificate_name }}</h3> -->
+                                </div>
+                                <div class="certificate-content">
+                                    <div class="form-group">
+                                        <label>Certificate Name</label>
+                                        <input type="text" class="form-control" value="{{ $certificate->certificate_name }}" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label>Certificate File</label> -->
+                                        <img src="{{ asset('public/storage/' . $certificate->certificate) }}" class="certificate-preview" alt="{{ $certificate->certificate_name }}">
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                     
                     <div class="action-buttons">

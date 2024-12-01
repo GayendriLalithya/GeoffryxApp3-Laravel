@@ -54,5 +54,5 @@ Route::post('/request-verification', [ProfessionalController::class, 'requestVer
 
 use App\Http\Controllers\Admin\VerifyController;
 
-Route::get('/admin/requests', [App\Http\Controllers\Admin\VerifyController::class, 'showRequests'])->name('admin.requests');
+Route::get('/admin/requests', [VerifyController::class, 'showRequests'])->name('admin.requests');
 

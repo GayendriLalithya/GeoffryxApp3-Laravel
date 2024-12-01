@@ -11,9 +11,13 @@ class VerifyController extends Controller
 {
     public function showRequests()
     {
-        $verifications = DB::table('verify_requests')->get(); // Fetch data from the view
+        // Fetch pending verification requests
+        $verifications = Verify::with('user')->where('status', 'pending')->where('deleted', false)->get();
 
-        return view('pages.admin.request', compact('verifications'));
+        // Fetch all certificate records
+        $certificates = Certificate::whereIn('verify_id', $pendingRequests->pluck('verify_id'))->get();
+
+        return view('pages.admin.request', compact('verifications', 'certificates'));
     }
 }
 
