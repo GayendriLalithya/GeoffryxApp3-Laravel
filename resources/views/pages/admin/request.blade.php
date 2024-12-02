@@ -92,10 +92,11 @@
                 </form>
             </div>
         </div>
-    @endforeach
+   
 </div>
 
-<form method="POST" action="" id="rejectForm">
+
+<form method="POST" action="{{ route('requests.reject', ['verify_id' => $verify->verify_id]) }}" id="rejectForm">
     @csrf
     <!-- Single Modal for all records -->
     <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
@@ -125,6 +126,8 @@
         </div>
     </div>
 </form>
+
+@endforeach
 
 @section('additional-css')
     <script src="{{ asset('resources/js/verify.js') }}"></script>
