@@ -49,10 +49,15 @@ Route::post('/profile-picture/upload', [ProfilePictureController::class, 'store'
 // User - Professional Acccount Request
 Route::post('/request-verification', [ProfessionalController::class, 'requestVerification'])->name('requestVerification');
 
-// Admin - Pending Professional Account Requests
-// Route::get('/admin/verify-requests', [PendingRequestsController::class, 'showPendingRequests']);
 
 use App\Http\Controllers\Admin\VerifyController;
 
 Route::get('/admin/requests', [VerifyController::class, 'showRequests'])->name('admin.requests');
 
+use App\Http\Controllers\Admin\RequestController;
+
+// Accept verification request
+Route::get('/requests/accept/{verify_id}', [RequestController::class, 'acceptVerification'])->name('requests.accept');
+
+// Reject verification request
+Route::post('/requests/reject/{verify_id}', [RequestController::class, 'rejectVerification'])->name('requests.reject');

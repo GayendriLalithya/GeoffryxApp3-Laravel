@@ -18,7 +18,7 @@
         <div class="request-card">
             <div class="request-header">
                 <div class="request-user">
-                    <img src="{{ asset('public/storage/images/profile_pic/' . $verify->profile_pic ?? 'resources/images/sample.png') }}" alt="{{ $verify->user->name }}">
+                    <img src="{{ asset('storage/app/public/images/profile_pic/' . $verify->profile_pic ?? 'resources/images/sample.png') }}" alt="{{ $verify->user->name }}">
                     <div class="user-details">
                         <h3>{{ $verify->user->name }}</h3>
                         <p>{{ $verify->professional_type }}</p>
@@ -52,8 +52,8 @@
                     <div class="form-group">
                         <label>NIC</label>
                         <div class="id-preview">
-                            <img src="{{ asset('public/storage/' . $verify->nic_front) }}" class="id-card" alt="NIC Front">
-                            <img src="{{ asset('public/storage/' . $verify->nic_back) }}" class="id-card" alt="NIC Back">
+                            <img src="{{ asset('storage/app/public/' . $verify->nic_front) }}" class="id-card" alt="NIC Front">
+                            <img src="{{ asset('storage/app/public/' . $verify->nic_back) }}" class="id-card" alt="NIC Back">
                         </div>
                     </div>
                     <div class="form-group">
@@ -73,7 +73,7 @@
                                     </div>
                                     <div class="form-group">
                                         <!-- <label>Certificate File</label> -->
-                                        <img src="{{ asset('public/storage/' . $certificate->certificate) }}" class="certificate-preview" alt="{{ $certificate->certificate_name }}">
+                                        <img src="{{ asset('storage/app/public/' . $certificate->certificate) }}" class="certificate-preview" alt="{{ $certificate->certificate_name }}">
                                     </div>
                                 </div>
                             </div>
@@ -81,11 +81,51 @@
                     </div>
                     
                     <div class="action-buttons">
-                        <button type="button" class="btn-reject">Reject Request</button>
-                        <button type="button" class="btn-accept">Accept Request</button>
+                        <!-- Button with dynamic data attribute -->
+                        <button type="button" class="btn-reject" data-bs-toggle="modal" data-bs-target="#rejectModal" data-record-id="{{ $verify->verify_id }}">
+                            Reject Request
+                        </button>
+                        <a href="{{ route('requests.accept', ['verify_id' => $verify->verify_id]) }}">
+                            <button type="button" class="btn-accept">Accept Request</button>
+                        </a>
                     </div>
                 </form>
             </div>
         </div>
     @endforeach
 </div>
+
+<form method="POST" action="" id="rejectForm">
+    @csrf
+    <!-- Single Modal for all records -->
+    <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rejectModalLabel">
+                        <i class="fas fa-times-circle text-danger me-2"></i>
+                        Reason for rejection
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="hidden" id="currentRecordId">
+                        <textarea class="form-control" id="reasonTextarea" rows="4" placeholder="Please provide the reason for rejection..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger" onclick="submitRejection()">
+                        <i class="fas fa-paper-plane me-2"></i>
+                        Submit Rejection
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section('additional-css')
+    <script src="{{ asset('resources/js/verify.js') }}"></script>
+@endsection

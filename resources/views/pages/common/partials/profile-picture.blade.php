@@ -24,7 +24,7 @@
                     @if ($profilePicture && $profilePicture->profile_pic)
                         <!-- Display the profile picture -->
                         <div class="preview-image-container">
-                            <img src="{{ asset('public/storage/images/profile_pic/' . $profilePicture->profile_pic) }}" class="preview-image" id="profile-image">
+                            <img src="{{ asset('storage/app/public/images/profile_pic/' . $profilePicture->profile_pic) }}" class="preview-image" id="profile-image">
                         </div>
                     @else
                         <!-- Show placeholder if no image exists -->
