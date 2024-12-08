@@ -64,3 +64,5 @@ Route::post('/requests/reject/{verify_id}', [RequestController::class, 'rejectVe
 
 
 Route::patch('/notifications/mark-read/{id}', [NotificationController::class, 'markAsRead']);
+Route::post('/notifications/mark-read', [NotificationController::class, 'markAsRead'])->name('notifications.markRead');
+Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('notifications.getUnreadCount');

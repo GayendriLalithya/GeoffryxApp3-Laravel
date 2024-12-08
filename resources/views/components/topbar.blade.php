@@ -2,9 +2,20 @@
 <div class="top-bar">
     <div class="user-info">
 
+        @php
+            // Get the logged-in user's ID
+            $userId = auth()->id();
+
+            $unreadNotificationsCount = \App\Models\Notification::where('user_id', $userId)
+            ->where('status', 'unread')
+            ->count();
+        @endphp
+
         <a href="{{ route('user.dashboard', ['tab' => 'notification']) }}" class="notification-icon">
             <i class="fas fa-bell"></i>
-            <span class="notification-badge" id="notificationBadge">3</span>
+            @if($unreadNotificationsCount > 0)
+                <span class="notification-badge" id="notificationBadge">{{ $unreadNotificationsCount }}</span>
+            @endif
         </a>
 
         @if (Auth::user()->user_type === 'professional')
@@ -25,3 +36,4 @@
 
     </div>
 </div>
+
