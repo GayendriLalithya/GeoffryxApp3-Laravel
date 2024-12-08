@@ -1,64 +1,160 @@
-.filter-btn {
-    border: none;
-    padding: 8px 24px;
-    border-radius: 4px;
-    background: #f0f0f0;
-    margin-right: 10px;
-}
 
-.filter-btn.active {
-    background: #e1f7f7;
-    color: #008080;
-}
+    /* Filter buttons */
+    .filters {
+        margin-bottom: 20px;
+    }
 
-.notification-card {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 10px 0;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+    .filter-btn {
+        border: none;
+        padding: 8px 24px;
+        border-radius: 4px;
+        background: #f0f0f0;
+        margin-right: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
 
-.notification-card:hover {
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
+    .filter-btn.active {
+        background: #e1f7f7;
+        color: #008080;
+    }
 
-.notification-card.unread {
-    border-color: #008080;
-}
+    /* Notification item */
+    .notification-item {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        background: #fff;
+    }
 
-.notification-date {
-    color: #666;
-    font-size: 0.9rem;
-}
+    .notification-item:hover {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
 
-.unread-indicator {
-    width: 10px;
-    height: 10px;
-    background: #008080;
-    border-radius: 50%;
-}
+    .notification-item.unread {
+        border-left: 4px solid #008080;
+        background: #f8ffff;
+    }
 
-.filters {
-    margin: 20px 0;
-}
+    /* Notification title */
+    .notification-title h5 {
+        margin: 0;
+        color: #333;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
 
-.modal-content {
-    border-radius: 12px;
-}
+    .notification-item.unread .notification-title h5 {
+        color: #008080;
+        font-weight: 600;
+    }
 
-.modal-body {
-    padding: 24px;
-}
+    /* Notification message */
+    .notification-message {
+        margin: 10px 0;
+    }
 
-.close-btn {
-    background: #333;
-    color: white;
-    border: none;
-    padding: 8px 24px;
-    border-radius: 4px;
-}
+    .notification-message p {
+        margin: 0;
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    /* Notification footer */
+    .notification-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+    }
+
+    .notification-footer small {
+        color: #888;
+        font-size: 0.85rem;
+    }
+
+    .mark-read-btn {
+        border: none;
+        background: #008080;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    .mark-read-btn:hover {
+        background: #006666;
+    }
+
+    /* Modal styles */
+    .modal-content {
+        border-radius: 12px;
+        border: none;
+    }
+
+    .modal-body {
+        padding: 24px;
+    }
+
+    .modal-title {
+        color: #333;
+        margin-bottom: 0;
+    }
+
+    .modal-text {
+        color: #666;
+        line-height: 1.6;
+    }
+
+    .close-btn {
+        background: #333;
+        color: white;
+        border: none;
+        padding: 8px 24px;
+        border-radius: 4px;
+        transition: background 0.2s ease;
+    }
+
+    .close-btn:hover {
+        background: #222;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .notification-item {
+            padding: 15px;
+        }
+
+        .notification-title h5 {
+            font-size: 1rem;
+        }
+
+        .notification-message p {
+            font-size: 0.9rem;
+        }
+
+        .notification-footer {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            flex: 1;
+            text-align: center;
+            padding: 8px 12px;
+            margin-right: 0;
+        }
+    }

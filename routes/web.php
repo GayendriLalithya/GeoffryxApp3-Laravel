@@ -5,7 +5,7 @@ use App\Http\Controllers\Frontend\DashboardController;
 use App\Http\Controllers\ProfilePictureController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfessionalController;
-// use App\Http\Controllers\PendingRequestsController;
+use App\Http\Controllers\NotificationController;
 
 
 /*
@@ -61,3 +61,6 @@ Route::get('/requests/accept/{verify_id}', [RequestController::class, 'acceptVer
 
 // Reject verification request
 Route::post('/requests/reject/{verify_id}', [RequestController::class, 'rejectVerification'])->name('requests.reject');
+
+
+Route::patch('/notifications/mark-read/{id}', [NotificationController::class, 'markAsRead']);
