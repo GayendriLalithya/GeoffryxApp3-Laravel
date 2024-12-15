@@ -9,6 +9,19 @@
             $unreadNotificationsCount = \App\Models\Notification::where('user_id', $userId)
             ->where('status', 'unread')
             ->count();
+
+            // Initialize professionalType and availability
+            $professionalType = null;
+            $availability = null;
+
+            // Check if the user is a professional and fetch the professional details
+            if (Auth::user()->user_type === 'professional') {
+                $professional = \App\Models\Professional::where('user_id', $userId)->first();
+                if ($professional) {
+                    $professionalType = $professional->type;
+                    $availability = $professional->availability;
+                }
+            }
         @endphp
 
         <a href="{{ route('user.dashboard', ['tab' => 'notification']) }}" class="notification-icon">
@@ -18,13 +31,20 @@
             @endif
         </a>
 
-        @if (Auth::user()->user_type === 'professional')
+        @if ($availability === 'Available')
             <span class="status-badge">Available</span>
+        @elseif($availability === 'Not Available')
+            <span class="status-badge-unavailable">Unavailable</span>
         @endif
-        
+
         <div class="user-details">
             <p class="user-name">Hi {{ Auth::user()->name }}</p>
-            <p class="user-role">{{ ucfirst(Auth::user()->user_type) }}</p>
+            <p class="user-role">
+                {{ ucfirst(Auth::user()->user_type) }}
+                @if ($professionalType)
+                    - {{ $professionalType }}
+                @endif
+            </p>
         </div>
 
         

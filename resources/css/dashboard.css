@@ -1,6 +1,8 @@
 :root {
     --teal: #008080;
     --light-blue: #e6fbff;
+    --light-red: rgb(253, 173, 173);
+    --red: red;
 }
 
 /* Dashboard Layout */
@@ -78,6 +80,16 @@
     background-color: var(--light-blue);
     border: 2px solid var(--teal);
     color: var(--teal);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    margin-right: 10px;
+}
+
+.status-badge-unavailable {
+    background-color: var(--light-red);
+    border: 2px solid var(--red);
+    color: var(--red);
     padding: 2px 8px;
     border-radius: 12px;
     font-size: 0.8rem;
