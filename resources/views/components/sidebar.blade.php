@@ -19,22 +19,7 @@
                         <i class="fas fa-users"></i> Manage Users
                     </a>
                     <a class="nav-link" href="#">
-                        <i class="fas fa-folder"></i> Manage Files
-                    </a>
-                    <a class="nav-link" href="#">
                         <i class="fas fa-chart-pie"></i> Manage Projects
-                    </a>
-                    @break
-    
-                @case('customer')
-                    <a class="nav-link {{ request('tab') == 'projects' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'projects']) }}">
-                        <i class="fas fa-project-diagram"></i> Projects
-                    </a>
-                    <a class="nav-link {{ request('tab') == 'professional' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'professional']) }}">
-                        <i class="fas fa-user-tie"></i> Professionals
-                    </a>
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-folder"></i> Manage File
                     </a>
                     @break
 
@@ -48,18 +33,23 @@
                     <a class="nav-link" href="#">
                         <i class="fas fa-history"></i> Work History
                     </a>
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-folder"></i> My Files
-                    </a>
                     @break
-
-                @default
-                <a class="nav-link" href="#">No Navigation Available</a>
             @endswitch
+
+            <!-- Common Links - Settings for all users -->
+            <a class="nav-link {{ request('tab') == 'projects' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'projects']) }}">
+                <i class="fas fa-project-diagram"></i> Projects
+            </a>
+            <a class="nav-link {{ request('tab') == 'professional' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'professional']) }}">
+                <i class="fas fa-user-tie"></i> Professionals
+            </a>
+            <a class="nav-link" href="#">
+                <i class="fas fa-folder"></i> Manage File
+            </a>
 
             <div class="mt-auto">
                 
-                <!-- Common Link - Settings for all users -->
+                <!-- Common Links down - Settings for all users -->
                 <a class="nav-link {{ request('tab') == 'profile' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'profile']) }}">
                     <i class="fas fa-cog"></i> Settings
                 </a>

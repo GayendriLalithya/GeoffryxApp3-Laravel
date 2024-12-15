@@ -19,7 +19,7 @@
         </a>
 
         @if (Auth::user()->user_type === 'professional')
-            <span class="verified-badge">Verified</span>
+            <span class="status-badge">Available</span>
         @endif
         
         <div class="user-details">

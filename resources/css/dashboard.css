@@ -74,7 +74,7 @@
 }
 
 /* Professional */
-.verified-badge {
+.status-badge {
     background-color: var(--light-blue);
     border: 2px solid var(--teal);
     color: var(--teal);

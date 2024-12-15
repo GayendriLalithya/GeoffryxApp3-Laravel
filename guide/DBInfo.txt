@@ -1,0 +1,68 @@
+STORED PROCEDURES
+
+1. To Change the User type to professional in user table, create a record in professional table and notification table and update the verify table status to Verified when accepting a verification request.
+
+Procedure Name : AcceptVerification
+
+BEGIN
+    DECLARE user_id_param INT;
+    DECLARE professional_type_param VARCHAR(255);
+
+    -- Fetch user_id and professional_type from the verification request
+    SELECT user_id, professional_type
+    INTO user_id_param, professional_type_param
+    FROM verify_requests
+    WHERE verify_id = verify_id_param;
+
+    -- Update the status of the verification request
+    UPDATE verify_requests
+    SET status = 'verified'
+    WHERE verify_id = verify_id_param;
+
+    -- Insert a notification for the user
+    INSERT INTO notifications (
+        user_id, 
+        title, 
+        message, 
+        status, 
+        created_at, 
+        updated_at
+    )
+    VALUES (
+        user_id_param, 
+        'Account Verified', 
+        'Your professional account request has been approved by Geoffryx. Welcome to Geoffryx professionals!', 
+        'unread', 
+        NOW(), 
+        NOW()
+    );
+
+    -- Update the user's type in the users table
+    UPDATE users
+    SET user_type = 'professional'
+    WHERE user_id = user_id_param;
+
+    -- Insert a new record into the professionals table
+    INSERT INTO professionals (
+        user_id, 
+        type, 
+        availability, 
+        work_location, 
+        payment_min, 
+        payment_max, 
+        preferred_project_size, 
+        created_at, 
+        updated_at
+    )
+    VALUES (
+        user_id_param, 
+        professional_type_param, 
+        'Available', 
+        'anywhere', 
+        20000000, 
+        100000000, 
+        'all', 
+        NOW(), 
+        NOW()
+    );
+END
