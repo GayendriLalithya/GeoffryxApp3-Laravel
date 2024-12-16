@@ -2,109 +2,157 @@
     <link rel="stylesheet" href="{{ asset('resources/css/professional.css') }}">
 @endsection
 
+@php
+    $professionals = DB::select('CALL LoadAllProfessionals()');
+
+    if (isset($id)) {
+        $professional = DB::table('professional_details')
+                          ->where('professional_id', $id)
+                          ->first();
+    }
+@endphp
+
+
+
 <div class="search-container">
-            <select class="form-select">
-                <option value="all" selected>All</option>
-                <option value="charted architecture">Charted Architecture</option>
-                <option value="structural engineer">Structural Engineer</option>
-                <option value="construstor">Construstor</option>
-            </select>
-            <input type="text" class="form-control" placeholder="Search Professionals">
-            <button class="search-btn">Search</button>
-        </div>
+    <select class="form-select">
+        <option value="all" selected>All</option>
+        <option value="charted architecture">Chartered Architect</option>
+        <option value="structural engineer">Structural Engineer</option>
+        <option value="constructor">Constructor</option>
+    </select>
+    <input type="text" class="form-control" placeholder="Search Professionals">
+    <button class="search-btn">Search</button>
+</div>
 
-        <div class="professional-grid">
-            <!-- Professional Cards -->
-            <div class="professional-card">
-                <img src="{{ asset('resources/images/sample.png') }}" alt="Ann Fox" class="professional-image">
-                <div class="professional-name">Ann Fox</div>
-                <div class="professional-title">Charted Architect</div>
-                <button class="view-more-btn">View More</button>
-                
-                <!-- Modal -->
-                <div class="modal fade" id="architectModal" tabindex="-1">
-                    
-                    <div class="modal-dialog modal-dialog-scrollable">
+<div class="professional-grid">
+    @foreach($professionals as $professional)
+        <div class="professional-card">
+        @if($professional->profile_picture_url)
+            <img src="{{ asset('storage/app/public/images/profile_pic/' . $professional->profile_picture_url) }}" alt="{{ $professional->name }}" class="professional-image">
+        @else
+            <img src="{{ asset('resources/images/sample.png') }}" alt="Default Profile Picture" class="profile-image">
+        @endif
+            <div class="professional-name">{{ $professional->name }}</div>
+            <div class="professional-title">{{ $professional->type }}</div>
+            <button class="view-more-btn" data-bs-toggle="modal" data-bs-target="#professionalModal-{{ $professional->professional_id }}">View More</button>
 
-                        <div class="modal-content">
-
-                            <div class="modal-body">
-
-                                <div class="profile-header">
-                                    <img src="{{ asset('resources/images/sample.png') }}" alt="Ann Fox" class="profile-image">
-                                    <div class="profile-info">
-                                        <h2>Ann Fox</h2>
-                                        <p>Charted Architect</p>
-                                        <div class="ratings">
-                                            <span>4.5 Ratings</span>
-                                        </div>
+            <!-- Modal for each professional -->
+            <div class="modal fade" id="professionalModal-{{ $professional->professional_id }}" tabindex="-1">
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="profile-header">
+                            @if($professional->profile_picture_url)
+                                <img src="{{ asset('storage/app/public/images/profile_pic/' . $professional->profile_picture_url) }}" alt="{{ $professional->name }}" class="profile-image">
+                            @else
+                                <img src="{{ asset('resources/images/sample.png') }}" alt="Default Profile Picture" class="profile-image">
+                            @endif
+                                <div class="profile-info">
+                                    <h2>{{ $professional->name }}</h2>
+                                    <p>{{ $professional->type }}</p>
+                                    <div class="ratings">
+                                        <span>{{ $professional->average_rating ?? 'No ratings yet' }} Ratings</span>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="mb-4">
-                                    <div class="field-label">Work Location</div>
-                                    <div class="field-value">Colombo</div>
-                                </div>
+                            <div class="mb-4">
+                                <div class="field-label">Work Location</div>
+                                <div class="field-value">{{ $professional->work_location }}</div>
+                            </div>
 
-                                <div class="mb-4">
-                                    <div class="field-label">Typical Project Budget Range</div>
-                                    <div class="field-value">$5,000,000</div>
-                                </div>
+                            <div class="mb-4">
+                                <div class="field-label">Minimum Project Payment</div>
+                                <div class="field-value">${{ number_format($professional->payment_min ?? 0, 2) }}</div>
+                            </div>
 
-                                <div class="work-history">
-                                    <h4>Work History and Ratings</h4>
-
-                                    <div class="project-card">
-                                        <h5>
-                                            Sunset Villas
-                                            <i class="fas fa-chevron-up"></i>
-                                        </h5>
-                                        <div class="project-content">
-                                            <div class="mb-2">
-                                                <span class="star filled"><i class="fas fa-star"></i></span>
-                                                <span class="star filled"><i class="fas fa-star"></i></span>
-                                                <span class="star filled"><i class="fas fa-star"></i></span>
-                                                <span class="star filled"><i class="fas fa-star"></i></span>
-                                                <span class="star"><i class="fas fa-star"></i></span>
+                            <div class="work-history">
+                                <h4>Work History and Ratings</h4>
+                                @if(isset($professional->workHistory) && is_array($professional->workHistory))
+                                    @forelse($professional->work_history as $project)
+                                        <div class="project-card">
+                                            <h5>{{ $project->project_name }}</h5>
+                                            <div>
+                                                <p>{{ $project->description }}</p>
+                                                <div>
+                                                    @for($i = 0; $i < (int) $project->rating; $i++)
+                                                        <span class="star filled"><i class="fas fa-star"></i></span>
+                                                    @endfor
+                                                    @for($i = $project->rating; $i < 5; $i++)
+                                                        <span class="star"><i class="fas fa-star"></i></span>
+                                                    @endfor
+                                                </div>
                                             </div>
-                                            <p>Sunset Villas turned out beautifully with its modern design and eco-friendly features. Although mostly satisfied, I felt a few minor improvements could have been made.</p>
                                         </div>
-                                    </div>
+                                    @empty
+                                        <p>No work history available.</p>
+                                    @endforelse
+                                @else
+                                    <p>No professionals found.</p>
+                                @endif
+                            </div>
 
-                                    <div class="project-card">
-                                        <h5>
-                                            Greenwood Office Complex
-                                            <i class="fas fa-chevron-down"></i>
-                                        </h5>
-                                    </div>
-
-                                    <div class="project-card">
-                                        <h5>
-                                            Seaside Resort Development
-                                            <i class="fas fa-chevron-down"></i>
-                                        </h5>
-                                    </div>
-
-                                    <div class="project-card">
-                                        <h5>
-                                            Urban Renewal Apartments
-                                            <i class="fas fa-chevron-down"></i>
-                                        </h5>
-                                    </div>
-                                </div>
-
-                                <div class="action-buttons">
-                                    <button class="btn-close-modal" data-bs-dismiss="modal">Close</button>
-                                    <button class="btn-select">Select</button>
-                                </div>
+                            <div class="action-buttons">
+                                <button class="btn-close-modal" data-bs-dismiss="modal">Close</button>
+                                <button class="btn-select">Select</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                
             </div>
-            
-            <!-- Repeat similar cards for other professionals -->
-             
+        </div>
+    @endforeach
+</div>
+
+
+    <!-- Selected Professional List -->
+    <div class="prof-select-card" id="profSelectCard">
+        <div class="card-header" id="cardHeader">
+            <h5 class="m-0">Sunset Villas</h5>
+            <button class="minimize-btn" id="minimizeBtn">
+                <i class="bi bi-chevron-down"></i>
+            </button>
+        </div>
+        <div class="card-content" id="cardContent">
+            <div class="selected-professionals">
+                <div class="professional-item">
+                    <img class="professional-img" src="{{ asset('resources/images/sample.png') }}">
+                    <div class="professional-info">
+                        <p class="professional-name">Ann Fox</p>
+                        <p class="professional-title">Chartered Architect</p>
+                    </div>
+                    <button class="delete-btn">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+                <div class="professional-item">
+                    <img class="professional-img" src="{{ asset('resources/images/sample.png') }}">
+                    <div class="professional-info">
+                        <p class="professional-name">John Doe</p>
+                        <p class="professional-title">Structural Engineer</p>
+                    </div>
+                    <button class="delete-btn">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+                <div class="professional-item">
+                    <img class="professional-img" src="{{ asset('resources/images/sample.png') }}">
+                    <div class="professional-info">
+                        <p class="professional-name">Simon Warner</p>
+                        <p class="professional-title">Structural Engineer</p>
+                    </div>
+                    <button class="delete-btn">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+            <p class="info-text">If you Cancel this process this project won't be created.</p>
+            <div class="card-footer">
+                <button class="btn btn-danger w-50">Cancel</button>
+                <button class="btn btn-success w-50">Save</button>
+            </div>
         </div>
     </div>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">

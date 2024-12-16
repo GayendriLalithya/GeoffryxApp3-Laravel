@@ -68,27 +68,110 @@ BEGIN
     );
 END
 
+2. Stored procedure for displaying professionals with loading their information
+
+DELIMITER //
+
+CREATE PROCEDURE LoadProfessionalDetails(IN prof_id INT)
+BEGIN
+    -- Fetch professional details including basic info and profile picture
+    SELECT * FROM professional_details WHERE professional_id = prof_id;
+
+    -- Fetch average ratings for the professional
+    SELECT * FROM professional_ratings WHERE professional_id = prof_id;
+
+    -- Fetch work history for the professional
+    SELECT * FROM professional_work_history WHERE professional_id = prof_id;
+END //
+
+DELIMITER ;
+
+3. Stored procedure to load all the professional information
+
+DELIMITER //
+
+CREATE PROCEDURE LoadAllProfessionals()
+BEGIN
+    SELECT p.professional_id, p.user_id, u.name, p.type, p.work_location, 
+           pp.profile_pic AS profile_picture_url, r.average_rating
+    FROM professionals p
+    JOIN users u ON p.user_id = u.user_id
+    LEFT JOIN profile_picture pp ON u.user_id = pp.user_id
+    LEFT JOIN (
+        SELECT professional_id, AVG(rate) AS average_rating
+        FROM ratings
+        GROUP BY professional_id
+    ) r ON p.professional_id = r.professional_id;
+END //
+
+DELIMITER ;
+
+
 
 * VIEWS *
 ---------
 
 CREATE VIEW verify_requests AS
-    SELECT
-        v.verify_id,
-        v.user_id,
-        v.nic_no,
-        v.nic_front,
-        v.nic_back,
-        v.professional_type,   -- Include professional_type
-        v.status,
-        u.name as user_name,
-        u.contact_no,
-        u.address,
-        u.email,
-        -- Join the profile_picture table and select the image path
-        pp.profile_pic   -- Assuming "profile_picture_path" is the column in the profile_picture table
-    FROM verify v
-    INNER JOIN users u ON v.user_id = u.user_id
-    LEFT JOIN profile_picture pp ON u.user_id = pp.user_id  -- Join the profile_picture table on user_id
-    WHERE v.status = "pending"
-    AND u.deleted = false
+SELECT
+    v.verify_id,
+    v.user_id,
+    v.nic_no,
+    v.nic_front,
+    v.nic_back,
+    v.professional_type,   -- Include professional_type
+    v.status,
+    u.name as user_name,
+    u.contact_no,
+    u.address,
+    u.email,
+    -- Join the profile_picture table and select the image path
+    pp.profile_pic   -- Assuming "profile_picture_path" is the column in the profile_picture table
+FROM verify v
+INNER JOIN users u ON v.user_id = u.user_id
+LEFT JOIN profile_picture pp ON u.user_id = pp.user_id  -- Join the profile_picture table on user_id
+WHERE v.status = "pending"
+AND u.deleted = false
+
+
+2. Professional Details View
+
+This view will join the professionals, users, and profile_picture tables to consolidate the essential details about each professional.
+
+CREATE VIEW professional_details AS
+SELECT 
+    p.professional_id, 
+    p.user_id, 
+    u.name, 
+    p.work_location, 
+    p.payment_min, 
+    p.payment_max, 
+    pp.profile_pic AS profile_picture_url
+FROM professionals p
+JOIN users u ON p.user_id = u.user_id
+LEFT JOIN profile_picture pp ON u.user_id = pp.user_id;
+
+3. Professional Ratings View
+
+This view will aggregate and format the ratings for each professional, showing the average rating rounded to one decimal place. The average here is scaled to a 1-5 scale directly.
+
+CREATE VIEW professional_ratings AS
+SELECT 
+    professional_id, 
+    ROUND(AVG(CAST(rate AS DECIMAL)), 1) AS average_rating
+FROM rating
+GROUP BY professional_id;
+
+4. Professional Work History View
+
+This view joins the work_history, work, and ratings tables to provide a comprehensive history for each professional, including project names, ratings, and descriptions.
+
+CREATE VIEW professional_work_history AS
+SELECT 
+    wh.professional_id, 
+    w.name AS project_name, 
+    r.rate AS rating, 
+    w.description, 
+    w.location AS project_location
+FROM work_history wh
+JOIN work w ON wh.work_id = w.work_id
+LEFT JOIN rating r ON wh.rating_id = r.rating_id;

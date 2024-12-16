@@ -209,3 +209,119 @@ body {
 .star.filled {
     color: #FFD700;
 }
+
+
+
+
+.prof-select-card {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 400px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.professional-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.professional-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.professional-info {
+    flex-grow: 1;
+}
+
+.selected-professional-name {
+    margin: 0;
+    font-weight: 500;
+}
+
+.selected-professional-title {
+    margin: 0;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.delete-btn {
+    color: #dc3545;
+    background: none;
+    border: none;
+    padding: 5px;
+}
+
+.btn-success{
+    background-color: var(--primary-color);
+}
+
+.card-footer {
+    padding: 15px;
+    background: #f8f9fa;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+}
+
+.info-text {
+    font-size: 0.8em;
+    color: #666;
+    margin: 10px 15px;
+}
+
+/* Minimizing effect css */
+.prof-select-card {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 400px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.card-header {
+    position: relative;
+    cursor: pointer;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.minimize-btn {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    color: #666;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.card-content {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.minimized .card-content {
+    display: none;
+}
+
+.minimized {
+    width: 200px;
+}
