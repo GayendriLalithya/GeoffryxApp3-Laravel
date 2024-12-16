@@ -42,25 +42,9 @@
 
                     </div>
 
-                    <label class="form-label">Budget Range</label>
-
-                    <div class="mb-3 budget-container">
-
-                        <div class="budget-box">
-                            <label class="form-label">From</label>
-                            <input type="text" class="form-control">
-                        </div>
-
-                        <div class="budget-box">
-                            <label class="form-label">To</label>
-                            <input type="text" class="form-control">
-                        </div>
-
-                    </div>
-
                     <div class="mb-3">
-                        <label class="form-label">Contact No</label>
-                        <input type="tel" class="form-control">
+                        <label class="form-label">Budget</label>
+                        <input type="text" class="form-control">
                     </div>
 
                     <div class="mb-3">

@@ -175,3 +175,21 @@ SELECT
 FROM work_history wh
 JOIN work w ON wh.work_id = w.work_id
 LEFT JOIN rating r ON wh.rating_id = r.rating_id;
+
+* TRIGGERS *
+------------
+
+1. Create a Trigger to Prevent Users from Selecting Themselves
+
+DELIMITER //
+CREATE TRIGGER before_insert_pending_professional
+BEFORE INSERT ON pending_professional
+FOR EACH ROW
+BEGIN
+    IF NEW.user_id = NEW.professional_id THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot select yourself as a professional for the project.';
+    END IF;
+END;
+//
+DELIMITER ;

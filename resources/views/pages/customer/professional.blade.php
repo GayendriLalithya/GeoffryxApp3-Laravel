@@ -89,7 +89,7 @@
                                         <p>No work history available.</p>
                                     @endforelse
                                 @else
-                                    <p>No professionals found.</p>
+                                    <p>No work history available.</p>
                                 @endif
                             </div>
 
