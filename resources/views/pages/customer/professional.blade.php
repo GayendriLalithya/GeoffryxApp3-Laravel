@@ -22,7 +22,7 @@
 
 <div class="professional-grid">
     @foreach($professionals as $professional)
-        <div class="professional-card">
+        <div class="professional-card" data-id="{{ $professional->professional_id }}">
         @if($professional->profile_picture_url)
             <img src="{{ asset('storage/app/public/images/profile_pic/' . $professional->profile_picture_url) }}" alt="{{ $professional->name }}" class="professional-image">
         @else
@@ -89,8 +89,13 @@
                             </div>
 
                             <div class="action-buttons">
+                                @if (!empty($projectData['name']))
+                                <button type="button" class="btn-select" 
+                                    onclick="addSelectedProfessional('{{ $professional->professional_id }}', '{{ $professional->name }}', '{{ $professional->type }}')">
+                                    Select
+                                </button>
+                                @endif
                                 <button class="btn-close-modal" data-bs-dismiss="modal">Close</button>
-                                <button class="btn-select">Select</button>
                             </div>
                         </div>
                     </div>
@@ -120,7 +125,7 @@
                 <input type="hidden" name="budget" value="{{ $projectData['budget'] }}">
                 <input type="hidden" name="requirements" value="{{ $projectData['requirements'] }}">
 
-                <div class="selected-professionals">
+                <div class="selected-professionals" id="selectedProfessionals">
                     
                     <!-- <div class="professional-item">
                         <img class="professional-img" src="">
@@ -133,14 +138,14 @@
                         </button>
                     </div> -->
 
-                    @foreach ($professionals as $professional)
+                    <!-- @foreach ($professionals as $professional)
                         <input type="hidden" name="professionals[]" value="{{ $professional->professional_id }}">
-                    @endforeach
+                    @endforeach -->
 
                 </div>
                 <p class="info-text">If you Cancel this process this project won't be created.</p>
                 <div class="card-footer">
-                    <button class="btn btn-danger w-50" onclick="cancelProject()">Cancel</button>
+                    <button type="submit" name="cancel" value="true" class="btn btn-danger w-50" onclick="cancelProject()">Cancel</button>
                     <button type="submit" class="btn btn-success w-50" id="saveProjectBtn">Save</button>
                 </div>
             </form>

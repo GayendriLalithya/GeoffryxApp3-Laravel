@@ -11,6 +11,12 @@ class WorkController extends Controller
 {
     public function store(Request $request)
     {
+        // Check if the cancel button was clicked
+        if ($request->has('cancel')) {
+            return redirect()->route('user.dashboard', ['tab' => 'profile'])
+                             ->with('alert-error', 'Project creation was cancelled.');
+        }
+
         try {
             // Validate the incoming request data
             $data = $request->validate([
