@@ -210,6 +210,17 @@ FROM work_history wh
 JOIN work w ON wh.work_id = w.work_id
 LEFT JOIN rating r ON wh.rating_id = r.rating_id;
 
+5. User project creation view
+
+CREATE VIEW view_user_projects AS
+SELECT 
+    work.*,
+    users.name AS client_name,
+    users.contact_no AS client_contact
+FROM work
+INNER JOIN users ON work.user_id = users.user_id
+ORDER BY work.created_at DESC;
+
 
 
 * TRIGGERS *
