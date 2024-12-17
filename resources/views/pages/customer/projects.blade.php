@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="project-info">
-                    <span>{{ \Carbon\Carbon::parse($project->end_date)->format('Y.m.d') }}</span>
+                    <span>{{ \Carbon\Carbon::parse($project->start_date)->format('Y.m.d') }}</span>
                     <span>${{ number_format($project->budget, 2) }}</span>
                     <button class="btn btn-teal view-more" data-bs-toggle="collapse" data-bs-target="#projectDetails-{{ $project->work_id }}">View More</button>
                 </div>
@@ -141,15 +141,27 @@
                                                 <div id="teamList">
                                                     <div class="mb-3">
                                                         <label>Charted Architect</label>
-                                                        <input type="text" class="form-control" value="Ann Fox" readonly>
+                                                        <div class="team-members mt-2">
+                                                            <input type="text" class="form-control" value="Ann Fox" readonly>
+                                                            <span class="status pending">Pending</span>
+                                                            <button class="delete-btn"><i class="bi bi-trash"></i></button>
+                                                        </div>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label>Structural Engineer</label>
-                                                        <input type="text" class="form-control" value="Sam Fox" readonly>
+                                                        <div class="team-members mt-2">
+                                                            <input type="text" class="form-control" value="Sam Fox" readonly>
+                                                            <span class="status rejected">Rejected</span>
+                                                            <button class="delete-btn"><i class="bi bi-trash"></i></button>
+                                                        </div>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label>Contractor</label>
-                                                        <input type="text" class="form-control" value="Thomas Middleton" readonly>
+                                                        <div class="team-members mt-2">
+                                                            <input type="text" class="form-control" value="Thomas Middleton" readonly>
+                                                            <span class="status accepted">Accepted</span>
+                                                            <button class="delete-btn"><i class="bi bi-trash"></i></button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -214,6 +226,8 @@
                 @endif
             </div>
         </div>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 
     <script>
     document.getElementById('findProfessionalsBtn').addEventListener('click', function (e) {

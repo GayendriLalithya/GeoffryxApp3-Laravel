@@ -64,7 +64,7 @@ body {
     border-top: 1px solid #eee;
 }
 
-.project-header {
+.project-header, .team-members {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -83,8 +83,8 @@ body {
 }
 
 .status.pending { color: #ffc107; }
-.status.not-started { color: #dc3545; }
-.status.completed { color: #198754; }
+.status.rejected { color: #dc3545; }
+.status.accepted { color: #198754; }
 
 .btn-teal {
     background-color: var(--primary-color);
@@ -173,4 +173,13 @@ body {
 }
 .star-rating .far {
     color: #ccc;
+}
+
+.delete-btn {
+    color: #ffffff;
+    background: #dc3545;
+    border: none;
+    border-radius: 5px;
+    width: 35px;
+    padding: 5px;
 }

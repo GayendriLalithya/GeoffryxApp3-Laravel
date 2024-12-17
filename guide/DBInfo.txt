@@ -106,7 +106,7 @@ END //
 
 DELIMITER ;
 
-4. stored procedure to create project woth selected professionals
+4. stored procedure to create project with selected professionals
 
 DELIMITER $$
 
@@ -122,6 +122,37 @@ CREATE PROCEDURE create_project_with_professionals(
 )
 BEGIN
     DECLARE project_id BIGINT;
+    DECLARE professional_user_id BIGINT;
+    DECLARE invalid_professional BOOLEAN DEFAULT FALSE;
+    DECLARE idx INT DEFAULT 0;
+    DECLARE total_profs INT;
+
+    -- Get the total number of professionals in the JSON array
+    SET total_profs = JSON_LENGTH(p_professionals);
+
+    -- Check each professional_id in the JSON array
+    WHILE_LOOP: WHILE idx < total_profs DO
+        SET professional_user_id = (
+            SELECT user_id
+            FROM professionals
+            WHERE professional_id = JSON_UNQUOTE(JSON_EXTRACT(p_professionals, CONCAT('$[', idx, ']')))
+            LIMIT 1
+        );
+
+        -- If the professional's user_id matches the project creator's user_id
+        IF professional_user_id = p_user_id THEN
+            SET invalid_professional = TRUE;
+            LEAVE WHILE_LOOP; -- Exit the labeled WHILE loop
+        END IF;
+
+        SET idx = idx + 1;
+    END WHILE WHILE_LOOP;
+
+    -- If any professional is invalid, throw an error and do not insert
+    IF invalid_professional THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot select yourself as a professional for the project.';
+    END IF;
 
     -- Insert project details into the 'work' table
     INSERT INTO work (user_id, name, location, start_date, end_date, budget, description, created_at, updated_at)
@@ -131,13 +162,16 @@ BEGIN
 
     -- Insert professionals into 'pending_professional' table
     INSERT INTO pending_professional (user_id, professional_id, work_id, professional_status, created_at, updated_at)
-    SELECT p_user_id, JSON_UNQUOTE(JSON_EXTRACT(p_professionals, CONCAT('$[', idx.i, ']'))), project_id, 'pending', NOW(), NOW()
-    FROM (SELECT 0 AS i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5) idx
-    WHERE JSON_UNQUOTE(JSON_EXTRACT(p_professionals, CONCAT('$[', idx.i, ']'))) IS NOT NULL;
+    SELECT p_user_id, JSON_UNQUOTE(JSON_EXTRACT(p_professionals, CONCAT('$[', idx2.i, ']'))), project_id, 'pending', NOW(), NOW()
+    FROM (
+        SELECT 0 AS i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5
+    ) idx2
+    WHERE JSON_UNQUOTE(JSON_EXTRACT(p_professionals, CONCAT('$[', idx2.i, ']'))) IS NOT NULL;
 
 END$$
 
 DELIMITER ;
+
 
 
 
@@ -228,15 +262,26 @@ ORDER BY work.created_at DESC;
 
 1. Create a Trigger to Prevent Users from Selecting Themselves
 
-DELIMITER //
+DELIMITER $$
+
 CREATE TRIGGER before_insert_pending_professional
 BEFORE INSERT ON pending_professional
 FOR EACH ROW
 BEGIN
-    IF NEW.user_id = NEW.professional_id THEN
+    DECLARE professional_user_id BIGINT;
+
+    -- Get the user_id of the professional
+    SELECT user_id INTO professional_user_id
+    FROM professionals
+    WHERE professional_id = NEW.professional_id
+    LIMIT 1;
+
+    -- Compare with the project creator's user_id from the work table
+    IF professional_user_id = (SELECT user_id FROM work WHERE work_id = NEW.work_id) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Cannot select yourself as a professional for the project.';
     END IF;
-END;
-//
+END$$
+
 DELIMITER ;
+

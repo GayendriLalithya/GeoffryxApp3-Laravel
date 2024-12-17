@@ -51,9 +51,14 @@ class WorkController extends Controller
                              ->with('alert-success', 'Project created successfully.');
 
         } catch (Exception $e) {
-            // Redirect back with an error message if an exception occurs
-            return redirect()->back()
-                             ->with('alert-error', 'An error occurred: ' . $e->getMessage());
+            // Check if the exception message matches the custom signal
+            if (strpos($e->getMessage(), 'Cannot select yourself as a professional for the project.') !== false) {
+                // Display only the custom error message
+                return redirect()->back()->with('alert-error', 'Cannot select yourself as a professional for the project.');
+            }
+
+            // Display a generic error message for other exceptions
+            return redirect()->back()->with('alert-error', 'An unexpected error occurred. Please try again.');
         }
     }
 }

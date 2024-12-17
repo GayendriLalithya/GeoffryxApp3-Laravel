@@ -76,3 +76,9 @@ Route::get('/professionals/{id}', [ProfessionalListController::class, 'showProfe
 use App\Http\Controllers\User\WorkController;
 
 Route::post('/work/store', [WorkController::class, 'store'])->name('work.store');
+
+use App\Http\Controllers\User\ProjectRequestController;
+
+Route::get('/professional/requests', [ProjectRequestController::class, 'index'])
+    ->name('professional.requests');
+

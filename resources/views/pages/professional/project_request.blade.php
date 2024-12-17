@@ -2,45 +2,73 @@
     <link rel="stylesheet" href="{{ asset('resources/css/project_request.css') }}">
 @endsection
 
+@php
+// Step 1: Get logged-in user ID
+        $userId = Auth::id();
+
+        // Step 2: Get the professional ID from the professionals table
+        $professional = DB::table('professionals')
+            ->where('user_id', $userId)
+            ->select('professional_id')
+            ->first();
+
+            // Step 3: Get pending work IDs from the pending_professional table
+        $pendingWorks = DB::table('pending_professional')
+            ->where('professional_id', $professional->professional_id)
+            ->where('professional_status', 'pending')
+            ->pluck('work_id');
+
+        // Step 4: Get project details from the view_user_projects view using the work IDs
+        $projects = DB::table('view_user_projects')
+            ->whereIn('work_id', $pendingWorks)
+            ->orderBy('created_at', 'desc')
+            ->get();
+@endphp
+
 <div class="projects-container">
-        <!-- Sunset Villas -->
+@forelse ($projects as $project)
+        <!-- Project Card -->
         <div class="project-card">
             <div class="project-header">
                 <div>
-                    <h3 class="project-title">Sunset Villas</h3>
+                    <h3 class="project-title">{{ $project->name }}</h3>
                     <div class="project-info">
-                        <span class="project-date">2025.12.31</span>
-                        <span class="project-budget">$5,000,000</span>
+                        <span class="project-date">{{ \Carbon\Carbon::parse($project->end_date)->format('Y.m.d') }}</span>
+                        <span class="project-budget">${{ number_format($project->budget, 2) }}</span>
                     </div>
                 </div>
                 <button class="btn-view" onclick="toggleProject(this)">View Project</button>
             </div>
-            <div class="project-content">
-                <!-- <span class="close-btn" onclick="closeProject(this)">&times;</span> -->
+
+            <div class="project-content collapse">
                 <form>
                     <div class="form-group">
                         <label>Client Name</label>
-                        <input type="text" class="form-control" value="Tiffany Andrews" readonly>
+                        <input type="text" class="form-control" value="{{ $project->client_name }}" readonly>
                     </div>
                     <div class="form-group">
                         <label>Location</label>
-                        <input type="text" class="form-control" value="Colombo" readonly>
+                        <input type="text" class="form-control" value="{{ $project->location }}" readonly>
                     </div>
                     <div class="form-group">
-                        <label>Due Date</label>
-                        <input type="text" class="form-control" value="2025.12.31" readonly>
+                        <label>Start Date</label>
+                        <input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($project->start_date)->format('Y.m.d') }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($project->end_date)->format('Y.m.d') }}" readonly>
                     </div>
                     <div class="form-group">
                         <label>Budget Range</label>
-                        <input type="text" class="form-control" value="$5,000,000" readonly>
+                        <input type="text" class="form-control" value="${{ number_format($project->budget, 2) }}" readonly>
                     </div>
                     <div class="form-group">
                         <label>Contact No</label>
-                        <input type="text" class="form-control" value="+94 (555) 123-4567" readonly>
+                        <input type="text" class="form-control" value="{{ $project->client_contact }}" readonly>
                     </div>
                     <div class="form-group">
                         <label>Requirements</label>
-                        <textarea class="form-control" rows="6" readonly>Project requires a modern Mediterranean architectural style with an open floor plan, 4-5 bedrooms, and 3-4 bathrooms per villa, featuring high ceilings and large windows for natural light. Sustainable, eco-friendly materials, local stone, and wood are to be used, along with energy-efficient windows and doors. Each villa will include private swimming pools, landscaped gardens, outdoor living spaces, and a garage for at least two vehicles. Smart home systems, high-speed internet, and solar panels are essential. Environmental considerations include rainwater harvesting and low-water landscaping. Compliance with local building codes, fire, and security alarm installations, and accessibility features are mandatory.</textarea>
+                        <textarea class="form-control" rows="6" readonly>{{ $project->description }}</textarea>
                     </div>
                     <div class="action-buttons">
                         <button type="button" class="btn-reject">Reject Work</button>
@@ -50,23 +78,9 @@
                 </form>
             </div>
         </div>
+        @empty
+            <p>No pending project requests found.</p>
+        @endforelse
 
-        <!-- Add similar structure for other projects -->
-        <div class="project-card">
-            <div class="project-header">
-                <div>
-                    <h3 class="project-title">Greenwood Office Complex</h3>
-                    <div class="project-info">
-                        <span class="project-date">2026.06.30</span>
-                        <span class="project-budget">$12,000,000</span>
-                    </div>
-                </div>
-                <button class="btn-view" onclick="toggleProject(this)">View Project</button>
-            </div>
-            <div class="project-content">
-
-            <!-- Project Details -->
-            </div> 
-        </div>    
     </div>
-</div>
+</div> 
