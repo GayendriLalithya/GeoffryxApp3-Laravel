@@ -14,16 +14,16 @@
                     <span class="close-btn">&times;</span>
                 </div>
 
-                <form>
+                <form method="GET" action="{{ route('user.dashboard', ['tab' => 'professional']) }}">
 
                     <div class="mb-3">
                         <label class="form-label">Project Name</label>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" name="name" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Location</label>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" name="location" required>
                     </div>
                     
                     <label class="form-label">Time Duration</label>
@@ -32,29 +32,29 @@
 
                         <div class="date-box">
                             <label class="form-label">Start Date</label>
-                            <input type="date" class="form-control">
+                            <input type="date" class="form-control" name="start_date" required>
                         </div>
 
                         <div class="date-box">
                             <label class="form-label">End Date</label>
-                            <input type="date" class="form-control">
+                            <input type="date" class="form-control" name="end_date" required>
                         </div>
 
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Budget</label>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" name="budget" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Requirements</label>
-                        <textarea class="form-control" rows="6"></textarea>
+                        <textarea class="form-control" name="requirements" rows="6"></textarea>
                     </div>
 
                     <div class="form-buttons">
                         <button type="button" class="btn btn-teal">Suggest Professionals</button>
-                        <button type="button" class="btn btn-teal">Find Professionals</button>
+                        <button type="button" class="btn btn-teal" id="findProfessionalsBtn">Find Professionals</button>
                     </div>
 
                 </form>
@@ -181,7 +181,7 @@
                                             <div class="modal-card">
                                                 <h5>WhatsApp Group Link</h5>
                                                 <p>Here is the group link for Sunset Villas Project. Click the link Below to join</p>
-                                                <p class="text-primary">GSJC6A63%&$3HDHBCWH&*($#VG.com</p>
+                                                <p class="text-primary">GSJC6A63%&$3HDHBCWH&*$#VG.com</p>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -219,3 +219,22 @@
             </div>
         </div>
     </div>
+
+    <script>
+    document.getElementById('findProfessionalsBtn').addEventListener('click', function (e) {
+        e.preventDefault(); // Prevent the default form submission behavior
+
+        // Capture form data
+        const projectName = document.querySelector('input[name="name"]').value;
+        const location = document.querySelector('input[name="location"]').value;
+        const startDate = document.querySelector('input[name="start_date"]').value;
+        const endDate = document.querySelector('input[name="end_date"]').value;
+        const budget = document.querySelector('input[name="budget"]').value;
+        const requirements = document.querySelector('textarea[name="requirements"]').value;
+
+        // Redirect to the professionals tab with query parameters
+        const url = `{{ route('user.dashboard') }}?tab=professional&name=${encodeURIComponent(projectName)}&location=${encodeURIComponent(location)}&start_date=${startDate}&end_date=${endDate}&budget=${budget}&requirements=${encodeURIComponent(requirements)}`;
+
+        window.location.href = url;
+    });
+</script>

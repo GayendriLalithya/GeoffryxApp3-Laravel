@@ -73,3 +73,6 @@ use App\Http\Controllers\frontend\ProfessionalListController;
 Route::get('/professionals', [ProfessionalListController::class, 'index']);
 Route::get('/professionals/{id}', [ProfessionalListController::class, 'showProfessional']);
 
+use App\Http\Controllers\User\WorkController;
+
+Route::post('/work/store', [WorkController::class, 'store'])->name('work.store');

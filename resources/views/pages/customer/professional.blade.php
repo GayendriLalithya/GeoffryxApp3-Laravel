@@ -3,13 +3,8 @@
 @endsection
 
 @php
-    $professionals = DB::select('CALL LoadAllProfessionals()');
-
-    if (isset($id)) {
-        $professional = DB::table('professional_details')
-                          ->where('professional_id', $id)
-                          ->first();
-    }
+    // Check if professionals exist
+    $professionals = $professionals ?? [];
 @endphp
 
 
@@ -105,34 +100,52 @@
     @endforeach
 </div>
 
-
+@if ($tab === 'professional' && !empty($projectData['name']))
     <!-- Selected Professional List -->
     <div class="prof-select-card" id="profSelectCard">
         <div class="card-header" id="cardHeader">
-            <h5 class="m-0">Sunset Villas</h5>
+            <h5 class="m-0">{{ $projectData['name'] }}</h5>
             <button class="minimize-btn" id="minimizeBtn">
                 <i class="bi bi-chevron-down"></i>
             </button>
         </div>
         <div class="card-content" id="cardContent">
-            <div class="selected-professionals">
-                <!-- <div class="professional-item">
-                    <img class="professional-img" src="">
-                    <div class="professional-info">
-                        <p class="professional-name"></p>
-                        <p class="professional-title"></p>
-                    </div>
-                    <button class="delete-btn">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </div> -->
-            </div>
-            <p class="info-text">If you Cancel this process this project won't be created.</p>
-            <div class="card-footer">
-                <button class="btn btn-danger w-50">Cancel</button>
-                <button class="btn btn-success w-50">Save</button>
-            </div>
+            <form method="POST" action="{{ route('work.store') }}">
+            @csrf
+                <!-- Hidden Inputs to Pass Project Data -->
+                <input type="hidden" name="name" value="{{ $projectData['name'] }}">
+                <input type="hidden" name="location" value="{{ $projectData['location'] }}">
+                <input type="hidden" name="start_date" value="{{ $projectData['start_date'] }}">
+                <input type="hidden" name="end_date" value="{{ $projectData['end_date'] }}">
+                <input type="hidden" name="budget" value="{{ $projectData['budget'] }}">
+                <input type="hidden" name="requirements" value="{{ $projectData['requirements'] }}">
+
+                <div class="selected-professionals">
+                    
+                    <!-- <div class="professional-item">
+                        <img class="professional-img" src="">
+                        <div class="professional-info">
+                            <p class="professional-name"></p>
+                            <p class="professional-title"></p>
+                        </div>
+                        <button class="delete-btn">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div> -->
+
+                    @foreach ($professionals as $professional)
+                        <input type="hidden" name="professionals[]" value="{{ $professional->professional_id }}">
+                    @endforeach
+
+                </div>
+                <p class="info-text">If you Cancel this process this project won't be created.</p>
+                <div class="card-footer">
+                    <button class="btn btn-danger w-50" onclick="cancelProject()">Cancel</button>
+                    <button type="submit" class="btn btn-success w-50" id="saveProjectBtn">Save</button>
+                </div>
+            </form>
         </div>
     </div>
-    
+@endif
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">

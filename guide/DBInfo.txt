@@ -106,6 +106,40 @@ END //
 
 DELIMITER ;
 
+4. stored procedure to create project woth selected professionals
+
+DELIMITER $$
+
+CREATE PROCEDURE create_project_with_professionals(
+    IN p_user_id BIGINT,
+    IN p_name VARCHAR(255),
+    IN p_location VARCHAR(255),
+    IN p_start_date DATE,
+    IN p_end_date DATE,
+    IN p_budget DECIMAL(10,2),
+    IN p_description TEXT,
+    IN p_professionals JSON
+)
+BEGIN
+    DECLARE project_id BIGINT;
+
+    -- Insert project details into the 'work' table
+    INSERT INTO work (user_id, name, location, start_date, end_date, budget, description, created_at, updated_at)
+    VALUES (p_user_id, p_name, p_location, p_start_date, p_end_date, p_budget, p_description, NOW(), NOW());
+
+    SET project_id = LAST_INSERT_ID();
+
+    -- Insert professionals into 'pending_professional' table
+    INSERT INTO pending_professional (user_id, professional_id, work_id, professional_status, created_at, updated_at)
+    SELECT p_user_id, JSON_UNQUOTE(JSON_EXTRACT(p_professionals, CONCAT('$[', idx.i, ']'))), project_id, 'pending', NOW(), NOW()
+    FROM (SELECT 0 AS i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5) idx
+    WHERE JSON_UNQUOTE(JSON_EXTRACT(p_professionals, CONCAT('$[', idx.i, ']'))) IS NOT NULL;
+
+END$$
+
+DELIMITER ;
+
+
 
 
 * VIEWS *
@@ -175,6 +209,8 @@ SELECT
 FROM work_history wh
 JOIN work w ON wh.work_id = w.work_id
 LEFT JOIN rating r ON wh.rating_id = r.rating_id;
+
+
 
 * TRIGGERS *
 ------------

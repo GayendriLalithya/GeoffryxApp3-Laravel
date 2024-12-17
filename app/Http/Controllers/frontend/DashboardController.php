@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -48,9 +49,37 @@ class DashboardController extends Controller
         $tab = $request->get('tab', $defaultTab);
         $tabData = $availableTabs[$tab] ?? $availableTabs[$defaultTab];
     
+        // return view('layouts.dashboard', [
+        //     'tabView' => $tabData['view'],
+        //     'tabCss' => asset($tabData['css']),
+        // ]);
+
+        // Project data for 'professional' tab
+        $projectData = null;
+        if ($tab === 'professional') {
+            $projectData = [
+                'name' => $request->get('name'),
+                'location' => $request->get('location'),
+                'start_date' => $request->get('start_date'),
+                'end_date' => $request->get('end_date'),
+                'budget' => $request->get('budget'),
+                'requirements' => $request->get('requirements'),
+            ];
+        }
+
+        // Load all professionals using a stored procedure
+        $professionals = [];
+        if ($tab === 'professional') {
+            $professionals = DB::select('CALL LoadAllProfessionals()');
+        }
+
+        // Return the dashboard view
         return view('layouts.dashboard', [
+            'tab' => $tab,
             'tabView' => $tabData['view'],
             'tabCss' => asset($tabData['css']),
+            'projectData' => $projectData,
+            'professionals' => $professionals,
         ]);
     }
 }
