@@ -116,36 +116,16 @@
         </div>
         <div class="card-content" id="cardContent">
             <div class="selected-professionals">
-                <div class="professional-item">
-                    <img class="professional-img" src="{{ asset('resources/images/sample.png') }}">
+                <!-- <div class="professional-item">
+                    <img class="professional-img" src="">
                     <div class="professional-info">
-                        <p class="professional-name">Ann Fox</p>
-                        <p class="professional-title">Chartered Architect</p>
+                        <p class="professional-name"></p>
+                        <p class="professional-title"></p>
                     </div>
                     <button class="delete-btn">
                         <i class="bi bi-trash"></i>
                     </button>
-                </div>
-                <div class="professional-item">
-                    <img class="professional-img" src="{{ asset('resources/images/sample.png') }}">
-                    <div class="professional-info">
-                        <p class="professional-name">John Doe</p>
-                        <p class="professional-title">Structural Engineer</p>
-                    </div>
-                    <button class="delete-btn">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </div>
-                <div class="professional-item">
-                    <img class="professional-img" src="{{ asset('resources/images/sample.png') }}">
-                    <div class="professional-info">
-                        <p class="professional-name">Simon Warner</p>
-                        <p class="professional-title">Structural Engineer</p>
-                    </div>
-                    <button class="delete-btn">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </div>
+                </div> -->
             </div>
             <p class="info-text">If you Cancel this process this project won't be created.</p>
             <div class="card-footer">
