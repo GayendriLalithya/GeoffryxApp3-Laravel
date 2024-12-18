@@ -44,11 +44,20 @@ class ProjectRequestController extends Controller
     {
         $userId = Auth::id(); // Get the logged-in user ID
         $workId = $request->input('work_id');
-    
-        // Call the stored procedure
-        DB::statement('CALL AcceptWorkAndAddToTeam(?, ?)', [$workId, $userId]);
-    
-        return redirect()->back()->with('success', 'Work accepted and added to the team.');
-    }
 
+        try {
+            // Call the stored procedure
+            DB::statement('CALL AcceptWorkAndAddToTeam(?, ?)', [$workId, $userId]);
+
+            // Redirect back with a success alert
+            return redirect()->route('user.dashboard', ['tab' => 'manage_projects'])
+                             ->with('alert-success', 'Work accepted and added to the team successfully.');
+        } catch (Exception $e) {
+            // Log the exception for debugging
+            Log::error('Error accepting work: ' . $e->getMessage());
+
+            // Redirect back with an error alert
+            return redirect()->back()->with('alert-error', 'An unexpected error occurred while processing the request. Please try again.');
+        }
+    }
 }
