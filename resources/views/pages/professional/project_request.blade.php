@@ -72,7 +72,11 @@
                         <textarea class="form-control" rows="6" readonly>{{ $project->description }}</textarea>
                     </div>
                     <div class="action-buttons">
-                        <button type="button" class="btn-reject">Reject Work</button>
+                        
+                        <!-- Button with dynamic data attribute -->
+                        <button type="button" class="btn-reject" data-bs-toggle="modal" data-bs-target="#rejectModal" onclick="document.getElementById('rejectWorkId').value = '{{ $project->work_id }}';">
+                            Reject Work
+                        </button>
 
                         <button type="button" class="btn-refer">Refer Work</button>
 
@@ -89,3 +93,38 @@
 
     </div>
 </div> 
+
+<form action="{{ route('reject-work') }}" method="POST">
+    @csrf
+    <!-- Single Modal for all records -->
+    <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rejectModalLabel">
+                        <i class="fas fa-times-circle text-danger me-2"></i>
+                        Reason for rejection
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="hidden" name="work_id" id="rejectWorkId">
+                        <textarea class="form-control" id="reasonTextarea" rows="4" placeholder="Please provide the reason for rejection..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger" onclick="submitRejection()">
+                        <i class="fas fa-paper-plane me-2"></i>
+                        Submit Rejection
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section('additional-css')
+    <script src="{{ asset('resources/js/verify.js') }}"></script>
+@endsection

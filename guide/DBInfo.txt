@@ -201,8 +201,48 @@ END$$
 
 DELIMITER ;
 
+6. Stored Procedure to handle work rejection by the professional
 
+DELIMITER $$
 
+CREATE PROCEDURE RejectWork(
+    IN workId INT,
+    IN professionalId INT,
+    IN rejectionReason TEXT
+)
+BEGIN
+    DECLARE userId INT;
+    DECLARE professionalName VARCHAR(255);
+
+    -- Update status in pending_professional table
+    UPDATE pending_professional
+    SET professional_status = 'rejected'
+    WHERE work_id = workId
+    AND professional_id = professionalId;
+
+    -- Get the user_id from the work table
+    SELECT user_id INTO userId
+    FROM work
+    WHERE work_id = workId;
+
+    -- Get the professional name
+    SELECT name INTO professionalName
+    FROM users
+    WHERE user_id = (SELECT user_id FROM professionals WHERE professional_id = professionalId);
+
+    -- Insert notification into the notifications table
+    INSERT INTO notifications (user_id, title, message, status, created_at, updated_at)
+    VALUES (
+        userId,
+        'Project Rejection',
+        CONCAT('Your project has been rejected by ', professionalName, '. The reason is: ', rejectionReason),
+        'unread',
+        NOW(),
+        NOW()
+    );
+END$$
+
+DELIMITER ;
 
 
 

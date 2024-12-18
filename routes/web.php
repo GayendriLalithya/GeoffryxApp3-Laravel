@@ -83,3 +83,6 @@ Route::get('/professional/requests', [ProjectRequestController::class, 'index'])
     ->name('professional.requests');
 
 Route::post('/accept-work', [ProjectRequestController::class, 'acceptWork'])->name('accept-work');
+Route::post('/reject-work', [ProjectRequestController::class, 'rejectWork'])->name('reject-work');
+
+

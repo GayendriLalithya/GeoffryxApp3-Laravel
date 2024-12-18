@@ -60,4 +60,54 @@ class ProjectRequestController extends Controller
             return redirect()->back()->with('alert-error', 'An unexpected error occurred while processing the request. Please try again.');
         }
     }
+
+    public function rejectWork(Request $request)
+{
+    $userId = Auth::id(); // Logged-in user ID
+    $workId = $request->input('work_id');
+    $reason = $request->input('rejection_reason');
+
+    try {
+        // Get the professional ID
+        $professional = DB::table('professionals')
+            ->where('user_id', $userId)
+            ->select('professional_id')
+            ->first();
+
+        // Update the status in the pending_professional table
+        DB::table('pending_professional')
+            ->where('work_id', $workId)
+            ->where('professional_id', $professional->professional_id)
+            ->update(['professional_status' => 'rejected']);
+
+        // Get the user ID related to the work ID
+        $work = DB::table('work')
+            ->where('work_id', $workId)
+            ->select('user_id', 'name')
+            ->first();
+
+        if ($work) {
+            // Create a notification for the project owner
+            DB::table('notifications')->insert([
+                'user_id' => $work->user_id,
+                'title' => 'Project Rejection',
+                'message' => 'Your project has been rejected by ' . Auth::user()->name . '. The reason is: ' . $reason,
+                'status' => 'unread',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        // Redirect back with a success alert
+        return redirect()->route('user.dashboard', ['tab' => 'professional'])
+                         ->with('alert-success', 'The work was successfully rejected, and the notification was sent.');
+    } catch (Exception $e) {
+        // Log the exception for debugging
+        Log::error('Error rejecting work: ' . $e->getMessage());
+
+        // Redirect back with an error alert
+        return redirect()->back()->with('alert-error', 'An unexpected error occurred while processing the rejection. Please try again.');
+    }
+}
+
 }
