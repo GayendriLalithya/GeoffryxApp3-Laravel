@@ -28,7 +28,7 @@
 <div class="projects-container">
 @forelse ($projects as $project)
         <!-- Project Card -->
-        <div class="project-card">
+        <div class="project-card" data-work-id="{{ $project->work_id }}">
             <div class="project-header">
                 <div>
                     <h3 class="project-title">{{ $project->name }}</h3>
@@ -41,7 +41,8 @@
             </div>
 
             <div class="project-content collapse">
-                <form>
+                <form action="{{ route('accept-work') }}" method="POST">
+                @csrf
                     <div class="form-group">
                         <label>Client Name</label>
                         <input type="text" class="form-control" value="{{ $project->client_name }}" readonly>
@@ -72,8 +73,12 @@
                     </div>
                     <div class="action-buttons">
                         <button type="button" class="btn-reject">Reject Work</button>
+
                         <button type="button" class="btn-refer">Refer Work</button>
-                        <button type="button" class="btn-accept">Accept Work</button>
+
+                        <input type="hidden" name="work_id" value="{{ $project->work_id }}">
+                        <button type="submit" class="btn-accept">Accept Work</button>
+
                     </div>
                 </form>
             </div>

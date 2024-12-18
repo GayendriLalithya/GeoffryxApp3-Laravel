@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Professional;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -38,4 +39,16 @@ class ProjectRequestController extends Controller
         // Return view with projects
         return view('pages.professional.project_request', compact('projects'));
     }
+
+    public function acceptWork(Request $request)
+    {
+        $userId = Auth::id(); // Get the logged-in user ID
+        $workId = $request->input('work_id');
+    
+        // Call the stored procedure
+        DB::statement('CALL AcceptWorkAndAddToTeam(?, ?)', [$workId, $userId]);
+    
+        return redirect()->back()->with('success', 'Work accepted and added to the team.');
+    }
+
 }

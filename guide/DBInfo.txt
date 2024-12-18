@@ -172,6 +172,36 @@ END$$
 
 DELIMITER ;
 
+5. Stored procedure to create a member record when aceepted the work by a professional
+
+DELIMITER $$
+
+CREATE PROCEDURE AcceptWorkAndAddToTeam(
+    IN workId INT,
+    IN userId INT
+)
+BEGIN
+    DECLARE teamId INT;
+
+    -- Update status in pending_professional table
+    UPDATE pending_professional
+    SET professional_status = 'accepted'
+    WHERE work_id = workId
+    AND professional_id = (SELECT professional_id FROM professionals WHERE user_id = userId);
+
+    -- Get the team ID for the work ID
+    SELECT team_id INTO teamId
+    FROM team
+    WHERE work_id = workId;
+
+    -- Add record to team_members table
+    INSERT INTO team_members (user_id, team_id, status, created_at, updated_at)
+    VALUES (userId, teamId, 'not stated', NOW(), NOW());
+END$$
+
+DELIMITER ;
+
+
 
 
 
@@ -257,6 +287,7 @@ ORDER BY work.created_at DESC;
 
 
 
+
 * TRIGGERS *
 ------------
 
@@ -285,3 +316,17 @@ END$$
 
 DELIMITER ;
 
+2. Create a Trigger to automatically create a record in team table when creating a record in work table
+
+DELIMITER $$
+
+CREATE TRIGGER after_work_insert
+AFTER INSERT ON work
+FOR EACH ROW
+BEGIN
+    -- Insert a new team record whenever a work record is created
+    INSERT INTO team (work_id, created_at, updated_at) 
+    VALUES (NEW.work_id, NOW(), NOW());
+END$$
+
+DELIMITER ;

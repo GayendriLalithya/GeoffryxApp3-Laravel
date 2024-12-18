@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('team', function (Blueprint $table) {
             $table->id('team_id');
             $table->unsignedBigInteger('work_id');
-            $table->string('status');
+            // $table->string('status');
             $table->timestamps();
         
             $table->foreign('work_id')->references('work_id')->on('work');

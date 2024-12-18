@@ -135,6 +135,10 @@ body {
     margin-top: 20px;
 }
 
+.modal-content .form-control {
+    width: 81%;
+}
+
 .close-btn {
     cursor: pointer;
     float: right;

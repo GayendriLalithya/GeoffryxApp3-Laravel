@@ -77,8 +77,9 @@ use App\Http\Controllers\User\WorkController;
 
 Route::post('/work/store', [WorkController::class, 'store'])->name('work.store');
 
-use App\Http\Controllers\User\ProjectRequestController;
+use App\Http\Controllers\Professional\ProjectRequestController;
 
 Route::get('/professional/requests', [ProjectRequestController::class, 'index'])
     ->name('professional.requests');
 
+Route::post('/accept-work', [ProjectRequestController::class, 'acceptWork'])->name('accept-work');

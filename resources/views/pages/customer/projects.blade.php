@@ -137,7 +137,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="modal-card">
-                                                <h5>Team Members</h5>
+                                                <h5>Requested Professionals</h5>
                                                 <div id="teamList">
                                                     <div class="mb-3">
                                                         <label>Charted Architect</label>
@@ -183,9 +183,35 @@
                                             </div>
 
                                             <div class="modal-card">
-                                                <h5>WhatsApp Group Link</h5>
-                                                <p>Here is the group link for Sunset Villas Project. Click the link Below to join</p>
-                                                <p class="text-primary">GSJC6A63%&$3HDHBCWH&*$#VG.com</p>
+                                                <h5>Team Members</h5>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label>Team Member Name</label>  <!-- If the user id in here is same as the logged in user id then the user can edit this sectopn else the select type input should be readonly -->
+                                                    </div>
+                                                    <div class="col">
+                                                        <select class="form-select" id="memberType">
+                                                            <option value="">Status</option>
+                                                            <option value="0">Not Started</option>
+                                                            <option value="30">In Progress</option>
+                                                            <option value="50">Halfway Through</option>
+                                                            <option value="70">Almost Done</option>
+                                                            <option value="100">Completed</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <div class="col">
+                                                        <label>Project Status</label>
+                                                    </div>
+                                                    <div class="col">
+                                                        <!-- Display the project status by adding all the status values and divided them by team member count
+                                                         And if value = 0 - 50 In progress
+                                                                value = 50 - 70 Halfway through
+                                                                value = 70 - 100 Almost Done
+                                                                value = 100 Completed
+                                                        Also use colors when displaying those Ex: Not started - red, in progress - yellow, ... etc -->
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
