@@ -4,9 +4,33 @@
 
 @php
     use App\Models\UserProject;
+    use App\Models\Team;
+    use App\Models\TeamMember;
 
-    // Get all projects for the logged-in user
-    $projects = UserProject::where('user_id', Auth::id())->get();
+    $userId = Auth::id(); // Get the logged-in user's ID
+
+    // Fetch all projects created by the logged-in user
+    $projects = UserProject::where('user_id', $userId)->get();
+
+    // Fetch team and team members for each project
+    $teamsWithMembers = [];
+    foreach ($projects as $project) {
+        // Get the team associated with the project's work_id
+        $team = Team::where('work_id', $project->work_id)->first();
+
+        if ($team) {
+            // Fetch team members for the team
+            $teamMembers = TeamMember::with('user') // Assuming 'user' is the relationship in TeamMember
+                ->where('team_id', $team->team_id)
+                ->get();
+
+            // Store team and members together
+            $teamsWithMembers[] = [
+                'team' => $team,
+                'members' => $teamMembers,
+            ];
+        }
+    }
 @endphp
 
 <button class="new-project-btn">
@@ -124,138 +148,62 @@
                         </div>
 
                         <div class="action-buttons">
-                            <button type="button" class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#teamModal">View Team</button>
+                            <button type="button" class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#teamModal-{{ $team->work->work_id }}">View Team</button>
                         </div>
 
-                            <!-- Team Members Modal -->
-                            <div class="modal fade" id="teamModal" tabindex="-1">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Sunset Villas</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="modal-card">
-                                                <h5>Requested Professionals</h5>
-                                                <div id="teamList">
-                                                    <div class="mb-3">
-                                                        <label>Charted Architect</label>
-                                                        <div class="team-members mt-2">
-                                                            <input type="text" class="form-control" value="Ann Fox" readonly>
-                                                            <span class="status pending">Pending</span>
-                                                            <button class="delete-btn"><i class="bi bi-trash"></i></button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label>Structural Engineer</label>
-                                                        <div class="team-members mt-2">
-                                                            <input type="text" class="form-control" value="Sam Fox" readonly>
-                                                            <span class="status rejected">Rejected</span>
-                                                            <button class="delete-btn"><i class="bi bi-trash"></i></button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label>Contractor</label>
-                                                        <div class="team-members mt-2">
-                                                            <input type="text" class="form-control" value="Thomas Middleton" readonly>
-                                                            <span class="status accepted">Accepted</span>
-                                                            <button class="delete-btn"><i class="bi bi-trash"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <select class="form-select" id="memberType">
-                                                            <option value="">Type</option>
-                                                            <option value="Charted Architect">Charted Architect</option>
-                                                            <option value="Structural Engineer">Structural Engineer</option>
-                                                            <option value="contractor">Contractor</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col">
-                                                        <input type="text" class="form-control" id="memberName" placeholder="Name">
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <button class="btn btn-teal" onclick="addTeamMember()">Add</button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                        <!-- Include the team modal -->
+                @php
+                    $teamWithMembers = collect($teamsWithMembers)
+                        ->firstWhere('team.work_id', $project->work_id);
+                @endphp
 
-                                            <div class="modal-card">
-                                                <h5>Team Members</h5>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <label>Team Member Name</label>  <!-- If the user id in here is same as the logged in user id then the user can edit this sectopn else the select type input should be readonly -->
-                                                    </div>
-                                                    <div class="col">
-                                                        <select class="form-select" id="memberType">
-                                                            <option value="">Status</option>
-                                                            <option value="0">Not Started</option>
-                                                            <option value="30">In Progress</option>
-                                                            <option value="50">Halfway Through</option>
-                                                            <option value="70">Almost Done</option>
-                                                            <option value="100">Completed</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="row mt-3">
-                                                    <div class="col">
-                                                        <label>Project Status</label>
-                                                    </div>
-                                                    <div class="col">
-                                                        <!-- Display the project status by adding all the status values and divided them by team member count
-                                                         And if value = 0 - 50 In progress
-                                                                value = 50 - 70 Halfway through
-                                                                value = 70 - 100 Almost Done
-                                                                value = 100 Completed
-                                                        Also use colors when displaying those Ex: Not started - red, in progress - yellow, ... etc -->
+                @if ($teamWithMembers)
+                    <!-- Team Members Modal -->
+                    <div class="modal fade" id="teamModal-{{ $project->work_id }}" tabindex="-1">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Team for {{ $project->name }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h5>Team Members</h5>
+                                    <ul>
+                                        @if ($teamWithMembers['members']->isEmpty())
+                                            <p>No professionals found for this project.</p>
+                                        @else
+                                            @foreach ($teamWithMembers['members'] as $member)
+                                                <div class="mb-3">
+                                                    <label>{{ $member->professional_type ?? 'N/A' }}</label>
+                                                    <div class="team-members mt-2">
+                                                        <input type="text" class="form-control" value="{{ $member->user->name ?? 'N/A' }}" readonly>
+                                                        <span class="status {{ strtolower($member->status ?? 'unknown') }}">
+                                                            {{ ucfirst($member->status ?? 'Unknown') }}
+                                                        </span>
+                                                        <button class="delete-btn"><i class="bi bi-trash"></i></button>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-teal" onclick="showRatingsModal()">Make Payment</button>
-                                        </div>
-                                    </div>
+                                            @endforeach
+                                        @endif
+                                    </ul>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
-
-                            <!-- Ratings Modal -->
-                            <div class="modal fade" id="ratingsModal" tabindex="-1">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Sunset Villas</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body" id="ratingsContent">
-                                            <!-- Ratings content will be dynamically generated -->
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-teal">Rate Professionals</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            </form>
                         </div>
-
                     </div>
-                @endforeach
-            
-                @if($projects->isEmpty())
-                    <p>No projects found.</p>
+                @else
+                    <p>No team information found for this project.</p>
                 @endif
-            </div>
+            </form>
         </div>
+    </div>
+@endforeach
 
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 
-    <script>
+<script>
     document.getElementById('findProfessionalsBtn').addEventListener('click', function (e) {
         e.preventDefault(); // Prevent the default form submission behavior
 

@@ -47,7 +47,7 @@ class Work extends Model
 
     public function team()
     {
-        return $this->hasMany(Team::class, 'work_id', 'work_id');
+        return $this->hasOne(Team::class, 'work_id');
     }
 
     public function installmentPlans()
@@ -58,5 +58,10 @@ class Work extends Model
     public function client()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function pendingProfessionals()
+    {
+        return $this->hasMany(PendingProfessional::class, 'work_id');
     }
 }

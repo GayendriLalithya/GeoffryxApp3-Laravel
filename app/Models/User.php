@@ -93,4 +93,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(VerifyRequest::class);
     }
+
+    public function pendingProfessionals()
+    {
+        return $this->hasMany(PendingProfessional::class, 'user_id');
+    }
+
 }
