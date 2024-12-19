@@ -17,3 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Group Chat
+
+// Route::post('/group-chat/create', [GroupChatController::class, 'createGroupChat']);
+// Route::post('/group-chat/validate', [GroupChatController::class, 'validateGroupAccess']);

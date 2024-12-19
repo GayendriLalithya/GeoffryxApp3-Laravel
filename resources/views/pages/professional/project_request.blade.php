@@ -60,7 +60,7 @@
                         <input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($project->end_date)->format('Y.m.d') }}" readonly>
                     </div>
                     <div class="form-group">
-                        <label>Budget Range</label>
+                        <label>Budget</label>
                         <input type="text" class="form-control" value="${{ number_format($project->budget, 2) }}" readonly>
                     </div>
                     <div class="form-group">

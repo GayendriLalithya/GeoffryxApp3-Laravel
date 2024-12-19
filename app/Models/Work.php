@@ -54,4 +54,9 @@ class Work extends Model
     {
         return $this->hasMany(InstallmentPlan::class, 'work_id', 'work_id');
     }
+
+    public function client()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

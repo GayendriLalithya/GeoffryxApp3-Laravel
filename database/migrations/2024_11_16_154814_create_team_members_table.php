@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('team_members', function (Blueprint $table) {
             $table->id('team_member_id');
-            $table->unsignedBigInteger('professional_id');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('team_id');
+            $table->enum('status', ['not stated', 'in progress', 'halfway through', 'almost done', 'completed'])
+                  ->default('not stated');
             $table->timestamps();
-        
-            $table->foreign('professional_id')->references('professional_id')->on('professionals');
+
+            $table->foreign('user_id')->references('user_id')->on('users');
             $table->foreign('team_id')->references('team_id')->on('team');
-        });        
+        });
     }
 
     /**

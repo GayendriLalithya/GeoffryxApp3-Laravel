@@ -85,4 +85,9 @@ Route::get('/professional/requests', [ProjectRequestController::class, 'index'])
 Route::post('/accept-work', [ProjectRequestController::class, 'acceptWork'])->name('accept-work');
 Route::post('/reject-work', [ProjectRequestController::class, 'rejectWork'])->name('reject-work');
 
+use App\Http\Controllers\User\ProjectController;
 
+Route::get('/manage-projects', [ProjectController::class, 'manageProjects'])->name('manage.projects');
+
+// Group Chat
+// Route::get('/group-chat/{id}/{email}', [GroupChatController::class, 'showGroupChatView'])->name('group-chat.view');

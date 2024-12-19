@@ -53,7 +53,7 @@
 
                             <div class="d-flex gap-2">
                                 <button type="button" class="remove-btn" id="nicFrontRemoveBtn" style="display: none;">Remove File</button>
-                                <button class="btn btn-teal">Save</button>
+                                <!-- <button class="btn btn-teal">Save</button> -->
                             </div>
                         </div>
 
@@ -68,7 +68,7 @@
 
                             <div class="d-flex gap-2">
                                 <button type="button" class="remove-btn" id="nicBackRemoveBtn" style="display: none;">Remove File</button>
-                                <button class="btn btn-teal">Save</button>
+                                <!-- <button class="btn btn-teal">Save</button> -->
                             </div>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
 
                         <div class="d-flex gap-2">
                             <button type="button" class="remove-btn" id="certRemoveBtn" style="display: none;">Remove File</button>
-                            <button class="btn btn-teal">Save</button>
+                            <!-- <button class="btn btn-teal">Save</button> -->
                         </div>
                     </div>
                 </div>

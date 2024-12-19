@@ -3,8 +3,9 @@
 
 1. To Change the User type to professional in user table, create a record in professional table and notification table and update the verify table status to Verified when accepting a verification request.
 
-Procedure Name : AcceptVerification
+DELIMITER $$
 
+CREATE PROCEDURE AcceptVerification(IN verify_id_param INT)
 BEGIN
     DECLARE user_id_param INT;
     DECLARE professional_type_param VARCHAR(255);
@@ -66,7 +67,9 @@ BEGIN
         NOW(), 
         NOW()
     );
-END
+END$$
+
+DELIMITER ;
 
 2. Stored procedure for displaying professionals with loading their information
 
@@ -99,7 +102,7 @@ BEGIN
     LEFT JOIN profile_picture pp ON u.user_id = pp.user_id
     LEFT JOIN (
         SELECT professional_id, AVG(rate) AS average_rating
-        FROM ratings
+        FROM rating
         GROUP BY professional_id
     ) r ON p.professional_id = r.professional_id;
 END //
