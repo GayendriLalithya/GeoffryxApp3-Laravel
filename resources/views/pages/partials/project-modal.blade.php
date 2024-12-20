@@ -85,7 +85,9 @@ $pendingProfessionals = PendingProfessional::with(['professional.user']) // Ensu
                             @if ($pendingProfessional->professional_status !== 'accepted')
                                 <form>
                                     @csrf
-                                    <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                 </form>
                             @endif
                             </div>
@@ -108,16 +110,22 @@ $pendingProfessionals = PendingProfessional::with(['professional.user']) // Ensu
                             </select>
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control" id="memberName" placeholder="Name">
+                            <input type="text" class="form-control" id="memberName" placeholder="Name" list="nameSuggestions">
+                            <datalist id="nameSuggestions"></datalist>
                         </div>
                         <div class="col-auto">
-                            <button class="btn btn-teal">Add</button>
+                            <button class="btn btn-teal" id="addMemberButton">Add</button>
                         </div>
                     </div>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="{{ route('group-chat.view', ['id' => $workId, 'email' => Auth::user()->email]) }}" 
+                       class="btn btn-primary" 
+                       target="_blank">
+                        Group Chat
+                    </a>
                 </div>
             </div>
         </div>

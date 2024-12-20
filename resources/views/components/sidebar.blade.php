@@ -38,7 +38,7 @@
 
             <!-- Common Links - Settings for all users -->
             <a class="nav-link {{ request('tab') == 'projects' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'projects']) }}">
-                <i class="fas fa-project-diagram"></i> Projects
+                <i class="fas fa-project-diagram"></i> My Projects
             </a>
             <a class="nav-link {{ request('tab') == 'professional' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'professional']) }}">
                 <i class="fas fa-user-tie"></i> Professionals

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\common;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -260,4 +260,5 @@ class GroupChatController extends Controller
             'chatboxUrl' => $chatboxUrl, // Remove this if you're fetching messages via API
         ]);
     }
+
 }

@@ -20,5 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Group Chat
 
-// Route::post('/group-chat/create', [GroupChatController::class, 'createGroupChat']);
-// Route::post('/group-chat/validate', [GroupChatController::class, 'validateGroupAccess']);
+use App\Http\Controllers\GroupChatController;
+
+Route::post('/group-chat/create', [GroupChatController::class, 'createGroupChat']);
+Route::post('/group-chat/validate', [GroupChatController::class, 'validateGroupAccess']);

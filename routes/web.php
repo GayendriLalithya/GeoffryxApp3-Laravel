@@ -97,4 +97,7 @@ Route::post('/team-members/update-status', [TeamController::class, 'updateStatus
 
 
 // Group Chat
-// Route::get('/group-chat/{id}/{email}', [GroupChatController::class, 'showGroupChatView'])->name('group-chat.view');
+
+use App\Http\Controllers\GroupChatController;
+
+Route::get('/group-chat/{id}/{email}', [GroupChatController::class, 'showGroupChatView'])->name('group-chat.view');
