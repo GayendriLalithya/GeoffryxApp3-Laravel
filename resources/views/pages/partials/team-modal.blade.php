@@ -9,8 +9,6 @@
     }
 @endphp
 
-
-
 @if (!empty($teamMembers))
     <!-- Team Members Modal -->
     <div class="modal fade" id="teamModal-{{ $teamId }}" tabindex="-1">
@@ -64,7 +62,7 @@
                                             @csrf
                                             <input type="hidden" name="team_member_id" value="{{ $member->team_member_id }}">
                                             <select name="status" class="form-select">
-                                                <option value="not stated" {{ $member->member_status == 'not stated' ? 'selected' : '' }}>Not Stated</option>
+                                                <option value="not started" {{ $member->member_status == 'not stated' ? 'selected' : '' }}>Not Started</option>
                                                 <option value="in progress" {{ $member->member_status == 'in progress' ? 'selected' : '' }}>In Progress</option>
                                                 <option value="halfway through" {{ $member->member_status == 'halfway through' ? 'selected' : '' }}>Halfway Through</option>
                                                 <option value="almost done" {{ $member->member_status == 'almost done' ? 'selected' : '' }}>Almost Done</option>
@@ -78,7 +76,7 @@
                                     @if ($member->user_id == $userId)
                                         <button type="submit" class="btn btn-teal" style="width: 100%;">Save</button>
                                     @else
-                                        <span>{{ ucfirst($member->member_status) }}</span> <!-- Static Status -->
+                                        <!-- Static Status -->
                                     @endif
                                 </div>
                                 </form>
@@ -91,8 +89,25 @@
                             <label>Project Status</label>
                         </div>
                         <div class="col">
-                            <!-- Logic to calculate project status -->
-                            
+                            @php
+                                // Calculate project status
+                                $totalMembers = \App\Models\TeamMember::where('team_id', $teamId)->count();
+                                $completedMembers = \App\Models\TeamMember::where('team_id', $teamId)->where('status', 'completed')->count();
+                                $notStartedMembers = \App\Models\TeamMember::where('team_id', $teamId)->where('status', 'not started')->count();
+    
+                                // Determine project status and color
+                                if ($totalMembers === $completedMembers) {
+                                    $statusText = 'Completed';
+                                    $statusColor = 'green';
+                                } elseif ($totalMembers === $notStartedMembers) {
+                                    $statusText = 'Not Started';
+                                    $statusColor = 'red';
+                                } else {
+                                    $statusText = 'In Progress';
+                                    $statusColor = 'orange';
+                                }
+                            @endphp
+                        <span style="color: {{ $statusColor }}; font-weight: bold;">{{ $statusText }}</span>
                         </div>
                     </div>
                 </div>
