@@ -247,6 +247,31 @@ END$$
 
 DELIMITER ;
 
+7. Stored procedure to get team members by the team id from team-modal page
+
+DELIMITER $$
+
+CREATE PROCEDURE GetTeamMembersByTeamId(IN teamId INT)
+BEGIN
+    SELECT 
+        tm.team_member_id,
+        tm.user_id,
+        u.name AS member_name,
+        tm.status AS member_status,
+        p.type AS professional_type
+    FROM 
+        team_members tm
+    JOIN 
+        users u ON tm.user_id = u.user_id
+    LEFT JOIN 
+        professionals p ON tm.user_id = p.user_id
+    WHERE 
+        tm.team_id = teamId;
+END$$
+
+DELIMITER ;
+
+
 
 
 * VIEWS *

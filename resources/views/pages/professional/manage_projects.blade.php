@@ -3,6 +3,7 @@
 @endsection
 
 @php
+    use Illuminate\Support\Facades\DB;
     use App\Models\Team;
     use App\Models\TeamMember;
 
@@ -13,21 +14,13 @@
                  ->whereIn('team_id', TeamMember::where('user_id', $userId)->pluck('team_id'))
                  ->get();
 
-    $teamMembersByTeamId = []; // Initialize array to store members by team ID
-
+    // Fetch team members grouped by team_id using the stored procedure
+    $teamMembersByTeamId = [];
     foreach ($teams as $team) {
-        // Fetch all team members for this specific team ID
-        $teamMembersByTeamId[$team->team_id] = TeamMember::where('team_id', $team->team_id) // Filter by team_id
-            ->join('users', 'team_members.user_id', '=', 'users.user_id') // Join with users table to get user details
-            ->leftJoin('professionals', 'team_members.user_id', '=', 'professionals.user_id') // Join with professionals table
-            ->select(
-                'users.name as member_name', // Select user name
-                'team_members.status as member_status', // Select member status
-                'professionals.type as professional_type' // Select professional type
-            )
-            ->get(); // Get all rows
+        $teamMembersByTeamId[$team->team_id] = DB::select('CALL GetTeamMembersByTeamId(?)', [$team->team_id]);
     }
 @endphp
+
 
 @foreach ($teams as $team)
     @if ($team->work && $team->work->client)

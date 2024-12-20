@@ -1,30 +1,17 @@
 @php
-    use App\Models\Team;
-    use App\Models\TeamMember;
+    use Illuminate\Support\Facades\DB;
 
-    $userId = Auth::id(); // Get the logged-in user's ID
-
-    // Fetch all teams where the user is a member
-    $teams = Team::with(['work.client']) // Eager load work and client relationships
-                 ->whereIn('team_id', TeamMember::where('user_id', $userId)->pluck('team_id'))
-                 ->get();
-
-    // Fetch team members grouped by team_id
     $teamMembersByTeamId = [];
 
     foreach ($teams as $team) {
-        // Fetch all team members for the current team_id
-        $teamMembersByTeamId[$team->team_id] = TeamMember::where('team_id', $team->team_id)
-            ->join('users', 'team_members.user_id', '=', 'users.user_id') // Join with users table for user details
-            ->select(
-                'users.name as member_name',       // Select user name
-                'team_members.status as member_status' // Select team member status
-            )
-            ->get();
+        // Call the stored procedure and pass the team_id
+        $teamMembersByTeamId[$team->team_id] = DB::select('CALL GetTeamMembersByTeamId(?)', [$team->team_id]);
     }
 @endphp
 
-@if ($teamMembers->isNotEmpty())
+
+
+@if (!empty($teamMembers))
     <!-- Team Members Modal -->
     <div class="modal fade" id="teamModal-{{ $teamId }}" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -38,33 +25,41 @@
                     <div class="modal-card">
                         <h5>Team Members</h5>
                         <div class="row mb-2" style="background-color: #e6fbff;">
-                            <div class="col-4">
+                            <div class="col-2">
+                                <label><b>Team Member ID</b></label>
+                            </div>
+                            <div class="col-2">
+                                <label><b>User ID</b></label>
+                            </div>
+                            <div class="col-2">
                                 <label><b>Name</b></label>
                             </div>
-                            <div class="col-4">
+                            <div class="col-2">
                                 <label><b>Professional Type</b></label>
                             </div>
-                            <div class="col-4">
+                            <div class="col-2">
                                 <label><b>Work Status</b></label>
                             </div>
                         </div>
-                        @if ($teamMembers->isNotEmpty())
-                            @foreach ($teamMembers as $member)
-                                <div class="row mb-2">
-                                    <div class="col-4">
-                                        <span>{{ $member->member_name }}</span>
-                                    </div>
-                                    <div class="col-4">
-                                        <span>{{ $member->professional_type ?? 'Not a Professional' }}</span>
-                                    </div>
-                                    <div class="col-4">
-                                        <span>{{ ucfirst($member->member_status) }}</span>
-                                    </div>
+                        @foreach ($teamMembers as $member)
+                            <div class="row mb-2">
+                                <div class="col-2">
+                                    <span>{{ $member->team_member_id }}</span> <!-- Team Member ID -->
                                 </div>
-                            @endforeach
-                        @else
-                            <p>No team members found for this team.</p>
-                        @endif
+                                <div class="col-2">
+                                    <span>{{ $member->user_id }}</span> <!-- User ID -->
+                                </div>
+                                <div class="col-2">
+                                    <span>{{ $member->member_name }}</span>
+                                </div>
+                                <div class="col-2">
+                                    <span>{{ $member->professional_type ?? 'Not a Professional' }}</span>
+                                </div>
+                                <div class="col-2">
+                                    <span>{{ ucfirst($member->member_status) }}</span>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
 
                     <div class="row mt-3">
