@@ -24,40 +24,64 @@
                 <div class="modal-body">
                     <div class="modal-card">
                         <h5>Team Members</h5>
-                        <div class="row mb-2" style="background-color: #e6fbff;">
-                            <div class="col-2">
+                        <div class="row mb-2 p-1" style="background-color: #e6fbff;">
+                            <!-- <div class="col-2">
                                 <label><b>Team Member ID</b></label>
                             </div>
                             <div class="col-2">
                                 <label><b>User ID</b></label>
-                            </div>
-                            <div class="col-2">
+                            </div> -->
+                            <div class="col-3">
                                 <label><b>Name</b></label>
                             </div>
-                            <div class="col-2">
+                            <div class="col-3">
                                 <label><b>Professional Type</b></label>
                             </div>
-                            <div class="col-2">
+                            <div class="col-3">
                                 <label><b>Work Status</b></label>
+                            </div>
+                            <div class="col-3">
+                                <label><b>Actions</b></label>
                             </div>
                         </div>
                         @foreach ($teamMembers as $member)
-                            <div class="row mb-2">
-                                <div class="col-2">
-                                    <span>{{ $member->team_member_id }}</span> <!-- Team Member ID -->
+                            <div class="row mb-2 p-1">
+                                <!-- <div class="col-2">
+                                    <span>{{ $member->team_member_id }}</span> 
                                 </div>
                                 <div class="col-2">
-                                    <span>{{ $member->user_id }}</span> <!-- User ID -->
-                                </div>
-                                <div class="col-2">
+                                    <span>{{ $member->user_id }}</span> 
+                                </div> -->
+                                <div class="col-3">
                                     <span>{{ $member->member_name }}</span>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-3">
                                     <span>{{ $member->professional_type ?? 'Not a Professional' }}</span>
                                 </div>
-                                <div class="col-2">
-                                    <span>{{ ucfirst($member->member_status) }}</span>
+                                <div class="col-3">
+                                    @if ($member->user_id == $userId)
+                                        <form method="POST" action="{{ route('team-members.update-status') }}">
+                                            @csrf
+                                            <input type="hidden" name="team_member_id" value="{{ $member->team_member_id }}">
+                                            <select name="status" class="form-select">
+                                                <option value="not stated" {{ $member->member_status == 'not stated' ? 'selected' : '' }}>Not Stated</option>
+                                                <option value="in progress" {{ $member->member_status == 'in progress' ? 'selected' : '' }}>In Progress</option>
+                                                <option value="halfway through" {{ $member->member_status == 'halfway through' ? 'selected' : '' }}>Halfway Through</option>
+                                                <option value="almost done" {{ $member->member_status == 'almost done' ? 'selected' : '' }}>Almost Done</option>
+                                                <option value="completed" {{ $member->member_status == 'completed' ? 'selected' : '' }}>Completed</option>
+                                            </select>
+                                    @else
+                                        <span>{{ ucfirst($member->member_status) }}</span> <!-- Static Status -->
+                                    @endif
                                 </div>
+                                <div class="col-3">
+                                    @if ($member->user_id == $userId)
+                                        <button type="submit" class="btn btn-teal" style="width: 100%;">Save</button>
+                                    @else
+                                        <span>{{ ucfirst($member->member_status) }}</span> <!-- Static Status -->
+                                    @endif
+                                </div>
+                                </form>
                             </div>
                         @endforeach
                     </div>

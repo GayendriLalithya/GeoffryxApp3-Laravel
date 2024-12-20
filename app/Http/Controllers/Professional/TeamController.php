@@ -23,27 +23,34 @@ class TeamController extends Controller
 
     public function updateStatus(Request $request)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,user_id',
-            'team_id' => 'required|exists:team,team_id',
-            'team_member_id' => 'required|exists:team_members,team_member_id',
-            'professional_type' => 'nullable|string',
-            'member_status' => 'required|in:not stated,in progress,halfway through,almost done,completed',
-        ]);
+        try {
+            // Validate the request
+            $request->validate([
+                'team_member_id' => 'required|exists:team_members,team_member_id',
+                'status' => 'required|in:not stated,in progress,halfway through,almost done,completed',
+            ]);
 
-        $teamMember = TeamMember::where('team_member_id', $validated['team_member_id'])
-            ->where('user_id', $validated['user_id'])
-            ->where('team_id', $validated['team_id'])
-            ->first();
+            // Find the team member
+            $teamMember = TeamMember::find($request->team_member_id);
 
-        if ($teamMember) {
-            $teamMember->status = $validated['member_status'];
+            if (!$teamMember) {
+                session()->flash('alert-error', 'Team member not found.');
+                return back();
+            }
+
+            // Update the status
+            $teamMember->status = $request->status;
             $teamMember->save();
 
-            return response()->json(['success' => true, 'message' => 'Status updated successfully.']);
+            // Success message
+            session()->flash('alert-success', 'Status updated successfully!');
+            return back();
+        } catch (\Exception $e) {
+            // Error message
+            session()->flash('alert-error', 'An error occurred while updating the status. Please try again.');
+            return back();
         }
-
-        return response()->json(['success' => false, 'message' => 'Team member not found.']);
     }
+
 
 }
