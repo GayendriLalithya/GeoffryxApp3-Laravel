@@ -113,6 +113,11 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="{{ route('group-chat.view', ['id' => $workId, 'email' => Auth::user()->email]) }}" 
+                       class="btn btn-primary" 
+                       target="_blank">
+                        Group Chat
+                    </a>
                 </div>
             </div>
         </div>
