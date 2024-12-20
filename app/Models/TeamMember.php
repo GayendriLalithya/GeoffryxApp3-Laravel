@@ -20,8 +20,14 @@ class TeamMember extends Model
     }
 
     // Define relationship with the User model
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class, 'user_id');
+    // }
+
     public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
+{
+    return $this->belongsTo(User::class, 'user_id', 'user_id');
+}
+
 }

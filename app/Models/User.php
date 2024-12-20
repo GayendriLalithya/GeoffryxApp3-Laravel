@@ -99,4 +99,9 @@ class User extends Authenticatable
         return $this->hasMany(PendingProfessional::class, 'user_id');
     }
 
+    public function professional()
+    {
+        return $this->hasOne(Professional::class, 'user_id', 'user_id');
+    }
+
 }

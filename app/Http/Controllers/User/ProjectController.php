@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\UserProject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\PendingProfessional;
 use App\Models\TeamMember;
+use App\Models\Professional;
 use App\Models\Team;
 
 class ProjectController extends Controller
@@ -63,5 +65,4 @@ class ProjectController extends Controller
     
         return view('pages.professional.manage_projects', compact('teams'));
     }
-
 }

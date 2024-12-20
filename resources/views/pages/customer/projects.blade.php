@@ -99,7 +99,19 @@
 
                 <div class="project-header">
                     <h5>{{ $project->name }}</h5>
-                    <!-- <span class="status pending">Pending</span> -->
+                    @php
+                        // Assign color based on the work status
+                        $statusColors = [
+                            'not started' => 'red',
+                            'in progress' => 'orange',
+                            'completed' => 'green',
+                        ];
+                    
+                        $statusColor = $statusColors[$project->status] ?? 'gray'; // Default color if status doesn't match
+                    @endphp
+                    <span class="status" style="color: {{ $statusColor }}; font-weight: bold;">
+                        {{ ucfirst($project->status) }}
+                    </span>
                 </div>
 
                 <div class="project-info">
@@ -154,10 +166,9 @@
 
                         @include('pages.partials.project-modal', [
     
-    'modalId' => 'teamModal-' . $project->work_id,
-    'workId' => $project->work_id // Pass the work_id explicitly
-])
-
+                            'modalId' => 'teamModal-' . $project->work_id,
+                            'workId' => $project->work_id // Pass the work_id explicitly
+                        ])
 
             </form>
         </div>

@@ -11,18 +11,6 @@ use App\Models\Team;
 
 class TeamController extends Controller
 {
-    // public function loadTeamMembers($workId)
-    // {
-    //     $userId = auth()->id(); // Get the logged-in user ID
-
-    //     // Call the stored procedure
-    //     $teamMembers = DB::select('CALL GetTeamMembersByWork(?, ?)', [$workId, $userId]);
-
-    //     return response()->json([
-    //         'teamMembers' => $teamMembers
-    //     ]);
-    // }
-
     private function updateWorkStatus($teamId)
     {
         // Get the associated work ID from the team
