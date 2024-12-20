@@ -6,6 +6,7 @@
     use App\Models\UserProject;
     use App\Models\Team;
     use App\Models\TeamMember;
+    use App\Models\PendingProfessional;
 
     $userId = Auth::id(); // Get the logged-in user's ID
 
@@ -15,19 +16,19 @@
     // Fetch team and team members for each project
     $teamsWithMembers = [];
     foreach ($projects as $project) {
-        // Get the team associated with the project's work_id
         $team = Team::where('work_id', $project->work_id)->first();
+        $pendingProfessionals = PendingProfessional::where('work_id', $project->work_id)
+            ->get();
 
         if ($team) {
-            // Fetch team members for the team
-            $teamMembers = TeamMember::with('user') // Assuming 'user' is the relationship in TeamMember
+            $teamMembers = TeamMember::with('user')
                 ->where('team_id', $team->team_id)
                 ->get();
 
-            // Store team and members together
             $teamsWithMembers[] = [
                 'team' => $team,
                 'members' => $teamMembers,
+                'pendingProfessionals' => $pendingProfessionals,
             ];
         }
     }
@@ -148,54 +149,16 @@
                         </div>
 
                         <div class="action-buttons">
-                            <button type="button" class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#teamModal-{{ $team->work->work_id }}">View Team</button>
+                            <button type="button" class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#teamModal-{{ $project->work_id }}">View Team</button>
                         </div>
 
-                        <!-- Include the team modal -->
-                @php
-                    $teamWithMembers = collect($teamsWithMembers)
-                        ->firstWhere('team.work_id', $project->work_id);
-                @endphp
+                        @include('pages.partials.project-modal', [
+    
+    'modalId' => 'teamModal-' . $project->work_id,
+    'workId' => $project->work_id // Pass the work_id explicitly
+])
 
-                @if ($teamWithMembers)
-                    <!-- Team Members Modal -->
-                    <div class="modal fade" id="teamModal-{{ $project->work_id }}" tabindex="-1">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Team for {{ $project->name }}</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <h5>Team Members</h5>
-                                    <ul>
-                                        @if ($teamWithMembers['members']->isEmpty())
-                                            <p>No professionals found for this project.</p>
-                                        @else
-                                            @foreach ($teamWithMembers['members'] as $member)
-                                                <div class="mb-3">
-                                                    <label>{{ $member->professional_type ?? 'N/A' }}</label>
-                                                    <div class="team-members mt-2">
-                                                        <input type="text" class="form-control" value="{{ $member->user->name ?? 'N/A' }}" readonly>
-                                                        <span class="status {{ strtolower($member->status ?? 'unknown') }}">
-                                                            {{ ucfirst($member->status ?? 'Unknown') }}
-                                                        </span>
-                                                        <button class="delete-btn"><i class="bi bi-trash"></i></button>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        @endif
-                                    </ul>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @else
-                    <p>No team information found for this project.</p>
-                @endif
+
             </form>
         </div>
     </div>

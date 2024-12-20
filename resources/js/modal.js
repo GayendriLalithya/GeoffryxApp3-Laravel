@@ -1,3 +1,23 @@
+// Initialize Bootstrap modals
+const teamModal = new bootstrap.Modal(document.getElementById('teamModal'));
+        
+// Add click event for team modal button
+const teamModalButtons = document.querySelectorAll('[data-bs-target="#teamModal"]');
+teamModalButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        teamModal.show();
+    });
+});
+
+// Add click event for modal close buttons
+const modalCloseButtons = document.querySelectorAll('[data-bs-dismiss="modal"]');
+modalCloseButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        teamModal.hide();
+    });
+});
+
+
 // Customer - Projects Modal
 const teamMembers = [
     { name: 'Ann Fox', role: 'Charted Architect' },

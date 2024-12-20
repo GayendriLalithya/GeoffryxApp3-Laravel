@@ -89,6 +89,10 @@ use App\Http\Controllers\User\ProjectController;
 
 Route::get('/manage-projects', [ProjectController::class, 'manageProjects'])->name('manage.projects');
 
+use App\Http\Controllers\Professional\TeamController;
+
+Route::get('/team-members/{workId}', [TeamController::class, 'loadTeamMembers']);
+Route::post('/team-members/update', [TeamController::class, 'updateTeamMemberStatus']);
 
 
 // Group Chat

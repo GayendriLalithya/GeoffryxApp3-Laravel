@@ -1,102 +1,91 @@
- @php
-    use App\Models\UserProject;
-    use App\Models\TeamMember;
+@php
     use App\Models\Team;
+    use App\Models\TeamMember;
 
     $userId = Auth::id(); // Get the logged-in user's ID
 
-    // Fetch team IDs where the user is a member
-    $teamIds = TeamMember::where('user_id', $userId)->pluck('team_id');
+    // Fetch all teams where the user is a member
+    $teams = Team::with(['work.client']) // Eager load work and client relationships
+                 ->whereIn('team_id', TeamMember::where('user_id', $userId)->pluck('team_id'))
+                 ->get();
 
-    // Fetch teams and related work records
-    $teams = Team::with(['work.client']) // Eager load both work and its client
-             ->whereIn('team_id', $teamIds)
-             ->get();
+    // Fetch team members grouped by team_id
+    $teamMembersByTeamId = [];
 
-    // Fetch professionals for each work ID
     foreach ($teams as $team) {
-        if ($team->work) {
-            $workId = $team->work->work_id;
-            $team->work->professionals = DB::table('pending_professional')
-                ->join('users', 'pending_professional.user_id', '=', 'users.user_id')
-                ->join('professionals', 'pending_professional.professional_id', '=', 'professionals.professional_id')
-                ->where('pending_professional.work_id', $workId)
-                ->select(
-                    'users.name as professional_name',
-                    'professionals.type as professional_type',
-                    'pending_professional.professional_status'
-                )
-                ->get();
-        }
+        // Fetch all team members for the current team_id
+        $teamMembersByTeamId[$team->team_id] = TeamMember::where('team_id', $team->team_id)
+            ->join('users', 'team_members.user_id', '=', 'users.user_id') // Join with users table for user details
+            ->select(
+                'users.name as member_name',       // Select user name
+                'team_members.status as member_status' // Select team member status
+            )
+            ->get();
     }
 @endphp
- 
- <!-- Team Members Modal -->
- <div class="modal fade" id="teamModal-{{ $team->work->work_id }}" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">{{ $team->work->name }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-card">
-                    <h5>Team Members</h5>
-                    <div class="row">
-                        <div class="col">
-                            <label>Team Member Name</label>  <!-- If the user id in here is same as the logged in user id then the user can edit this sectopn else the select type input should be readonly -->
+
+@if ($teamMembers->isNotEmpty())
+    <!-- Team Members Modal -->
+    <div class="modal fade" id="teamModal-{{ $teamId }}" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">{{ $teamName }} - Team Members</h5>
+                <!-- <h5 class="modal-title">Team ID: {{ $teamId }} - Work ID: {{ $workId }} - {{ $teamName }} - Team Members</h5> -->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-card">
+                        <h5>Team Members</h5>
+                        <div class="row mb-2" style="background-color: #e6fbff;">
+                            <div class="col-4">
+                                <label><b>Name</b></label>
+                            </div>
+                            <div class="col-4">
+                                <label><b>Professional Type</b></label>
+                            </div>
+                            <div class="col-4">
+                                <label><b>Work Status</b></label>
+                            </div>
                         </div>
-                        <div class="col">
-                            <select class="form-select" id="memberType">
-                                <option value="">Status</option>
-                                <option value="0">Not Started</option>
-                                <option value="30">In Progress</option>
-                                <option value="50">Halfway Through</option>
-                                <option value="70">Almost Done</option>
-                                <option value="100">Completed</option>
-                            </select>
-                        </div>
+                        @if ($teamMembers->isNotEmpty())
+                            @foreach ($teamMembers as $member)
+                                <div class="row mb-2">
+                                    <div class="col-4">
+                                        <span>{{ $member->member_name }}</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <span>{{ $member->professional_type ?? 'Not a Professional' }}</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <span>{{ ucfirst($member->member_status) }}</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <p>No team members found for this team.</p>
+                        @endif
                     </div>
+
                     <div class="row mt-3">
                         <div class="col">
                             <label>Project Status</label>
                         </div>
                         <div class="col">
-                            <!-- Display the project status by adding all the status values and divided them by team member count
-                             And if value = 0 - 50 In progress
-                                    value = 50 - 70 Halfway through
-                                    value = 70 - 100 Almost Done
-                                    value = 100 Completed
-                            Also use colors when displaying those Ex: Not started - red, in progress - yellow, ... etc -->
+                            <!-- Logic to calculate project status -->
+                            
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-teal" onclick="showRatingsModal()">Make Payment</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+@else
+    <p>No team members found for this team.</p>
+@endif
 
-<!-- Ratings Modal -->
-<div class="modal fade" id="ratingsModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Sunset Villas</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body" id="ratingsContent">
-                <!-- Ratings content will be dynamically generated -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-teal">Rate Professionals</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">

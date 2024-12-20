@@ -14,11 +14,11 @@ class PendingProfessional extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 
     public function professional()
-    {
-        return $this->belongsTo(Professional::class, 'professional_id');
-    }
+{
+    return $this->belongsTo(Professional::class, 'professional_id', 'professional_id');
+}
 }
