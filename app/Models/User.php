@@ -43,10 +43,16 @@ class User extends Authenticatable
     /**
      * Get the profile picture associated with the user.
      */
+    // public function profilePicture()
+    // {
+    //     return $this->hasOne(ProfilePicture::class, 'user_id');
+    // }
+
     public function profilePicture()
     {
-        return $this->hasOne(ProfilePicture::class, 'user_id');
+        return $this->hasOne(ProfilePicture::class, 'user_id', 'user_id'); // Match the foreign key and local key
     }
+
 
     /**
      * Local scope to get non-deleted users.
@@ -104,4 +110,10 @@ class User extends Authenticatable
         return $this->hasOne(Professional::class, 'user_id', 'user_id');
     }
 
-}
+    public function getProfilePictureUrlAttribute()
+    {
+        return $this->profilePicture && $this->profilePicture->profile_pic
+            ? asset('storage/app/public/images/profile_pic/' . $this->profilePicture->profile_pic)
+            : asset('images/sample.png'); // Corrected fallback
+    }
+}    

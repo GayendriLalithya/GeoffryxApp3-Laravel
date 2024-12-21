@@ -271,6 +271,28 @@ END$$
 
 DELIMITER ;
 
+8. stored procedure for the payment process
+
+DELIMITER $$
+
+CREATE PROCEDURE ProcessPayment(
+    IN p_work_id INT,
+    IN p_user_id INT,
+    IN p_amount DECIMAL(10, 2)
+)
+BEGIN
+    -- Create a payment record
+    INSERT INTO payment (work_id, user_id, amount, date, time, created_at, updated_at)
+    VALUES (p_work_id, p_user_id, p_amount, CURDATE(), CURTIME(), NOW(), NOW());
+
+    -- Send notification to the customer
+    INSERT INTO notifications (user_id, title, message, status, created_at, updated_at)
+    VALUES (p_user_id, 'Payment Successful', 'Your payment has been successfully processed.', 'unread', NOW(), NOW());
+END $$
+
+DELIMITER ;
+
+
 
 
 

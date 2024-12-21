@@ -59,7 +59,7 @@
 
                             <div class="mb-4">
                                 <div class="field-label">Minimum Project Payment</div>
-                                <div class="field-value">${{ number_format($professional->payment_min ?? 0, 2) }}</div>
+                                <div class="field-value">LKR {{ number_format($professional->payment_min ?? 0, 2) }}</div>
                             </div>
 
                             <div class="work-history">

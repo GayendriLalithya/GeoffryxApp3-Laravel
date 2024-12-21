@@ -61,7 +61,7 @@
                                         <form method="POST" action="{{ route('team-members.update-status') }}">
                                             @csrf
                                             <input type="hidden" name="team_member_id" value="{{ $member->team_member_id }}">
-                                            <select name="status" class="form-select">
+                                            <select name="status" class="form-select" class="form-select" {{ $member->member_status == 'completed' ? 'disabled' : '' }}>
                                                 <option value="not started" {{ $member->member_status == 'not stated' ? 'selected' : '' }}>Not Started</option>
                                                 <option value="in progress" {{ $member->member_status == 'in progress' ? 'selected' : '' }}>In Progress</option>
                                                 <option value="halfway through" {{ $member->member_status == 'halfway through' ? 'selected' : '' }}>Halfway Through</option>

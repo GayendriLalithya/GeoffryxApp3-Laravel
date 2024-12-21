@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\WorkHistory;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
@@ -59,6 +60,33 @@ class WorkController extends Controller
 
             // Display a generic error message for other exceptions
             return redirect()->back()->with('alert-error', 'An unexpected error occurred. Please try again.');
+        }
+    }
+
+    public function confirmCompletion($workId)
+    {
+        try {
+            // Check if work history already exists
+            $workHistoryExists = WorkHistory::where('work_id', $workId)->exists();
+            if (!$workHistoryExists) {
+                // Create a new work history record
+                WorkHistory::create([
+                    'work_id' => $workId,
+                    'user_id' => auth()->id(), // Assuming the authenticated user is adding the work history
+                ]);
+
+                // Redirect with a success alert
+                return redirect()->route('user.dashboard', ['tab' => 'projects'])
+                                 ->with('alert-success', 'Project completion confirmed successfully.');
+            }
+
+            // Redirect with an error alert if work history already exists
+            return redirect()->route('user.dashboard', ['tab' => 'projects'])
+                             ->with('alert-error', 'Work history already exists for this project.');
+        } catch (Exception $e) {
+            // Handle unexpected errors
+            return redirect()->route('user.dashboard', ['tab' => 'projects'])
+                             ->with('alert-error', 'An unexpected error occurred. Please try again.');
         }
     }
 }

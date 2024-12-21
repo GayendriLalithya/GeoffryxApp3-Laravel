@@ -46,7 +46,7 @@
 
                 <div class="project-info">
                     <span>{{ $team->work->start_date }} - {{ $team->work->end_date }}</span>
-                    <span>${{ number_format($team->work->budget, 2) }}</span>
+                    <span>LKR {{ number_format($team->work->budget, 2) }}</span>
                     <button class="btn btn-teal btn-view-more" data-bs-toggle="collapse" data-bs-target="#projectDetails-{{ $team->work->work_id }}">View More</button>
                 </div>
 
@@ -82,7 +82,7 @@
 
                         <div class="form-group mb-4">
                             <label class="form-label">Budget</label>
-                            <input type="text" class="form-control" value="${{ number_format($team->work->budget, 2) }}" readonly>
+                            <input type="text" class="form-control" value="LKR {{ number_format($team->work->budget, 2) }}" readonly>
                         </div>
 
                         <div class="form-group mb-4">

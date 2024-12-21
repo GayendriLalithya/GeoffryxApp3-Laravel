@@ -76,6 +76,8 @@ Route::get('/professionals/{id}', [ProfessionalListController::class, 'showProfe
 use App\Http\Controllers\User\WorkController;
 
 Route::post('/work/store', [WorkController::class, 'store'])->name('work.store');
+Route::post('/work/{workId}/confirm-completion', [WorkController::class, 'confirmCompletion'])->name('work.confirmCompletion');
+
 
 use App\Http\Controllers\Professional\ProjectRequestController;
 
@@ -89,10 +91,19 @@ use App\Http\Controllers\User\ProjectController;
 
 Route::get('/manage-projects', [ProjectController::class, 'manageProjects'])->name('manage.projects');
 
+
 use App\Http\Controllers\Professional\TeamController;
 
 Route::get('/team-members/{workId}', [TeamController::class, 'loadTeamMembers']);
 Route::post('/team-members/update-status', [TeamController::class, 'updateStatus'])->name('team-members.update-status');
+
+use App\Http\Controllers\Professional\ProfessionalRatingController;
+
+Route::get('/work/{work_id}/rate-professionals', [ProfessionalRatingController::class, 'showRatingPage'])->name('professional.rating');
+
+use App\Http\Controllers\User\RatingController;
+
+Route::post('/ratings/submit', [RatingController::class, 'submitRatings'])->name('professional.submitRatings');
 
 
 
@@ -101,3 +112,15 @@ Route::post('/team-members/update-status', [TeamController::class, 'updateStatus
 use App\Http\Controllers\GroupChatController;
 
 Route::get('/group-chat/{id}/{email}', [GroupChatController::class, 'showGroupChatView'])->name('group-chat.view');
+
+// Payment
+
+use App\Http\Controllers\PaymentController;
+
+Route::post('/payment/return', [PaymentController::class, 'paymentReturn'])->name('payment.return');
+Route::post('/payment/cancel', [PaymentController::class, 'paymentCancel'])->name('payment.cancel');
+Route::post('/payment/notify', [PaymentController::class, 'paymentNotify'])->name('payment.notify');
+
+Route::post('/payment/execute', [PaymentController::class, 'executePayment'])->name('payment.execute');
+
+Route::get('/payment/initiate/{work_id}', [PaymentController::class, 'initiatePayment'])->name('payment.initiate');

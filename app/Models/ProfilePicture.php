@@ -9,17 +9,16 @@ class ProfilePicture extends Model
 {
     use HasFactory;
 
-    protected $table = 'profile_picture';
-
+    protected $table = 'profile_picture'; // Ensure this matches the actual table name
     protected $primaryKey = 'profile_picture_id';
 
-    protected $fillable = [
-        'user_id',
-        'profile_pic',
-    ];
+    protected $fillable = ['profile_pic', 'user_id'];
 
+    /**
+     * Relationship to the User model
+     */
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

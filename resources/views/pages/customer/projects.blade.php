@@ -116,7 +116,7 @@
 
                 <div class="project-info">
                     <span>{{ \Carbon\Carbon::parse($project->start_date)->format('Y.m.d') }}</span>
-                    <span>${{ number_format($project->budget, 2) }}</span>
+                    <span>LKR {{ number_format($project->budget, 2) }}</span>
                     <button class="btn btn-teal view-more" data-bs-toggle="collapse" data-bs-target="#projectDetails-{{ $project->work_id }}">View More</button>
                 </div>
 
@@ -152,7 +152,7 @@
 
                         <div class="form-group mb-4">
                             <label class="form-label">Budget</label>
-                            <input type="text" class="form-control" value="${{ number_format($project->budget, 2) }}" readonly>
+                            <input type="text" class="form-control" value="LKR {{ number_format($project->budget, 2) }}" readonly>
                         </div>
 
                         <div class="form-group mb-4">

@@ -22,4 +22,10 @@ class Professional extends Model
         return $this->hasMany(PendingProfessional::class, 'professional_id');
     }
 
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class, 'professional_id');
+    }
+
+
 }
