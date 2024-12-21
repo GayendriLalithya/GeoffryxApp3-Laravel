@@ -171,4 +171,5 @@ class ProfessionalController extends Controller
         ], 500);
     }
 }
+
 }

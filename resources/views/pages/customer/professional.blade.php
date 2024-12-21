@@ -14,6 +14,19 @@
     $name = $name ?? '';
 @endphp
 
+@php
+    $budget = request('budget', 0);
+    $location = request('location', '');
+    $suggest = request('suggest', false);
+
+    if ($suggest && $professionals) {
+        $professionals = collect($professionals)->filter(function ($professional) use ($budget, $location) {
+            // Check if payment_max property exists before comparing
+            return isset($professional->payment_max) && $professional->payment_max >= $budget && $professional->work_location === $location;
+        })->all();
+    }
+@endphp
+
 
 <div class="search-container">
     <form method="POST">

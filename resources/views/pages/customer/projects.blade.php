@@ -194,4 +194,24 @@
 
         window.location.href = url;
     });
+
+    // Suggest professional button
+
+    document.querySelector('.btn-teal').addEventListener('click', function (e) {
+    e.preventDefault(); // Prevent the default form submission behavior
+
+    // Capture form data
+    const projectName = document.querySelector('input[name="name"]').value;
+    const location = document.querySelector('input[name="location"]').value;
+    const startDate = document.querySelector('input[name="start_date"]').value;
+    const endDate = document.querySelector('input[name="end_date"]').value;
+    const budget = document.querySelector('input[name="budget"]').value;
+    const requirements = document.querySelector('textarea[name="requirements"]').value;
+
+    // Redirect to the professionals tab with query parameters and additional filter flags
+    const url = `{{ route('user.dashboard') }}?tab=professional&suggest=true&name=${encodeURIComponent(projectName)}&location=${encodeURIComponent(location)}&start_date=${startDate}&end_date=${endDate}&budget=${budget}&requirements=${encodeURIComponent(requirements)}`;
+
+    window.location.href = url;
+});
+
 </script>
