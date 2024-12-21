@@ -40,6 +40,10 @@ class DashboardController extends Controller
                 'view' => 'pages.customer.professional',
                 'css' => 'resources/css/professional.css',
             ],
+            'finance' => [
+                'view' => 'pages.customer.finance',
+                'css' => 'resources/css/finance.css',
+            ],
             'profile' => [
                 'view' => 'pages.common.profile',
                 'css' => 'resources/css/profile.css',

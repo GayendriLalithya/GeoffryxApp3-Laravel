@@ -127,3 +127,11 @@ Route::post('/payment/notify', [PaymentController::class, 'paymentNotify'])->nam
 Route::post('/payment/execute', [PaymentController::class, 'executePayment'])->name('payment.execute');
 
 Route::get('/payment/initiate/{work_id}', [PaymentController::class, 'initiatePayment'])->name('payment.initiate');
+
+// Admin Manage user controller
+
+use App\Http\Controllers\Admin\ManageUserController;
+
+Route::get('/users', [ManageUserController::class, 'index'])->name('user.details');
+Route::get('/users/edit/{id}', [ManageUserController::class, 'editUser'])->name('user.edit');
+Route::delete('/users/delete/{id}', [ManageUserController::class, 'deleteUser'])->name('user.delete');

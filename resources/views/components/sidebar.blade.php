@@ -40,9 +40,9 @@
             <a class="nav-link {{ request('tab') == 'professional' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'professional']) }}">
                 <i class="fas fa-user-tie"></i> Professionals
             </a>
-            <!-- <a class="nav-link" href="#">
-                <i class="fas fa-folder"></i> Manage File
-            </a> -->
+            <a class="nav-link {{ request('tab') == 'finance' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'finance']) }}">
+                <i class="fas fa-folder"></i> Finance Mangement
+            </a>
 
             <div class="mt-auto">
                 

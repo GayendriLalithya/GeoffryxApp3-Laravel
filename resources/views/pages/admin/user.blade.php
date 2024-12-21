@@ -1,31 +1,49 @@
+<div class="container">
+    <h2 class="mt-4 mb-4">User Details</h2>
 
-    <div class="users-container">
-        <h2>Manage Users</h2>
-        <p>This is the Manage Users page. Add your user management content here.</p>
+    @php
+        use App\Models\User;
 
-        <!-- Example user table -->
-        <table class="table">
+        // Fetch all users where deleted is false
+        $users = User::where('deleted', false)->get();
+    @endphp
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Role</th>
+                    <th>Contact No</th>
+                    <th>User Type</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>John Doe</td>
-                    <td>johndoe@example.com</td>
-                    <td>Admin</td>
-                    <td>
-                        <button class="btn btn-sm btn-primary">Edit</button>
-                        <button class="btn btn-sm btn-danger">Delete</button>
-                    </td>
-                </tr>
-                <!-- Add more rows as needed -->
+                @forelse ($users as $user)
+                    <tr>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->contact_no }}</td>
+                        <td>{{ ucfirst($user->user_type) }}</td>
+                        <td>
+                            <!-- Update Button -->
+                            <a href="{{ route('user.edit', ['id' => $user->user_id]) }}" class="btn btn-sm btn-primary">Update</a>
+                            
+                            <!-- Delete Button -->
+                            <form action="{{ route('user.delete', ['id' => $user->user_id]) }}" method="POST" style="display:inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center">No users found.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
+</div>
