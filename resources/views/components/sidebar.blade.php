@@ -6,7 +6,7 @@
     </div>
     <nav class="nav flex-column">
         <!-- Common Links -->
-        <a class="nav-link active" href="#">
+        <a class="nav-link {{ request('tab') == 'home' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'home']) }}">
             <i class="fas fa-home"></i> Home
         </a>
 
@@ -41,7 +41,7 @@
                 <i class="fas fa-user-tie"></i> Professionals
             </a>
             <a class="nav-link {{ request('tab') == 'finance' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'finance']) }}">
-                <i class="fas fa-folder"></i> Finance Mangement
+            <i class="fas fa-file-invoice-dollar"></i>Finance Mangement
             </a>
 
             <div class="mt-auto">

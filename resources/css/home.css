@@ -1,0 +1,31 @@
+:root {
+    --teal: #008080;
+    --light-blue: #e6fbff;
+}
+
+.card {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.stats-card {
+    /* background: linear-gradient(45deg, var(--teal), #009999); */
+    /* background:  var(--light-blue); */
+    background: white;
+    border: 1px solid var(--light-blue);
+    color: var(--teal);
+}
+
+.main-content {
+    /* background-color: var(--light-blue); */
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.chart-container {
+    background: white;
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+}

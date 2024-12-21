@@ -78,7 +78,7 @@
                             Reject Work
                         </button>
 
-                        <button type="button" class="btn-refer">Refer Work</button>
+                        <!-- <button type="button" class="btn-refer">Refer Work</button> -->
 
                         <input type="hidden" name="work_id" value="{{ $project->work_id }}">
                         <button type="submit" class="btn-accept">Accept Work</button>
