@@ -7,6 +7,7 @@ use App\Models\Verify;
 use App\Models\Certificate;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ProfessionalController extends Controller
 {
@@ -92,5 +93,42 @@ class ProfessionalController extends Controller
     
         // Return the relative path to be stored in the database
         return 'images/' . $folder . '/' . $filename;
+    }
+
+    public function search(Request $request)
+    {
+        $type = $request->input('type', 'all');
+        $name = $request->input('name', '');
+
+        $query = DB::table('all_professional_details');
+
+        if ($type !== 'all') {
+            $query->where('type', '=', $type);
+        }
+
+        if (!empty($name)) {
+            $query->where('user_name', 'LIKE', '%' . $name . '%');
+        }
+
+        $professionals = $query->get();
+
+        return view('pages.customer.search_results', [
+            'professionals' => $professionals,
+            'type' => $type,
+            'name' => $name,
+            'tab' => 'professional',
+        ]);
+    }
+
+    public function index()
+    {
+        $professionals = DB::table('all_professional_details')->get();
+
+        return view('pages.customer.professional', [
+            'professionals' => $professionals,
+            'type' => 'all',
+            'name' => '',
+            'tab' => 'professional',
+        ]);
     }
 }

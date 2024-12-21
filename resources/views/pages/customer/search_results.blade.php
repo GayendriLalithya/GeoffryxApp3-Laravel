@@ -1,48 +1,190 @@
-@section('additional-css')
-    <link rel="stylesheet" href="{{ asset('resources/css/professional.css') }}">
-@endsection
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Directory</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #008080;
+            --secondary-color: #f5f5f5;
+            --text-color: #333;
+            --border-radius: 8px;
+            --card-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
 
-@php
-    // Check if professionals exist
-    $professionals = $professionals ?? [];
-    $tab = $tab ?? 'default'; 
-@endphp
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            color: var(--text-color);
+            padding: 20px;
+        }
 
-<style>
-.search-section {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-}
+        .search-container {
+            margin-bottom: 30px;
+        }
 
-.search-section .form-select,
-.search-section .form-control {
-    flex: 1;
-}
+        .search-section {
+            display: flex;
+            gap: 10px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-.search-btn {
-    min-width: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
+        .form-select, .form-control {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            flex: 1;
+        }
 
-.search-btn i {
-    font-size: 14px;
-}
-</style>
+        .search-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+        }
 
-@php
-    // Manually define default values for $type and $name if they are not passed
-    $type = $type ?? 'all';
-    $name = $name ?? '';
-@endphp
+        .professional-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
+        .professional-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: transform 0.2s;
+            text-align: center;
+            padding: 20px;
+        }
 
+        .professional-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .professional-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .professional-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .professional-title {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .view-more-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        .view-more-btn:hover {
+            background-color: #006666;
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            border-radius: var(--border-radius);
+            padding: 20px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+        }
+
+        .field-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        .field-value {
+            font-size: 1.1em;
+        }
+
+        .work-history {
+            margin-top: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-select, .btn-close-modal {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+        }
+
+        .btn-select {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-close-modal {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .search-section {
+                flex-direction: column;
+            }
+            
+            .professional-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-image {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
 <div class="search-container">
     <form method="POST" action="{{ route('professionals.search') }}">
         @csrf
@@ -197,91 +339,75 @@
         </div>
     </div>
 @endif
-
-<meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-
-    <script>
-      const searchRoute = "{{ route('professionals.search') }}";
-
-document.addEventListener('DOMContentLoaded', function() {
-    const searchBtn = document.getElementById('searchBtn');
-    const typeFilter = document.getElementById('typeFilter');
-    const searchInput = document.getElementById('searchInput');
-    const professionalGrid = document.querySelector('.professional-grid');
-
-    if (!searchBtn || !typeFilter || !searchInput || !professionalGrid) {
-        console.error('One or more required elements not found');
-        return;
-    }
-
-    searchBtn.addEventListener('click', performSearch);
-
-    async function performSearch() {
-        try {
-            const type = typeFilter.value;
-            const query = searchInput.value;
-            
-            console.log('Searching with:', { type, query });
-
-            const response = await fetch(`${searchRoute}?type=${encodeURIComponent(type)}&query=${encodeURIComponent(query)}`, {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json',
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Modal functionality
+        const viewMoreBtns = document.querySelectorAll('.view-more-btn');
+        viewMoreBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const cardId = this.closest('.professional-card').dataset.id;
+                const modal = document.querySelector(`#professionalModal-${cardId}`);
+                if (modal) {
+                    new bootstrap.Modal(modal).show();
                 }
             });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const result = await response.json();
-            console.log('Search results:', result);
-
-            if (result.status === 'success') {
-                updateProfessionalGrid(result.data);
-            } else {
-                throw new Error(result.message || 'An error occurred');
-            }
-        } catch (error) {
-            console.error('Search error:', error);
-            professionalGrid.innerHTML = `
-                <div class="alert alert-danger">
-                    ${error.message || 'An error occurred while searching. Please try again.'}
-                </div>`;
-        }
-    }
-
-    function updateProfessionalGrid(professionals) {
-        professionalGrid.innerHTML = '';
-
-        if (!professionals || professionals.length === 0) {
-            professionalGrid.innerHTML = `
-                <div class="alert alert-info text-center w-100">
-                    No professionals found matching your criteria.
-                </div>`;
-            return;
-        }
-
-        professionals.forEach(professional => {
-            const profilePicUrl = professional.profile_picture_url 
-                ? `/storage/app/public/images/profile_pic/${professional.profile_picture_url}`
-                : '/resources/images/sample.png';
-
-            const card = `
-                <div class="professional-card" data-id="${professional.professional_id}">
-                    <img src="${profilePicUrl}" alt="${professional.name}" class="professional-image">
-                    <div class="professional-name">${professional.name}</div>
-                    <div class="professional-title">${professional.type}</div>
-                    <button class="view-more-btn" data-bs-toggle="modal" data-bs-target="#professionalModal-${professional.professional_id}">
-                        View More
-                    </button>
-                </div>`;
-            
-            professionalGrid.insertAdjacentHTML('beforeend', card);
         });
-    }
-});
-    </script>
+
+        // Search functionality
+        const searchForm = document.querySelector('form');
+        if (searchForm) {
+            searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Add your search logic here
+            });
+        }
+
+        // Professional selection functionality
+        function addSelectedProfessional(id, name, type) {
+            const selectedList = document.getElementById('selectedProfessionals');
+            if (!selectedList) return;
+
+            // Check if professional is already selected
+            if (document.querySelector(`[data-professional-id="${id}"]`)) {
+                alert('This professional is already selected');
+                return;
+            }
+
+            const professionalItem = document.createElement('div');
+            professionalItem.className = 'professional-item';
+            professionalItem.dataset.professionalId = id;
+            professionalItem.innerHTML = `
+                <div class="professional-info">
+                    <p class="professional-name">${name}</p>
+                    <p class="professional-title">${type}</p>
+                </div>
+                <button class="delete-btn" onclick="removeProfessional('${id}')">
+                    <i class="bi bi-trash"></i>
+                </button>
+            `;
+
+            selectedList.appendChild(professionalItem);
+        }
+
+        // Remove professional functionality
+        window.removeProfessional = function(id) {
+            const item = document.querySelector(`[data-professional-id="${id}"]`);
+            if (item) {
+                item.remove();
+            }
+        };
+
+        // Minimize/Maximize card functionality
+        const minimizeBtn = document.getElementById('minimizeBtn');
+        const cardContent = document.getElementById('cardContent');
+        if (minimizeBtn && cardContent) {
+            minimizeBtn.addEventListener('click', function() {
+                cardContent.classList.toggle('minimized');
+                this.querySelector('i').classList.toggle('bi-chevron-up');
+                this.querySelector('i').classList.toggle('bi-chevron-down');
+            });
+        }
+    });
+</script>
+</html>

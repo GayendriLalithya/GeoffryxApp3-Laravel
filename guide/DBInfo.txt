@@ -375,6 +375,28 @@ FROM work
 INNER JOIN users ON work.user_id = users.user_id
 ORDER BY work.created_at DESC;
 
+6. to get all ptofessional details for the search
+
+CREATE VIEW all_professional_details AS
+SELECT 
+    p.professional_id,
+    p.user_id,
+    u.name AS user_name,
+    p.type,
+    p.availability,
+    p.work_location,
+    p.payment_min,
+    p.payment_max,
+    p.preferred_project_size,
+    pp.profile_pic AS profile_picture_url,
+    p.created_at,
+    p.updated_at
+FROM professionals p
+JOIN users u ON p.user_id = u.user_id
+LEFT JOIN profile_pictures pp ON p.user_id = pp.user_id
+WHERE u.deleted = 0;
+
+
 
 
 

@@ -104,6 +104,12 @@ Route::get('/work/{work_id}/rate-professionals', [ProfessionalRatingController::
 use App\Http\Controllers\User\RatingController;
 
 Route::post('/ratings/submit', [RatingController::class, 'submitRatings'])->name('professional.submitRatings');
+Route::post('/ratings/submit', [WorkController::class, 'submitRatings'])->name('professional.submitRatings');
+
+
+
+Route::get('/professional', [ProfessionalController::class, 'index'])->name('professionals.index');
+Route::post('/professionals/search', [ProfessionalController::class, 'search'])->name('professionals.search');
 
 
 
