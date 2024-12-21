@@ -8,34 +8,6 @@
     $tab = $tab ?? 'default'; 
 @endphp
 
-<style>
-.search-section {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-}
-
-.search-section .form-select,
-.search-section .form-control {
-    flex: 1;
-}
-
-.search-btn {
-    min-width: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-
-.search-btn i {
-    font-size: 14px;
-}
-</style>
-
 @php
     // Manually define default values for $type and $name if they are not passed
     $type = $type ?? 'all';
@@ -44,7 +16,7 @@
 
 
 <div class="search-container">
-    <form method="POST" action="{{ route('professionals.search') }}">
+    <form method="POST">
         @csrf
         <div class="search-section">
             <select class="form-select" name="type">
@@ -53,7 +25,7 @@
                 <option value="structural engineer" {{ $type == 'structural engineer' ? 'selected' : '' }}>Structural Engineer</option>
                 <option value="constructor" {{ $type == 'constructor' ? 'selected' : '' }}>Constructor</option>
             </select>
-            <input type="text" name="name" class="form-control" placeholder="Search by Name" value="{{ $name }}">
+            <input type="text" name="name" class="form-control" placeholder="Search by Name">
             <button type="submit" class="btn search-btn">
                 <i class="bi bi-search"></i> Search
             </button>
@@ -203,85 +175,136 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 
     <script>
-      const searchRoute = "{{ route('professionals.search') }}";
+    window.addEventListener('load', function() {
+        initializeSearch();
+    });
 
-document.addEventListener('DOMContentLoaded', function() {
-    const searchBtn = document.getElementById('searchBtn');
-    const typeFilter = document.getElementById('typeFilter');
-    const searchInput = document.getElementById('searchInput');
-    const professionalGrid = document.querySelector('.professional-grid');
+    function initializeSearch() {
+        const searchForm = document.querySelector('.search-container form');
+        const professionalGrid = document.querySelector('.professional-grid');
 
-    if (!searchBtn || !typeFilter || !searchInput || !professionalGrid) {
-        console.error('One or more required elements not found');
-        return;
-    }
-
-    searchBtn.addEventListener('click', performSearch);
-
-    async function performSearch() {
-        try {
-            const type = typeFilter.value;
-            const query = searchInput.value;
-            
-            console.log('Searching with:', { type, query });
-
-            const response = await fetch(`${searchRoute}?type=${encodeURIComponent(type)}&query=${encodeURIComponent(query)}`, {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json',
-                }
+        if (!searchForm || !professionalGrid) {
+            console.error('Required elements not found:', { 
+                searchForm: !!searchForm, 
+                professionalGrid: !!professionalGrid 
             });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const result = await response.json();
-            console.log('Search results:', result);
-
-            if (result.status === 'success') {
-                updateProfessionalGrid(result.data);
-            } else {
-                throw new Error(result.message || 'An error occurred');
-            }
-        } catch (error) {
-            console.error('Search error:', error);
-            professionalGrid.innerHTML = `
-                <div class="alert alert-danger">
-                    ${error.message || 'An error occurred while searching. Please try again.'}
-                </div>`;
-        }
-    }
-
-    function updateProfessionalGrid(professionals) {
-        professionalGrid.innerHTML = '';
-
-        if (!professionals || professionals.length === 0) {
-            professionalGrid.innerHTML = `
-                <div class="alert alert-info text-center w-100">
-                    No professionals found matching your criteria.
-                </div>`;
             return;
         }
 
-        professionals.forEach(professional => {
-            const profilePicUrl = professional.profile_picture_url 
-                ? `/storage/app/public/images/profile_pic/${professional.profile_picture_url}`
-                : '/resources/images/sample.png';
+        const searchRoute = "{{ route('professionals.search.ajax') }}";
 
-            const card = `
-                <div class="professional-card" data-id="${professional.professional_id}">
-                    <img src="${profilePicUrl}" alt="${professional.name}" class="professional-image">
-                    <div class="professional-name">${professional.name}</div>
-                    <div class="professional-title">${professional.type}</div>
-                    <button class="view-more-btn" data-bs-toggle="modal" data-bs-target="#professionalModal-${professional.professional_id}">
-                        View More
-                    </button>
-                </div>`;
-            
-            professionalGrid.insertAdjacentHTML('beforeend', card);
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            performSearch(formData, searchRoute);
         });
+
+        async function performSearch(formData, route) {
+            try {
+                const params = new URLSearchParams();
+                params.append('type', formData.get('type'));
+                params.append('name', formData.get('name'));
+
+                console.log('Searching with URL:', `${route}?${params.toString()}`);
+
+                const response = await fetch(`${route}?${params.toString()}`, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Search results:', result);
+                
+                if (result.status === 'success') {
+                    updateProfessionalGrid(result.data);
+                } else {
+                    throw new Error(result.message || 'An error occurred');
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+                professionalGrid.innerHTML = `
+                    <div class="alert alert-danger">
+                        An error occurred while searching. Please try again.
+                    </div>`;
+            }
+        }
+
+        function updateProfessionalGrid(professionals) {
+            professionalGrid.innerHTML = '';
+
+            if (!professionals || professionals.length === 0) {
+                professionalGrid.innerHTML = `
+                    <div class="alert alert-info text-center w-100">
+                        No professionals found matching your criteria.
+                    </div>`;
+                return;
+            }
+
+            professionals.forEach(professional => {
+                console.log('Professional data:', professional);
+
+                const name = professional.user_name || 'N/A';
+                const profilePicUrl = professional.profile_picture_url 
+                    ? `http://localhost/geoffryxapp/storage/app/public/images/profile_pic/${professional.profile_picture_url}`
+                    : 'http://localhost/geoffryxapp/resources/images/sample.png';
+
+                const card = `
+                    <div class="professional-card" data-id="${professional.professional_id}">
+                        <img src="${profilePicUrl}" alt="${name}" class="professional-image">
+                        <div class="professional-name">${name}</div>
+                        <div class="professional-title">${professional.type}</div>
+                        <button class="view-more-btn" data-bs-toggle="modal" data-bs-target="#professionalModal-${professional.professional_id}">
+                            View More
+                        </button>
+
+                        <!-- Modal for professional -->
+                        <div class="modal fade" id="professionalModal-${professional.professional_id}" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <div class="profile-header">
+                                            <img src="${profilePicUrl}" alt="${name}" class="profile-image">
+                                            <div class="profile-info">
+                                                <h2>${name}</h2>
+                                                <p>${professional.type}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <div class="field-label">Work Location</div>
+                                            <div class="field-value">${professional.work_location || 'N/A'}</div>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <div class="field-label">Minimum Project Payment</div>
+                                            <div class="field-value">LKR ${Number(professional.payment_min || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                                        </div>
+
+                                        <div class="action-buttons">
+                                            <button class="btn-close-modal" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                
+                professionalGrid.insertAdjacentHTML('beforeend', card);
+            });
+
+            // Reinitialize Bootstrap modals
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                new bootstrap.Modal(modal);
+            });
+        }
     }
-});
-    </script>
+</script>

@@ -95,40 +95,80 @@ class ProfessionalController extends Controller
         return 'images/' . $folder . '/' . $filename;
     }
 
-    public function search(Request $request)
-    {
+    // public function search(Request $request)
+    // {
+    //     $type = $request->input('type', 'all');
+    //     $name = $request->input('name', '');
+
+    //     $query = DB::table('all_professional_details');
+
+    //     if ($type !== 'all') {
+    //         $query->where('type', '=', $type);
+    //     }
+
+    //     if (!empty($name)) {
+    //         $query->where('user_name', 'LIKE', '%' . $name . '%');
+    //     }
+
+    //     $professionals = $query->get();
+
+    //     return view('pages.customer.search_results', [
+    //         'professionals' => $professionals,
+    //         'type' => $type,
+    //         'name' => $name,
+    //         'tab' => 'professional',
+    //     ]);
+    // }
+
+    // public function index()
+    // {
+    //     $professionals = DB::table('all_professional_details')->get();
+
+    //     return view('pages.customer.professional', [
+    //         'professionals' => $professionals,
+    //         'type' => 'all',
+    //         'name' => '',
+    //         'tab' => 'professional',
+    //     ]);
+    // }
+    
+
+    public function searchAjax(Request $request)
+{
+    try {
         $type = $request->input('type', 'all');
         $name = $request->input('name', '');
-
-        $query = DB::table('all_professional_details');
-
+        
+        $query = DB::table('all_professional_details')
+                   ->select('professional_id', 'user_name', 'type', 'work_location', 
+                           'payment_min', 'profile_picture_url');
+        
         if ($type !== 'all') {
             $query->where('type', '=', $type);
         }
-
+        
         if (!empty($name)) {
             $query->where('user_name', 'LIKE', '%' . $name . '%');
         }
-
+        
         $professionals = $query->get();
-
-        return view('pages.customer.search_results', [
-            'professionals' => $professionals,
-            'type' => $type,
-            'name' => $name,
-            'tab' => 'professional',
+        
+        // Log the first result to check the structure
+        if ($professionals->count() > 0) {
+            \Log::info('First professional:', ['data' => $professionals->first()]);
+        }
+        
+        return response()->json([
+            'status' => 'success',
+            'data' => $professionals
         ]);
+        
+    } catch (\Exception $e) {
+        \Log::error('Search error: ' . $e->getMessage());
+        return response()->json([
+            'status' => 'error',
+            'message' => 'An error occurred while searching.'
+        ], 500);
     }
-
-    public function index()
-    {
-        $professionals = DB::table('all_professional_details')->get();
-
-        return view('pages.customer.professional', [
-            'professionals' => $professionals,
-            'type' => 'all',
-            'name' => '',
-            'tab' => 'professional',
-        ]);
-    }
+}
 }

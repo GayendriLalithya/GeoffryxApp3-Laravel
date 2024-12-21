@@ -107,10 +107,7 @@ Route::post('/ratings/submit', [RatingController::class, 'submitRatings'])->name
 Route::post('/ratings/submit', [WorkController::class, 'submitRatings'])->name('professional.submitRatings');
 
 
-
-Route::get('/professional', [ProfessionalController::class, 'index'])->name('professionals.index');
-Route::post('/professionals/search', [ProfessionalController::class, 'search'])->name('professionals.search');
-
+Route::get('/search-professionals', [ProfessionalController::class, 'searchAjax'])->name('professionals.search.ajax');
 
 
 // Group Chat

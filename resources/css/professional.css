@@ -7,7 +7,33 @@ body {
     background-color: #f8f9fa;
 }
 
-.search-container {
+.search-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.search-section .form-select,
+.search-section .form-control {
+    flex: 1;
+}
+
+.search-btn {
+    min-width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.search-btn i {
+    font-size: 14px;
+}
+
+/* .search-container {
     display: flex;
     gap: 15px;
     margin-bottom: 30px;
@@ -19,7 +45,7 @@ body {
 
 .search-container input {
     flex-grow: 1;
-}
+} */
 
 .search-btn {
     background-color: var(--primary-color);
