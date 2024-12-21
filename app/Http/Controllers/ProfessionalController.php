@@ -172,4 +172,23 @@ class ProfessionalController extends Controller
     }
 }
 
+public function getProfessionalDetails($professionalId)
+{
+    $professionalDetails = DB::table('professional_details')
+        ->where('professional_id', $professionalId)
+        ->first();
+
+    $workHistory = DB::table('professional_work_history')
+        ->where('professional_id', $professionalId)
+        ->get();
+
+    return response()->json([
+        'status' => 'success',
+        'data' => [
+            'professional' => $professionalDetails,
+            'work_history' => $workHistory,
+        ],
+    ]);
+}
+
 }

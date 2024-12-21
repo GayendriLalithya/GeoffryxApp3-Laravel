@@ -18,9 +18,6 @@
                     <a class="nav-link {{ request('tab') == 'users' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'users']) }}">
                         <i class="fas fa-users"></i> Manage Users
                     </a>
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-chart-pie"></i> Manage Projects
-                    </a>
                     @break
 
                 @case('professional')
@@ -30,7 +27,7 @@
                     <a class="nav-link {{ request('tab') == 'manage_projects' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'manage_projects']) }}">
                         <i class="fas fa-chart-pie"></i> Manage Projects
                     </a>
-                    <a class="nav-link" href="#">
+                    <a class="nav-link {{ request('tab') == 'work_history' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'work_history']) }}">
                         <i class="fas fa-history"></i> Work History
                     </a>
                     @break
@@ -43,9 +40,9 @@
             <a class="nav-link {{ request('tab') == 'professional' ? 'active' : '' }}" href="{{ route('user.dashboard', ['tab' => 'professional']) }}">
                 <i class="fas fa-user-tie"></i> Professionals
             </a>
-            <a class="nav-link" href="#">
+            <!-- <a class="nav-link" href="#">
                 <i class="fas fa-folder"></i> Manage File
-            </a>
+            </a> -->
 
             <div class="mt-auto">
                 

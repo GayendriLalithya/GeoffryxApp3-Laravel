@@ -403,4 +403,44 @@ async function submitRatings(workId) {
 // Initialize the rating boxes when the page loads
 document.addEventListener("DOMContentLoaded", initializeRatingBoxes);
 
+// Rating handling js
+
+$('#ratingsForm').on('submit', function(e) {
+    e.preventDefault();
+
+    let formData = {
+        work_id: $('#work_id').val(),
+        ratings: []
+    };
+
+    $('.rating-box').each(function() {
+        let professionalId = $(this).data('professional-id');
+        let rate = $(this).find('input[name="rate"]').val();
+        let comment = $(this).find('textarea[name="comment"]').val();
+
+        formData.ratings.push({
+            professional_id: professionalId,
+            rate: rate,
+            comment: comment
+        });
+    });
+
+    $.ajax({
+        url: '{{ route("professional.submitRatings") }}',
+        method: 'POST',
+        data: JSON.stringify(formData),
+        contentType: 'application/json',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            alert('Ratings submitted successfully!');
+        },
+        error: function(response) {
+            alert('Failed to submit ratings.');
+        }
+    });
+});
+
+
 </script>

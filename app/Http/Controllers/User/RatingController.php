@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Rating;
+use App\Models\Work;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -11,20 +12,20 @@ class RatingController extends Controller
 {
     public function submitRatings(Request $request)
 {
-    $ratings = $request->input('ratings');
-    $workId = $request->input('work_id');
-    $userId = Work::where('work_id', $workId)->value('user_id'); // Get user ID from work table
+    $validated = $request->validate([
+        'work_id' => 'required|exists:work,work_id',
+        'ratings' => 'required|array',
+        'ratings.*.professional_id' => 'required|exists:professionals,professional_id',
+        'ratings.*.rate' => 'required|in:1,2,3,4,5',
+        'ratings.*.comment' => 'nullable|string',
+    ]);
 
-    foreach ($ratings as $rating) {
-        Rating::create([
-            'professional_id' => $rating['professional_id'],
-            'work_id' => $workId,
-            'user_id' => $userId,
-            'rate' => $rating['rate'],
-            'comment' => $rating['comment'],
-        ]);
-    }
+    DB::statement('CALL SubmitRatings(?, ?, ?)', [
+        $validated['work_id'],
+        auth()->user()->user_id, // Assuming authenticated user
+        json_encode($validated['ratings']),
+    ]);
 
-    return response()->json(['success' => true, 'message' => 'Ratings submitted successfully.']);
+    return redirect()->back()->with('success', 'Ratings submitted successfully!');
 }
 }

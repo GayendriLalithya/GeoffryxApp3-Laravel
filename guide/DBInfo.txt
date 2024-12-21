@@ -292,6 +292,42 @@ END $$
 
 DELIMITER ;
 
+8. stored procedure to add ratings upon project completion
+
+DELIMITER $$
+
+CREATE PROCEDURE submit_ratings(
+    IN p_work_id BIGINT,
+    IN p_user_id BIGINT,
+    IN p_ratings JSON
+)
+BEGIN
+    DECLARE idx INT DEFAULT 0;
+    DECLARE total_ratings INT;
+    DECLARE professional_id BIGINT;
+    DECLARE rate ENUM('1', '2', '3', '4', '5');
+    DECLARE comment TEXT;
+
+    -- Get the total number of ratings from the JSON array
+    SET total_ratings = JSON_LENGTH(p_ratings);
+
+    -- Iterate through each rating in the JSON array
+    WHILE idx < total_ratings DO
+        -- Extract the professional_id, rate, and comment from the JSON array
+        SET professional_id = JSON_UNQUOTE(JSON_EXTRACT(p_ratings, CONCAT('$[', idx, '].professional_id')));
+        SET rate = JSON_UNQUOTE(JSON_EXTRACT(p_ratings, CONCAT('$[', idx, '].rate')));
+        SET comment = JSON_UNQUOTE(JSON_EXTRACT(p_ratings, CONCAT('$[', idx, '].comment')));
+
+        -- Insert the rating into the 'rating' table
+        INSERT INTO rating (professional_id, work_id, user_id, rate, comment, created_at, updated_at)
+        VALUES (professional_id, p_work_id, p_user_id, rate, comment, NOW(), NOW());
+
+        -- Increment the index to move to the next rating
+        SET idx = idx + 1;
+    END WHILE;
+END$$
+
+DELIMITER ;
 
 
 

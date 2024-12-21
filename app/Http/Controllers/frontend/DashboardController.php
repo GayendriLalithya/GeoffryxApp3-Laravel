@@ -28,6 +28,10 @@ class DashboardController extends Controller
                 'view' => 'pages.professional.manage_projects',
                 'css' => 'resources/css/projects.css',
             ],
+            'work_history' => [
+                'view' => 'pages.professional.work_history',
+                'css' => 'resources/css/work_history.css',
+            ],
             'projects' => [
                 'view' => 'pages.customer.projects',
                 'css' => 'resources/css/projects.css',
