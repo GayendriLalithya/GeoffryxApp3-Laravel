@@ -162,11 +162,18 @@
 
                         <div class="action-buttons">
                             <button type="button" class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#teamModal-{{ $project->work_id }}">View Team</button>
+                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#documentModal-{{ $project->work_id }}">View Project Documents</button>
                         </div>
 
                         @include('pages.partials.project-modal', [
     
                             'modalId' => 'teamModal-' . $project->work_id,
+                            'workId' => $project->work_id // Pass the work_id explicitly
+                        ])
+
+                        @include('pages.partials.document-modal', [
+                        
+                            'modalId' => 'documentModal-' . $project->work_id,
                             'workId' => $project->work_id // Pass the work_id explicitly
                         ])
 

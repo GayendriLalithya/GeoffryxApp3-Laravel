@@ -135,3 +135,13 @@ use App\Http\Controllers\Admin\ManageUserController;
 Route::get('/users', [ManageUserController::class, 'index'])->name('user.details');
 Route::get('/users/edit/{id}', [ManageUserController::class, 'editUser'])->name('user.edit');
 Route::delete('/users/delete/{id}', [ManageUserController::class, 'deleteUser'])->name('user.delete');
+
+// Handling project document upload
+
+use App\Http\Controllers\DocumentController;
+
+// Document update route
+Route::post('/documents/update/{workId}', [DocumentController::class, 'updateDocuments'])->name('documents.update');
+
+
+// Route::post('/documents/update', [DocumentController::class, 'store'])->name('documents.update');
