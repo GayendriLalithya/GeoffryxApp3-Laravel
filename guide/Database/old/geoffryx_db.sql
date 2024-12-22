@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 22, 2024 at 08:32 AM
+-- Generation Time: Dec 21, 2024 at 08:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -363,19 +363,11 @@ CREATE TABLE `customer` (
 CREATE TABLE `document` (
   `document_id` bigint(20) UNSIGNED NOT NULL,
   `document` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `work_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `document`
---
-
-INSERT INTO `document` (`document_id`, `document`, `work_id`, `created_at`, `updated_at`) VALUES
-(2, 'example_certificate.jpg', 5, '2024-12-22 07:12:42', '2024-12-22 07:12:42'),
-(3, 'sample.pdf', 5, '2024-12-22 07:24:47', '2024-12-22 07:24:47'),
-(4, 'example_certificate.jpg', 1, '2024-12-22 07:31:07', '2024-12-22 07:31:07');
 
 -- --------------------------------------------------------
 
@@ -511,8 +503,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (37, '2024_12_18_141816_add_status_to_work_table', 1),
 (40, '2024_12_20_103033_update_status_enum_in_work_table', 2),
 (41, '2024_12_20_160726_update_work_history_table_remove_columns', 3),
-(42, '2024_12_20_160754_update_payment_table_add_columns', 3),
-(43, '2024_12_22_051449_remove_name_from_documents_table', 4);
+(42, '2024_12_20_160754_update_payment_table_add_columns', 3);
 
 -- --------------------------------------------------------
 
@@ -708,7 +699,7 @@ CREATE TABLE `profile_picture` (
 
 INSERT INTO `profile_picture` (`profile_picture_id`, `profile_pic`, `user_id`, `created_at`, `updated_at`) VALUES
 (1, '1734585365_sam winchester.jpg', 1, '2024-12-18 23:45:45', '2024-12-18 23:46:06'),
-(2, '1734849650_image 10.png', 2, '2024-12-18 23:46:50', '2024-12-22 01:10:50'),
+(2, '1734585425_image 10.png', 2, '2024-12-18 23:46:50', '2024-12-18 23:47:05'),
 (3, '1734585600_Emma Watson.png', 3, '2024-12-18 23:49:35', '2024-12-18 23:50:00'),
 (4, '1734585952_Tiffany Andrews.jpg', 4, '2024-12-18 23:55:39', '2024-12-18 23:55:52'),
 (5, '1734807803_mary.jpg', 5, '2024-12-21 13:10:21', '2024-12-21 13:33:23');
@@ -818,7 +809,7 @@ INSERT INTO `team_members` (`team_member_id`, `user_id`, `team_id`, `status`, `c
 (2, 3, 2, 'not started', '2024-12-19 15:55:12', '2024-12-19 15:55:12'),
 (3, 2, 4, 'in progress', '2024-12-19 17:49:44', '2024-12-20 06:25:58'),
 (4, 3, 4, 'completed', '2024-12-19 18:10:11', '2024-12-20 05:12:24'),
-(5, 2, 3, 'not started', '2024-12-20 04:02:55', '2024-12-21 21:47:46'),
+(5, 2, 3, 'almost done', '2024-12-20 04:02:55', '2024-12-20 06:20:38'),
 (6, 3, 6, 'not started', '2024-12-20 05:00:28', '2024-12-20 05:00:28');
 
 --
@@ -1013,7 +1004,7 @@ CREATE TABLE `work` (
 INSERT INTO `work` (`work_id`, `description`, `name`, `user_id`, `location`, `budget`, `start_date`, `end_date`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'Need a house plan with following\r\n2 bedrooms\r\n2 bathrooms\r\n1 kitchen', 'Sunset Villa', 4, 'Colombo', 3500000.00, '2025-01-22', '2025-06-30', 'completed', '2024-12-19 05:32:02', '2024-12-20 10:03:42'),
 (2, 'The Office Complex needs a structured plan \r\nstrong house plan', 'Greenwood Office Complex', 2, 'Kandy', 5000000.00, '2024-12-01', '2025-01-10', 'not started', '2024-12-19 10:26:16', '2024-12-19 10:26:16'),
-(3, 'Regression testing', 'Example Project', 3, 'Gampaha', 5000000.00, '2024-12-01', '2024-12-31', 'not started', '2024-12-19 16:14:09', '2024-12-21 21:47:46'),
+(3, 'Regression testing', 'Example Project', 3, 'Gampaha', 5000000.00, '2024-12-01', '2024-12-31', 'in progress', '2024-12-19 16:14:09', '2024-12-20 06:20:38'),
 (4, 'Testing multiple profesisonals', 'Seaside Resort Development', 4, 'Kandy', 5000000.00, '2024-12-01', '2025-04-02', 'in progress', '2024-12-19 17:48:42', '2024-12-20 06:08:57'),
 (5, 'Test Project', 'Test Project', 2, 'Gampaha', 5000000.00, '2024-12-01', '2025-01-10', 'not started', '2024-12-20 04:03:50', '2024-12-20 04:03:50'),
 (6, 'Hii', 'Test Project 2', 4, 'Gampaha', 3500000.00, '2024-12-05', '2024-12-17', 'not started', '2024-12-20 04:59:56', '2024-12-20 04:59:56');
@@ -1335,7 +1326,7 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `document`
 --
 ALTER TABLE `document`
-  MODIFY `document_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `document_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -1371,7 +1362,7 @@ ALTER TABLE `member_tasks`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `notifications`
@@ -1389,7 +1380,7 @@ ALTER TABLE `payment`
 -- AUTO_INCREMENT for table `pending_professional`
 --
 ALTER TABLE `pending_professional`
-  MODIFY `pending_prof_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `pending_prof_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`

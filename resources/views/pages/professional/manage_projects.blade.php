@@ -92,6 +92,7 @@
 
                         <div class="action-buttons">
                             <button type="button" class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#teamModal-{{ $team->team_id }}">View Team</button>
+                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#documentModal-{{ $team->work->work_id }}">View Project Documents</button>
                         </div>
 
                         </form>
@@ -117,6 +118,12 @@
         'teamName' => $team->work->name ?? 'N/A',
         'teamId' => $team->team_id, // Pass team ID for debugging
         'workId' => $team->work->work_id, // Pass work ID for debugging
+    ])
+
+    @include('pages.partials.document-modal', [
+                        
+        'modalId' => 'documentModal-' . $team->work->work_id,
+        'workId' => $team->work->work_id // Pass the work_id explicitly
     ])
 @endforeach
 
