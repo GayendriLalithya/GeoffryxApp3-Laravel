@@ -258,6 +258,7 @@ BEGIN
         tm.user_id,
         u.name AS member_name,
         tm.status AS member_status,
+        tm.amount AS task_amount,
         p.type AS professional_type
     FROM 
         team_members tm

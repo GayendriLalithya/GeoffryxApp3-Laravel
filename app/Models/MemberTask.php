@@ -15,7 +15,7 @@ class MemberTask extends Model
     protected $primaryKey = 'member_task_id';
 
     // Allow mass assignment for the necessary fields
-    protected $fillable = ['description', 'status', 'team_member_id', 'team_id'];
+    protected $fillable = ['description', 'status', 'amount', 'team_member_id', 'team_id'];
 
     // If the primary key is not an auto-incrementing integer, set this to false
     public $incrementing = true;

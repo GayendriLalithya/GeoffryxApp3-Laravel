@@ -19,25 +19,27 @@ class MemberTaskController extends Controller
     {
         $validated = $request->validate([
             'description' => 'required|string|max:255',
+            'amount' => 'required|numeric|min:0',
             'team_member_id' => 'required|exists:team_members,team_member_id',
             'team_id' => 'required|exists:team,team_id',
         ]);
 
         MemberTask::create([
             'description' => $validated['description'],
+            'amount' => $validated['amount'],
             'status' => 'not started',
             'team_member_id' => $validated['team_member_id'],
             'team_id' => $validated['team_id'],
         ]);
 
-        // Update the associated work status
-        $this->updateWorkStatusByTeamMember($validated['team_member_id']);
+        // Update the total amounts for the team member and the team
+        $this->updateTeamMemberAndTeamAmount($validated['team_member_id']);
 
         return back()->with('alert-success', 'Task added successfully.');
     }
 
     /**
-     * Update an existing task's status.
+     * Update an existing task's status or amount.
      */
     public function update(Request $request, $member_task_id)
     {
@@ -45,14 +47,18 @@ class MemberTaskController extends Controller
 
         $validated = $request->validate([
             'status' => 'required|in:not started,in progress,done',
+            'amount' => 'required|numeric|min:0',
         ]);
 
-        $task->update(['status' => $validated['status']]);
+        $task->update([
+            'status' => $validated['status'],
+            'amount' => $validated['amount'],
+        ]);
 
-        // Update the associated work status
-        $this->updateWorkStatusByTeamMember($task->team_member_id);
+        // Update the total amounts for the team member and the team
+        $this->updateTeamMemberAndTeamAmount($task->team_member_id);
 
-        return back()->with('alert-success', 'Task status updated.');
+        return back()->with('alert-success', 'Task updated successfully.');
     }
 
     /**
@@ -65,10 +71,25 @@ class MemberTaskController extends Controller
 
         $task->delete();
 
-        // Update the associated work status
-        $this->updateWorkStatusByTeamMember($teamMemberId);
+        // Update the total amounts for the team member and the team
+        $this->updateTeamMemberAndTeamAmount($teamMemberId);
 
         return back()->with('alert-success', 'Task deleted successfully.');
+    }
+
+    /**
+     * Update the total amounts for a team member and the team.
+     */
+    private function updateTeamMemberAndTeamAmount($teamMemberId)
+    {
+        // Update the team member's total amount
+        $totalMemberAmount = MemberTask::where('team_member_id', $teamMemberId)->sum('amount');
+        TeamMember::where('team_member_id', $teamMemberId)->update(['amount' => $totalMemberAmount]);
+
+        // Update the team's total amount
+        $teamId = TeamMember::where('team_member_id', $teamMemberId)->value('team_id');
+        $totalTeamAmount = TeamMember::where('team_id', $teamId)->sum('amount');
+        Team::where('team_id', $teamId)->update(['amount' => $totalTeamAmount]);
     }
 
     /**
@@ -76,7 +97,6 @@ class MemberTaskController extends Controller
      */
     private function updateWorkStatusByTeamMember($teamMemberId)
     {
-        // Get the team ID and work ID for the team member
         $team = TeamMember::where('team_member_id', $teamMemberId)->firstOrFail()->team;
         $workId = $team->work_id;
 

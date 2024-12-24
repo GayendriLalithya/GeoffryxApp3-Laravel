@@ -13,6 +13,9 @@ class TeamMember extends Model
     protected $primaryKey = 'team_member_id';
     public $timestamps = true;
 
+    // Allow mass assignment for the necessary fields
+    protected $fillable = ['status', 'amount', 'team_id', 'user_id'];
+
     // Define relationship with the Team model
     public function team()
     {
@@ -20,26 +23,18 @@ class TeamMember extends Model
     }
 
     // Define relationship with the User model
-    // public function user()
-    // {
-    //     return $this->belongsTo(User::class, 'user_id');
-    // }
-
     public function user()
-{
-    return $this->belongsTo(User::class, 'user_id', 'user_id');
-}
+    {
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
+    }
 
-public function professional()
-{
-    return $this->belongsTo(Professional::class, 'user_id', 'user_id');
-}
+    public function professional()
+    {
+        return $this->belongsTo(Professional::class, 'user_id', 'user_id');
+    }
 
-public function memberTasks()
-{
-    return $this->hasMany(MemberTask::class, 'team_member_id');
-}
-
-
-
+    public function memberTasks()
+    {
+        return $this->hasMany(MemberTask::class, 'team_member_id');
+    }
 }
