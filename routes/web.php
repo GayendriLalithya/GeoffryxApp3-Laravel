@@ -156,3 +156,8 @@ Route::get('/teams/members', [MemberTaskController::class, 'getTeamsWithMembers'
 use App\Http\Controllers\WorkStatusController;
 
 Route::put('/work/{workId}/update-status', [WorkStatusController::class, 'updateWorkStatus'])->name('work.updateStatus');
+
+use App\Http\Controllers\PendingProfessionalController;
+
+// Route for deleting a pending professional
+Route::post('/pending-professional/{pending_prof_id}/delete', [PendingProfessionalController::class, 'destroy'])->name('pendingProfessional.delete');

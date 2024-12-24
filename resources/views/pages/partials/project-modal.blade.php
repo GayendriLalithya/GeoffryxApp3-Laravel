@@ -3,6 +3,7 @@ use App\Models\TeamMember;
 use App\Models\PendingProfessional;
 use App\Models\WorkHistory;
 use App\Models\Payment;
+use App\Models\Professional;
 
 // Fetch team members for the given work ID
 $team = \App\Models\Team::where('work_id', $workId)->first();
@@ -26,6 +27,10 @@ $workHistoryExists = WorkHistory::where('work_id', $workId)->exists();
 
 // Check if a payment record exists for the work ID
 $paymentExists = Payment::where('work_id', $workId)->exists();
+
+// Fetch all professionals
+    $allProfessionals = Professional::with('user')->get();
+    
 @endphp
 
 <style>
@@ -132,48 +137,95 @@ $paymentExists = Payment::where('work_id', $workId)->exists();
                             <div class="col-4">{{ $teamMember->user->name }}</div>
                             <div class="col-4">{{ ucfirst($teamMember->status) }}</div>
                         </div>
+                                        
+                        <!-- Collapsible Section for Member Tasks -->
+                        <div class="collapse mt-2" id="taskList-{{ $teamMember->team_member_id }}">
+                            <div class="task-list p-2" style="background-color: #f9f9f9;">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Description</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($teamMember->memberTasks as $task)
+                                            <tr>
+                                                <td>{{ $task->description }}</td>
+                                                <td>{{ $task->amount }}</td>
+                                                <td>{{ ucfirst($task->status) }}</td>
+                                                <td>
+                                                    @if ($task->status === 'completed')
+                                                        <button class="btn btn-primary btn-sm">Pay</button>
+                                                    @else
+                                                        <button class="btn btn-secondary btn-sm" disabled>Not Available</button>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4">No tasks found for this member.</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="text-end mt-2">
+                            <button 
+                                type="button" 
+                                class="btn btn-secondary btn-sm" 
+                                data-bs-toggle="collapse" 
+                                data-bs-target="#taskList-{{ $teamMember->team_member_id }}">
+                                View Tasks
+                            </button>
+                        </div>
+
                     @empty
                         <p>No team members found for this project.</p>
                     @endforelse
 
+
                     <hr style="border: 1px solid #e6fbff;">
 
-                    <!-- Requested Professionals Section -->
-                    <h5 class="mt-4 mb-4">Requested Professionals</h5>
-                    <div class="p-1" style="background-color: #e6fbff;">
-                        <div class="row">
-                            <!-- <div class="col-2"><label><b>Pend Professional ID</b></label></div> -->
-                            <div class="col-3"><label><b>Professional Type</b></label></div>
-                            <div class="col-3"><label><b>Name</b></label></div>
-                            <div class="col-3"><label><b>Status</b></label></div>
-                            <div class="col-3"><label><b>Actions</b></label></div>
-                        </div>
-                    </div>
-
-                    @forelse ($pendingProfessionals as $pendingProfessional)
-                        <div class="row mt-2">
-                            <!-- <div class="col-2">{{ $pendingProfessional->pending_prof_id ?? 'N/A' }}</div>  -->
-                            <div class="col-3">{{ $pendingProfessional->professional->type ?? 'N/A' }}</div>
-                            <div class="col-3">{{ $pendingProfessional->professional->user->name ?? 'N/A' }}</div>
-                            <div class="col-3">{{ ucfirst($pendingProfessional->professional_status) }}</div>
-                            <div class="col-3">
-                            @if ($pendingProfessional->professional_status !== 'accepted')
-                                <form>
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
-                            @endif
+                    @if ($pendingProfessionals->where('professional_status', 'pending')->isNotEmpty())
+                        <!-- Requested Professionals Section -->
+                        <h5 class="mt-4 mb-4">Requested Professionals</h5>
+                        <div class="p-1" style="background-color: #e6fbff;">
+                            <div class="row">
+                                <!-- <div class="col-2"><label><b>Pend Professional ID</b></label></div> -->
+                                <div class="col-3"><label><b>Professional Type</b></label></div>
+                                <div class="col-3"><label><b>Name</b></label></div>
+                                <div class="col-3"><label><b>Status</b></label></div>
+                                <div class="col-3"><label><b>Actions</b></label></div>
                             </div>
                         </div>
-                    @empty
-                        <p>No requested professionals found for this project.</p>
-                    @endforelse
 
-                    <hr style="border: 1px solid #e6fbff;">
+                        @foreach ($pendingProfessionals->where('professional_status', 'pending') as $pendingProfessional)
+                            <div class="row mt-2">
+                                <!-- <div class="col-2">{{ $pendingProfessional->pending_prof_id ?? 'N/A' }}</div>  -->
+                                <div class="col-3">{{ $pendingProfessional->professional->type ?? 'N/A' }}</div>
+                                <div class="col-3">{{ $pendingProfessional->professional->user->name ?? 'N/A' }}</div>
+                                <div class="col-3">{{ ucfirst($pendingProfessional->professional_status) }}</div>
+                                <div class="col-3">
+                                    <form method="POST" action="{{ route('pendingProfessional.delete', $pendingProfessional->pending_prof_id) }}">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this professional?')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @endforeach
 
-                    <!-- Add Member -->
+                        <hr style="border: 1px solid #e6fbff;">
+
+                    @endif
+
+                    <!-- Add Member Section -->
                     <h5 class="mt-4 mb-4">Add Members</h5>
                     <div class="row mt-2">
                         <div class="col">
@@ -186,7 +238,11 @@ $paymentExists = Payment::where('work_id', $workId)->exists();
                         </div>
                         <div class="col">
                             <input type="text" class="form-control" id="memberName" placeholder="Name" list="nameSuggestions">
-                            <datalist id="nameSuggestions"></datalist>
+                            <datalist id="nameSuggestions">
+                                @foreach ($allProfessionals as $professional)
+                                    <option value="{{ $professional->user->name }}"></option>
+                                @endforeach
+                            </datalist>
                         </div>
                         <div class="col-auto">
                             <button class="btn btn-teal" id="addMemberButton">Add</button>
@@ -194,6 +250,7 @@ $paymentExists = Payment::where('work_id', $workId)->exists();
                     </div>
 
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <a href="{{ route('group-chat.view', ['id' => $workId, 'email' => Auth::user()->email]) }}" 
@@ -296,6 +353,31 @@ $paymentExists = Payment::where('work_id', $workId)->exists();
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+<script>
+    document.getElementById('memberType').addEventListener('change', async function () {
+        const type = this.value;
+        const nameSuggestions = document.getElementById('nameSuggestions');
+
+        // Clear existing suggestions
+        nameSuggestions.innerHTML = '';
+
+        if (type) {
+            try {
+                const response = await fetch(`/professionals-by-type?type=${encodeURIComponent(type)}`);
+                const professionals = await response.json();
+
+                professionals.forEach(professional => {
+                    const option = document.createElement('option');
+                    option.value = professional.name;
+                    nameSuggestions.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error fetching professionals:', error);
+            }
+        }
+    });
+</script>
 
 <script>
 document.getElementById('confirmCompletionButton')?.addEventListener('click', async function() {

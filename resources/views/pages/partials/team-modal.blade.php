@@ -94,19 +94,19 @@
                                                                     @csrf
                                                                     @method('PUT')
                                                                     <div class="d-flex">
-                                                                        <input type="text" name="amount" value="{{ $task->amount }}" class="form-control me-2" placeholder="Enter Amount">
-                                                                        <select name="status" class="form-select d-inline-block w-auto" {{ $task->status == 'done' ? 'disabled' : '' }}>
+                                                                        <input type="text" name="amount" value="{{ $task->amount }}" class="form-control me-2" placeholder="Enter Amount" {{ $task->status == 'completed' ? 'disabled' : '' }}>
+                                                                        <select name="status" class="form-select d-inline-block w-auto" {{ $task->status == 'completed' ? 'disabled' : '' }}>
                                                                             <option value="not started" {{ $task->status == 'not started' ? 'selected' : '' }}>Not Started</option>
                                                                             <option value="in progress" {{ $task->status == 'in progress' ? 'selected' : '' }}>In Progress</option>
-                                                                            <option value="done" {{ $task->status == 'done' ? 'selected' : '' }}>Done</option>
+                                                                            <option value="completed" {{ $task->status == 'completed' ? 'selected' : '' }}>Completed</option>
                                                                         </select>
-                                                                        <button type="submit" class="btn btn-primary btn-sm ms-2"><i class="bi bi-pencil"></i></button>
+                                                                        <button type="submit" class="btn btn-primary btn-sm ms-2 mt-2 mb-1" {{ $task->status == 'completed' ? 'disabled' : '' }}><i class="bi bi-pencil"></i></button>
                                                                     </div>
                                                                 </form>
                                                                 <form method="POST" action="{{ route('tasks.delete', $task->member_task_id) }}" style="display:inline-block;">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                                                    <button type="submit" class="btn btn-danger btn-sm" {{ $task->status == 'completed' ? 'disabled' : '' }}><i class="bi bi-trash"></i></button>
                                                                 </form>
                                                             @else
                                                                 <p>No Actions available.</p>

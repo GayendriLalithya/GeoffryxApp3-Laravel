@@ -388,22 +388,7 @@ SELECT
 FROM rating
 GROUP BY professional_id;
 
-4. Professional Work History View
-
-This view joins the work_history, work, and ratings tables to provide a comprehensive history for each professional, including project names, ratings, and descriptions.
-
-CREATE VIEW professional_work_history AS
-SELECT 
-    wh.professional_id, 
-    w.name AS project_name, 
-    r.rate AS rating, 
-    w.description, 
-    w.location AS project_location
-FROM work_history wh
-JOIN work w ON wh.work_id = w.work_id
-LEFT JOIN rating r ON wh.rating_id = r.rating_id;
-
-5. User project creation view
+4. User project creation view
 
 CREATE VIEW view_user_projects AS
 SELECT 
@@ -414,7 +399,7 @@ FROM work
 INNER JOIN users ON work.user_id = users.user_id
 ORDER BY work.created_at DESC;
 
-6. to get all ptofessional details for the search
+5. to get all ptofessional details for the search
 
 CREATE VIEW all_professional_details AS
 SELECT 
@@ -435,6 +420,22 @@ JOIN users u ON p.user_id = u.user_id
 LEFT JOIN profile_pictures pp ON p.user_id = pp.user_id
 WHERE u.deleted = 0;
 
+6. view teams with work view
+
+CREATE VIEW `geoffryx_db`.`view_teams_with_work` AS
+SELECT 
+    t.team_id AS team_id,
+    t.work_id AS work_id,
+    w.name AS work_name,
+    w.description AS work_description,
+    w.status AS work_status,
+    w.user_id AS work_owner_id
+FROM 
+    geoffryx_db.team t
+JOIN 
+    geoffryx_db.work w 
+ON 
+    (t.work_id = w.work_id);
 
 
 

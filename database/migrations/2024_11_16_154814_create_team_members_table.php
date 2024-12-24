@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('team_id');
             $table->enum('status', ['not started', 'in progress', 'halfway through', 'almost done', 'completed'])
-                  ->default('not stated');
+                  ->default('not started');
             $table->timestamps();
 
             $table->foreign('user_id')->references('user_id')->on('users');

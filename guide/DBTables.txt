@@ -1,0 +1,175 @@
+Database: geoffryx_db
+
+01. The structure of the users table in text format:
+
+user_id - bigint(20), Primary Key
+name - varchar(255)
+contact_no - varchar(15)
+address - text
+email - varchar(255), Unique
+password - varchar(255)
+user_type - enum('professional', 'customer', 'admin')
+remember_token - varchar(100)
+created_at - timestamp
+updated_at - timestamp
+deleted - tinyint(1)
+
+02. The structure of the verify table in text format:
+
+verify_id - bigint(20), Primary Key
+user_id - bigint(20), Foreign Key
+nic_no - varchar(255)
+nic_front - varchar(255)
+nic_back - varchar(255)
+professional_type - varchar(255)
+created_at - timestamp
+updated_at - timestamp
+status - varchar(255)
+
+03. The structure of the work table in text format:
+
+work_id - bigint(20), Primary Key
+description - text
+name - varchar(255)
+user_id - bigint(20), Foreign Key
+location - varchar(255)
+budget - decimal(10,2)
+start_date - date
+end_date - date
+status - enum('not started', 'in progress', 'completed')
+created_at - timestamp
+updated_at - timestamp
+
+04. The structure of the work_history table in text format:
+
+work_history_id - bigint(20), Primary Key
+work_id - bigint(20), Foreign Key
+user_id - bigint(20), Foreign Key
+created_at - timestamp
+updated_at - timestamp
+
+05. The structure of the certificate table in text format:
+
+certificate_id - bigint(20), Primary Key
+certificate_name - varchar(255)
+certificate - varchar(255)
+created_at - timestamp
+updated_at - timestamp
+verify_id - bigint(20), Foreign Key
+
+06. The structure of the document table in text format:
+
+document_id - bigint(20), Primary Key
+document - varchar(255)
+work_id - bigint(20), Foreign Key
+created_at - timestamp
+updated_at - timestamp
+
+07. The structure of the team table in text format:
+
+team_id - bigint(20), Primary Key
+work_id - bigint(20), Foreign Key
+amount - decimal(10,2)
+created_at - timestamp
+updated_at - timestamp
+
+08. The structure of the team_members table in text format:
+
+team_member_id - bigint(20), Primary Key
+user_id - bigint(20), Foreign Key
+team_id - bigint(20), Foreign Key
+status - enum('not started', 'in progress', 'completed')
+amount - decimal(10,2)
+created_at - timestamp
+updated_at - timestamp
+
+09. The structure of the member_tasks table in text format:
+
+member_task_id - bigint(20), Primary Key
+team_id - bigint(20), Foreign Key
+description - text
+amount - decimal(10,2)
+status - enum('not started', 'in progress', 'completed')
+team_member_id - bigint(20), Foreign Key
+created_at - timestamp
+updated_at - timestamp
+
+10. The structure of the notifications table in text format:
+
+notification_id - bigint(20), Primary Key
+user_id - bigint(20), Foreign Key
+title - varchar(255)
+message - text
+status - enum('read', 'unread')
+created_at - timestamp
+updated_at - timestamp
+
+11. The structure of the professionals table in text format:
+
+professional_id - bigint(20), Primary Key
+user_id - bigint(20), Foreign Key
+type - varchar(255)
+availability - enum('Available', 'Not Available')
+work_location - varchar(255)
+created_at - timestamp
+updated_at - timestamp
+payment_min - decimal(13,2)
+payment_max - decimal(13,2)
+preferred_project_size - enum('small', 'medium', 'large', 'all')
+
+12. The structure of the pending_professional table in text format:
+
+pending_prof_id - bigint(20), Primary Key
+user_id - bigint(20), Foreign Key
+professional_id - bigint(20), Foreign Key
+work_id - bigint(20), Foreign Key
+professional_status - enum('pending', 'accepted', 'rejected', 'removed')
+created_at - timestamp
+updated_at - timestamp
+
+13. The structure of the profile_picture table in text format:
+
+profile_picture_id - bigint(20), Primary Key
+profile_pic - varchar(255)
+user_id - bigint(20), Foreign Key
+created_at - timestamp
+updated_at - timestamp
+
+14. The structure of the rating table in text format:
+
+rating_id - bigint(20), Primary Key
+professional_id - bigint(20), Foreign Key
+work_id - bigint(20), Foreign Key
+user_id - bigint(20), Foreign Key
+rate - enum('1', '2', '3', '4', '5')
+comment - text
+created_at - timestamp
+updated_at - timestamp
+
+15. The structure of the payment table in text format:
+
+payment_id - bigint(20), Primary Key
+work_id - bigint(20), Foreign Key
+user_id - bigint(20), Foreign Key
+amount - decimal(10,2)
+date - date
+time - time
+created_at - timestamp
+updated_at - timestamp
+
+16. The structure of the reference table in text format:
+
+reference_id - bigint(20), Primary Key
+professional_id - bigint(20), Foreign Key
+created_at - timestamp
+updated_at - timestamp
+
+17. The structure of the referrals table in text format:
+
+referral_id - bigint(20), Primary Key
+work_id - bigint(20), Foreign Key
+professional_id - bigint(20), Foreign Key
+reference_id - bigint(20), Foreign Key
+status - enum('accepted', 'rejected', 'pending')
+created_at - timestamp
+updated_at - timestamp
