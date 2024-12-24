@@ -62,7 +62,7 @@ class DocumentController extends Controller
         }
 
         // return redirect()->back()->with('alert-info', 'No new documents to update.');
-        return redirect()->back()->with('alert-success', 'Documents updated successfully.');
+        return redirect()->back()->with('alert-info', 'No new documents to update.');
     }
 
     protected function deleteOldFile($filename)

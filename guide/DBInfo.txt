@@ -335,6 +335,8 @@ DELIMITER ;
 * VIEWS *
 ---------
 
+1. verify requests view
+
 CREATE VIEW verify_requests AS
 SELECT
     v.verify_id,
@@ -439,6 +441,8 @@ WHERE u.deleted = 0;
 * TRIGGERS *
 ------------
 
+
+
 1. Create a Trigger to Prevent Users from Selecting Themselves
 
 DELIMITER $$
@@ -464,6 +468,10 @@ END$$
 
 DELIMITER ;
 
+
+
+
+
 2. Create a Trigger to automatically create a record in team table when creating a record in work table
 
 DELIMITER $$
@@ -476,5 +484,102 @@ BEGIN
     INSERT INTO team (work_id, created_at, updated_at) 
     VALUES (NEW.work_id, NOW(), NOW());
 END$$
+
+DELIMITER ;
+
+
+3. This trigger automatically updates the status of a work record whenever a team member's status in the team_members table is updated.
+
+DELIMITER $$
+
+CREATE TRIGGER after_team_members_update
+AFTER UPDATE ON team_members
+FOR EACH ROW
+BEGIN
+    DECLARE total_members INT;
+    DECLARE completed_members INT;
+    DECLARE not_started_members INT;
+    DECLARE work_id INT;
+
+    -- Get the work_id for the team
+    SELECT work_id INTO work_id
+    FROM team
+    WHERE team_id = NEW.team_id;
+
+    -- Calculate the total number of team members
+    SELECT COUNT(*) INTO total_members
+    FROM team_members
+    WHERE team_id = NEW.team_id;
+
+    -- Calculate the number of team members with status 'completed'
+    SELECT COUNT(*) INTO completed_members
+    FROM team_members
+    WHERE team_id = NEW.team_id AND status = 'completed';
+
+    -- Calculate the number of team members with status 'not stated'
+    SELECT COUNT(*) INTO not_started_members
+    FROM team_members
+    WHERE team_id = NEW.team_id AND status = 'not stated';
+
+    -- Update the work status based on the counts
+    IF total_members = completed_members THEN
+        UPDATE work
+        SET status = 'completed'
+        WHERE work_id = work_id;
+    ELSEIF total_members = not_started_members THEN
+        UPDATE work
+        SET status = 'not started'
+        WHERE work_id = work_id;
+    ELSE
+        UPDATE work
+        SET status = 'in progress'
+        WHERE work_id = work_id;
+    END IF;
+END $$
+
+DELIMITER ;
+
+4. This trigger automatically updates the status of a team member record whenever a member task's status in the member_task table is updated.
+
+DELIMITER $$
+
+CREATE TRIGGER after_member_tasks_update
+AFTER UPDATE ON member_tasks
+FOR EACH ROW
+BEGIN
+    DECLARE total_tasks INT DEFAULT 0;
+    DECLARE completed_tasks INT DEFAULT 0;
+    DECLARE not_started_tasks INT DEFAULT 0;
+
+    -- Calculate the total number of tasks for the team member
+    SELECT COUNT(*) INTO total_tasks
+    FROM member_tasks
+    WHERE team_member_id = NEW.team_member_id;
+
+    -- Calculate the number of tasks with status 'completed'
+    SELECT COUNT(*) INTO completed_tasks
+    FROM member_tasks
+    WHERE team_member_id = NEW.team_member_id AND status = 'completed';
+
+    -- Calculate the number of tasks with status 'not started'
+    SELECT COUNT(*) INTO not_started_tasks
+    FROM member_tasks
+    WHERE team_member_id = NEW.team_member_id AND status = 'not started';
+
+    -- Update the team member status based on the task statuses
+    IF total_tasks = completed_tasks THEN
+        UPDATE team_members
+        SET status = 'completed'
+        WHERE team_member_id = NEW.team_member_id;
+    ELSEIF total_tasks = not_started_tasks THEN
+        UPDATE team_members
+        SET status = 'not started'
+        WHERE team_member_id = NEW.team_member_id;
+    ELSE
+        UPDATE team_members
+        SET status = 'in progress'
+        WHERE team_member_id = NEW.team_member_id;
+    END IF;
+END $$
 
 DELIMITER ;

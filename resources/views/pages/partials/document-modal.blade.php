@@ -65,114 +65,125 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-    const uploadArea = document.getElementById('uploadArea');
-    const fileInput = document.getElementById('fileInput');
-    const fileList = document.getElementById('fileList');
-    const removedDocumentIdsInput = document.getElementById('removedDocumentIds');
-    const removedDocumentIds = [];
-    const uploadedFiles = new Set(); // To track uploaded files
+    // Select all modals on the page
+    const modals = document.querySelectorAll('.modal');
 
-    // Initialize existing document deletion handlers
-    initializeExistingDocuments();
+    modals.forEach(modal => {
+        const modalId = modal.id;
+        const uploadArea = modal.querySelector('#uploadArea');
+        const fileInput = modal.querySelector('#fileInput');
+        const fileList = modal.querySelector('#fileList');
+        const removedDocumentIdsInput = modal.querySelector('#removedDocumentIds');
+        const removedDocumentIds = [];
+        const uploadedFiles = new Set();
 
-    // Handle click on upload area
-    uploadArea.addEventListener('click', () => {
-        fileInput.click();
-    });
+        if (!uploadArea || !fileInput || !fileList || !removedDocumentIdsInput) {
+            return; // Skip if required elements are not found in this modal
+        }
 
-    // Handle drag and drop events
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        uploadArea.addEventListener(eventName, preventDefaults, false);
-    });
+        // Initialize existing document deletion handlers
+        initializeExistingDocuments(modal);
 
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    ['dragenter', 'dragover'].forEach(eventName => {
-        uploadArea.addEventListener(eventName, () => {
-            uploadArea.classList.add('dragover');
-        });
-    });
-
-    ['dragleave', 'drop'].forEach(eventName => {
-        uploadArea.addEventListener(eventName, () => {
-            uploadArea.classList.remove('dragover');
-        });
-    });
-
-    // Handle file drop
-    uploadArea.addEventListener('drop', (e) => {
-        const files = e.dataTransfer.files;
-        handleFiles(files);
-    });
-
-    // Handle file input change
-    fileInput.addEventListener('change', (e) => {
-        const files = e.target.files;
-        handleFiles(files);
-        fileInput.value = ''; // Reset file input to allow uploading the same file again
-    });
-
-    function handleFiles(files) {
-        [...files].forEach(file => {
-            // Check if file is already uploaded
-            if (!uploadedFiles.has(file.name)) {
-                addFileToList(file);
-                uploadedFiles.add(file.name);
-            }
-        });
-    }
-
-    function addFileToList(file) {
-        const fileItem = document.createElement('div');
-        fileItem.className = 'file-item';
-        
-        const fileURL = URL.createObjectURL(file);
-        const fileExtension = file.name.split('.').pop().toUpperCase();
-
-        fileItem.innerHTML = `
-            <div class="file-info">
-                <span class="file-type">${fileExtension}</span>
-                <span class="file-name">${file.name}</span>
-            </div>
-            <div class="file-actions">
-                <a href="${fileURL}" target="_blank" class="action-btn view">
-                    <i class="fas fa-eye"></i>
-                </a>
-                <button class="action-btn delete">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `;
-
-        const deleteBtn = fileItem.querySelector('.delete');
-        deleteBtn.addEventListener('click', () => {
-            fileItem.remove();
-            URL.revokeObjectURL(fileURL);
-            uploadedFiles.delete(file.name); // Remove from tracked files
+        // Handle click on upload area
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
         });
 
-        fileList.appendChild(fileItem);
-    }
+        // Handle drag and drop events
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+        });
 
-    function initializeExistingDocuments() {
-        document.querySelectorAll('.file-item').forEach(fileItem => {
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, () => {
+                uploadArea.classList.add('dragover');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, () => {
+                uploadArea.classList.remove('dragover');
+            });
+        });
+
+        // Handle file drop
+        uploadArea.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        // Handle file input change
+        fileInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            handleFiles(files);
+            fileInput.value = ''; // Reset file input to allow uploading the same file again
+        });
+
+        function handleFiles(files) {
+            [...files].forEach(file => {
+                // Check if file is already uploaded
+                if (!uploadedFiles.has(file.name)) {
+                    addFileToList(file);
+                    uploadedFiles.add(file.name);
+                }
+            });
+        }
+
+        function addFileToList(file) {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+
+            const fileURL = URL.createObjectURL(file);
+            const fileExtension = file.name.split('.').pop().toUpperCase();
+
+            fileItem.innerHTML = `
+                <div class="file-info">
+                    <span class="file-type">${fileExtension}</span>
+                    <span class="file-name">${file.name}</span>
+                </div>
+                <div class="file-actions">
+                    <a href="${fileURL}" target="_blank" class="action-btn view">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <button class="action-btn delete">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+
             const deleteBtn = fileItem.querySelector('.delete');
-            if (deleteBtn) {
-                deleteBtn.addEventListener('click', () => {
-                    const documentId = fileItem.dataset.docId;
-                    if (documentId) {
-                        removedDocumentIds.push(documentId);
-                        if (removedDocumentIdsInput) {
-                            removedDocumentIdsInput.value = JSON.stringify(removedDocumentIds);
+            deleteBtn.addEventListener('click', () => {
+                fileItem.remove();
+                URL.revokeObjectURL(fileURL);
+                uploadedFiles.delete(file.name); // Remove from tracked files
+            });
+
+            fileList.appendChild(fileItem);
+        }
+
+        function initializeExistingDocuments(modal) {
+            modal.querySelectorAll('.file-item').forEach(fileItem => {
+                const deleteBtn = fileItem.querySelector('.delete');
+                if (deleteBtn) {
+                    deleteBtn.addEventListener('click', () => {
+                        const documentId = fileItem.dataset.docId;
+                        if (documentId) {
+                            removedDocumentIds.push(documentId);
+                            if (removedDocumentIdsInput) {
+                                removedDocumentIdsInput.value = JSON.stringify(removedDocumentIds);
+                            }
                         }
-                    }
-                    fileItem.remove();
-                });
-            }
-        });
-    }
+                        fileItem.remove();
+                    });
+                }
+            });
+        }
+    });
 });
+
 </script>

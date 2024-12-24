@@ -145,3 +145,14 @@ Route::post('/documents/update/{workId}', [DocumentController::class, 'updateDoc
 
 
 // Route::post('/documents/update', [DocumentController::class, 'store'])->name('documents.update');
+
+use App\Http\Controllers\MemberTaskController;
+
+Route::post('/tasks/store', [MemberTaskController::class, 'store'])->name('tasks.store');
+Route::put('/tasks/{member_task_id}/update', [MemberTaskController::class, 'update'])->name('tasks.update');
+Route::delete('/tasks/{member_task_id}/delete', [MemberTaskController::class, 'destroy'])->name('tasks.delete');
+Route::get('/teams/members', [MemberTaskController::class, 'getTeamsWithMembers'])->name('teams.members');
+
+use App\Http\Controllers\WorkStatusController;
+
+Route::put('/work/{workId}/update-status', [WorkStatusController::class, 'updateWorkStatus'])->name('work.updateStatus');

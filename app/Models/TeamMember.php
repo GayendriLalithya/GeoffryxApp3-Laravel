@@ -35,5 +35,11 @@ public function professional()
     return $this->belongsTo(Professional::class, 'user_id', 'user_id');
 }
 
+public function memberTasks()
+{
+    return $this->hasMany(MemberTask::class, 'team_member_id');
+}
+
+
 
 }
