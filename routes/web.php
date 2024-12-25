@@ -161,3 +161,5 @@ use App\Http\Controllers\PendingProfessionalController;
 
 // Route for deleting a pending professional
 Route::post('/pending-professional/{pending_prof_id}/delete', [PendingProfessionalController::class, 'destroy'])->name('pendingProfessional.delete');
+
+Route::post('/pending-professional/add', [PendingProfessionalController::class, 'add'])->name('pendingProfessional.add');

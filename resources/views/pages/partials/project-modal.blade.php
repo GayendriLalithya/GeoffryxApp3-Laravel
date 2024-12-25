@@ -33,36 +33,7 @@ $paymentExists = Payment::where('work_id', $workId)->exists();
     
 @endphp
 
-<style>
-    /* Rating stars */
-
-.rating-box {
-    position: relative;
-    background: #fff;
-    /* padding: 15px 25px 20px; */
-    border-radius: 25px;
-    /* box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05); */
-  }
-  
-  .rating-box .stars {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-  .stars i {
-    color: #e6e6e6;
-    font-size: 25px;
-    cursor: pointer;
-    transition: color 0.2s ease;
-  }
-  .stars i.active {
-    color: #ff9c1a;
-  }
-
-  .modal-card{
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-</style>
+<link rel="stylesheet" href="{{ asset('resources/css/project-modal.css') }}">
 
 @if ($pendingProfessionals->isNotEmpty())
     <div class="modal fade" id="{{ $modalId }}" tabindex="-1">
@@ -226,28 +197,43 @@ $paymentExists = Payment::where('work_id', $workId)->exists();
                     @endif
 
                     <!-- Add Member Section -->
-                    <h5 class="mt-4 mb-4">Add Members</h5>
                     <div class="row mt-2">
                         <div class="col">
-                            <select class="form-select" id="memberType">
-                                <option value="">Professional Type</option>
-                                <option value="Charted Architect">Charted Architect</option>
-                                <option value="Structural Engineer">Structural Engineer</option>
-                                <option value="Contractor">Contractor</option>
-                            </select>
-                        </div>
-                        <div class="col">
-                            <input type="text" class="form-control" id="memberName" placeholder="Name" list="nameSuggestions">
-                            <datalist id="nameSuggestions">
-                                @foreach ($allProfessionals as $professional)
-                                    <option value="{{ $professional->user->name }}"></option>
-                                @endforeach
-                            </datalist>
-                        </div>
-                        <div class="col-auto">
-                            <button class="btn btn-teal" id="addMemberButton">Add</button>
+                            <form method="POST" action="{{ route('pendingProfessional.add') }}" id="addProfessionalForm">
+                                @csrf
+                                <div class="search-container">
+                                    <input type="text" 
+                                           class="form-control member-search" 
+                                           placeholder="Search by Name" 
+                                           name="search_name"
+                                           data-project-id="{{ $workId }}"
+                                           autocomplete="off">
+                                    <input type="hidden" id="selected_professional_id" name="professional_id">
+                                    <input type="hidden" name="work_id" value="{{ $workId }}">
+                                    <button type="submit" class="btn btn-teal add-btn" id="addMemberBtn">Add</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
+                                        
+                    <!-- Professionals List Section -->
+                    <div class="professionals-list" data-project-id="{{ $workId }}">
+                        @foreach ($allProfessionals as $professional)
+                            <div class="professional-item" 
+                                 data-name="{{ $professional->user->name }}"
+                                 data-professional-id="{{ $professional->professional_id }}"
+                                 data-user-id="{{ $professional->user->id }}">
+                                <img class="professional-img" 
+                                     src="{{ asset($professional->profile_picture_url ? 'storage/app/public/images/profile_pic/' . $professional->profile_picture_url : 'resources/images/sample.png') }}" 
+                                     alt="Professional photo">
+                                <div class="professional-info">
+                                    <p class="professional-name">{{ $professional->user->name }}</p>
+                                    <p class="professional-title">{{ $professional->type }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
 
                 </div>
 
@@ -354,175 +340,4 @@ $paymentExists = Payment::where('work_id', $workId)->exists();
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 
-<script>
-    document.getElementById('memberType').addEventListener('change', async function () {
-        const type = this.value;
-        const nameSuggestions = document.getElementById('nameSuggestions');
-
-        // Clear existing suggestions
-        nameSuggestions.innerHTML = '';
-
-        if (type) {
-            try {
-                const response = await fetch(`/professionals-by-type?type=${encodeURIComponent(type)}`);
-                const professionals = await response.json();
-
-                professionals.forEach(professional => {
-                    const option = document.createElement('option');
-                    option.value = professional.name;
-                    nameSuggestions.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Error fetching professionals:', error);
-            }
-        }
-    });
-</script>
-
-<script>
-document.getElementById('confirmCompletionButton')?.addEventListener('click', async function() {
-    try {
-        const response = await fetch("{{ route('work.confirmCompletion', ['workId' => $workId]) }}", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-        });
-        if (response.ok) {
-            document.getElementById('confirmCompletionButton').classList.add('d-none');
-            document.getElementById('completionSuccessAlert').classList.remove('d-none');
-        }
-    } catch (error) {
-        console.error('Error confirming project completion:', error);
-    }
-});
-
-// Ratings section
-
-// Helper function to set stars based on the rating
-function setStars(ratingBox, count) {
-  const stars = ratingBox.querySelectorAll(".stars i");
-  stars.forEach((star, index) => {
-    star.classList.toggle("active", index < count);
-  });
-}
-
-// Reset star ratings for all fields
-function resetStars() {
-  const ratingBoxes = document.querySelectorAll(".rating-box");
-  ratingBoxes.forEach((ratingBox) => {
-    setStars(ratingBox, 0); // Unmark all stars
-    const inputField = ratingBox.dataset.field;
-    if (inputField) {
-      document.getElementById(inputField).value = 0; // Reset hidden input value
-    }
-  });
-}
-
-// Add click event listeners to manage star interactions
-function initializeRatingBoxes() {
-  const ratingBoxes = document.querySelectorAll(".rating-box");
-  ratingBoxes.forEach((ratingBox) => {
-    const stars = ratingBox.querySelectorAll(".stars i");
-    const inputField = ratingBox.dataset.field;
-
-    stars.forEach((star, index) => {
-      star.addEventListener("click", () => {
-        setStars(ratingBox, index + 1); // Update the stars
-        if (inputField) {
-          document.getElementById(inputField).value = index + 1; // Update the hidden input value
-        }
-      });
-    });
-  });
-}
-
-// Function to collect ratings and comments for submission
-async function submitRatings(workId) {
-  const ratings = [];
-  const modal = document.getElementById(`ratingsModal-${workId}`);
-  const ratingCards = modal.querySelectorAll(".modal-card");
-
-  ratingCards.forEach((card) => {
-    const ratingBox = card.querySelector(".rating-box");
-    const inputField = ratingBox.dataset.field;
-    const rating = document.getElementById(inputField).value;
-    const comments = card.querySelector("textarea").value;
-
-    ratings.push({
-      team_member_id: inputField.split("-")[1], // Extract the team_member_id from the input ID
-      rating,
-      comments,
-    });
-  });
-
-  try {
-    const response = await fetch("{{ route('professional.submitRatings') }}", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-TOKEN": "{{ csrf_token() }}",
-      },
-      body: JSON.stringify({ work_id: workId, ratings }),
-    });
-
-    const result = await response.json();
-    if (result.success) {
-      alert("Ratings submitted successfully!");
-      const modalInstance = bootstrap.Modal.getInstance(modal);
-      modalInstance.hide(); // Close the modal
-      window.location.reload(); // Reload the page to reflect changes
-    } else {
-      alert(result.message || "Failed to submit ratings. Please try again.");
-    }
-  } catch (error) {
-    console.error("Error submitting ratings:", error);
-    alert("An unexpected error occurred. Please try again.");
-  }
-}
-
-// Initialize the rating boxes when the page loads
-document.addEventListener("DOMContentLoaded", initializeRatingBoxes);
-
-// Rating handling js
-
-$('#ratingsForm').on('submit', function(e) {
-    e.preventDefault();
-
-    let formData = {
-        work_id: $('#work_id').val(),
-        ratings: []
-    };
-
-    $('.rating-box').each(function() {
-        let professionalId = $(this).data('professional-id');
-        let rate = $(this).find('input[name="rate"]').val();
-        let comment = $(this).find('textarea[name="comment"]').val();
-
-        formData.ratings.push({
-            professional_id: professionalId,
-            rate: rate,
-            comment: comment
-        });
-    });
-
-    $.ajax({
-        url: '{{ route("professional.submitRatings") }}',
-        method: 'POST',
-        data: JSON.stringify(formData),
-        contentType: 'application/json',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function(response) {
-            alert('Ratings submitted successfully!');
-        },
-        error: function(response) {
-            alert('Failed to submit ratings.');
-        }
-    });
-});
-
-
-</script>
+<script src="{{ asset('resources/js/project-modal.js') }}"></script>

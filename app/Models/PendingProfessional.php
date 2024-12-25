@@ -10,7 +10,17 @@ class PendingProfessional extends Model
     use HasFactory;
 
     protected $table = 'pending_professional';
-    protected $primaryKey = 'pending_prof_id';
+    protected $primaryKey = 'pending_prof_id'; 
+
+    protected $fillable = [
+        'user_id',
+        'professional_id',
+        'work_id',
+        'professional_status',
+        'created_at',
+        'updated_at'
+    ];
+
 
     public function user()
     {

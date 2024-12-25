@@ -53,11 +53,11 @@
     @foreach($professionals as $professional)
         <div class="professional-card" data-id="{{ $professional->professional_id }}">
         @if($professional->profile_picture_url)
-            <img src="{{ asset('storage/app/public/images/profile_pic/' . $professional->profile_picture_url) }}" alt="{{ $professional->user_name ?? 'N/A' }}" class="professional-image">
+            <img src="{{ asset('storage/app/public/images/profile_pic/' . $professional->profile_picture_url) }}" alt="{{ $professional->name ?? 'N/A' }}" class="professional-image">
         @else
             <img src="{{ asset('resources/images/sample.png') }}" alt="Default Profile Picture" class="profile-image">
         @endif
-            <div class="professional-name">{{ $professional->user_name ?? 'N/A' }}</div>
+            <div class="professional-name">{{ $professional->name ?? 'N/A' }}</div>
             <div class="professional-title">{{ $professional->type }}</div>
             <button class="view-more-btn" data-bs-toggle="modal" data-bs-target="#professionalModal-{{ $professional->professional_id }}">View More</button>
 
@@ -68,12 +68,12 @@
                         <div class="modal-body">
                             <div class="profile-header">
                             @if($professional->profile_picture_url)
-                                <img src="{{ asset('storage/app/public/images/profile_pic/' . $professional->profile_picture_url) }}" alt="{{ $professional->user_name ?? 'N/A' }}" class="profile-image">
+                                <img src="{{ asset('storage/app/public/images/profile_pic/' . $professional->profile_picture_url) }}" alt="{{ $professional->name ?? 'N/A' }}" class="profile-image">
                             @else
                                 <img src="{{ asset('resources/images/sample.png') }}" alt="Default Profile Picture" class="profile-image">
                             @endif
                                 <div class="profile-info">
-                                    <h2>{{ $professional->user_name ?? 'N/A' }}</h2>
+                                    <h2>{{ $professional->name ?? 'N/A' }}</h2>
                                     <p>{{ $professional->type }}</p>
                                     <div class="ratings">
                                         <span>{{ $professional->average_rating ?? 'No ratings yet' }} Ratings</span>
