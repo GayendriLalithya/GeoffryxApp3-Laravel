@@ -163,3 +163,10 @@ use App\Http\Controllers\PendingProfessionalController;
 Route::post('/pending-professional/{pending_prof_id}/delete', [PendingProfessionalController::class, 'destroy'])->name('pendingProfessional.delete');
 
 Route::post('/pending-professional/add', [PendingProfessionalController::class, 'add'])->name('pendingProfessional.add');
+
+use App\Http\Controllers\Professional\ReferralController;
+
+// Route::post('/refer-professional', [ReferralController::class, 'manageWorkflow'])->name('refer-professional');
+// Route::post('/manage-referral-workflow', [ReferralController::class, 'manageWorkflow'])->name('manage-referral-workflow');
+
+Route::post('/refer-professional', [ReferralController::class, 'referProfessional'])->name('refer-professional');

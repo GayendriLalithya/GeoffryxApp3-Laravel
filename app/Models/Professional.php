@@ -8,6 +8,8 @@ class Professional extends Model
 {
     protected $table = 'professionals'; // If you're using a custom table name
 
+    protected $primaryKey = 'professional_id';
+
     protected $fillable = [
         'user_id', 'type', 'availability', 'work_location', 'payment_min', 'payment_max', 'preferred_project_size'
     ];

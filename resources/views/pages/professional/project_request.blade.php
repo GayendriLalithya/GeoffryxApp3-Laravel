@@ -3,6 +3,8 @@
 @endsection
 
 @php
+use App\Models\Professional;
+
 // Step 1: Get logged-in user ID
         $userId = Auth::id();
 
@@ -23,6 +25,8 @@
             ->whereIn('work_id', $pendingWorks)
             ->orderBy('created_at', 'desc')
             ->get();
+
+        $allProfessionals = Professional::with('user')->get();
 @endphp
 
 <div class="projects-container">
@@ -78,13 +82,46 @@
                             Reject Work
                         </button>
 
-                        <!-- <button type="button" class="btn-refer">Refer Work</button> -->
+                        <button type="button" class="btn-refer" data-bs-toggle="modal" data-bs-target="#referModal-{{ $project->work_id }}">
+                            Refer Professional
+                        </button>
 
                         <input type="hidden" name="work_id" value="{{ $project->work_id }}">
                         <button type="submit" class="btn-accept">Accept Work</button>
 
                     </div>
                 </form>
+
+                <!-- Modal -->
+                <form id="{{ $project->work_id }}" action="{{ route('refer-professional') }}" method="POST" data-work-id="{{ $project->work_id }}">
+                            @csrf
+                            <input type="hidden" name="work_id" value="{{ $project->work_id }}">
+                            <input type="hidden" id="selected_professional_id" name="selected_professional_id">
+                            <input type="hidden" id="referred_professional_id" name="referred_professional_id" value="{{ Auth::user()->professional->professional_id }}">
+
+                            <div class="modal fade" id="referModal-{{ $project->work_id }}" tabindex="-1" aria-labelledby="referModalLabel-{{ $project->work_id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header border-bottom-0">
+                                            <h5 class="modal-title" id="referModalLabel-{{ $project->work_id }}">Select Professional to Refer</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body pt-0">
+                                        
+                                            @include('pages.partials.professional-list', [
+                                            
+                                                'workId' => $project->work_id // Pass the work_id explicitly
+                                            ])
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary refer-btn" id="referBtn-{{ $project->work_id }}">Refer</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
             </div>
         </div>
         @empty

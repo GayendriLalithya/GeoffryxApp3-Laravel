@@ -100,3 +100,122 @@ body {
     border-radius: 4px;
     border: none;
 }
+
+
+/* Professional Reffering section */
+
+.modal-content {
+    border-radius: 12px;
+    border: none;
+}
+
+.modal-header {
+    padding: 20px 20px 10px;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.btn-close {
+    opacity: 0.7;
+}
+
+.search-container {
+    position: relative;
+    padding: 0 20px;
+}
+
+.member-search {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+}
+
+.member-search:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.1);
+}
+
+.professionals-list {
+    display: none;
+    padding: 0 20px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.professionals-list {
+    display: none;
+}
+
+.professionals-list.show {
+    display: block;
+}
+
+.professional-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+}
+
+.professional-item:last-child {
+    border-bottom: none;
+}
+
+.professional-item:hover {
+    background-color: #f8f9fa;
+}
+
+.professional-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+}
+
+.professional-info {
+    flex-grow: 1;
+}
+
+.professional-name {
+    margin: 0;
+    font-size: 16px;
+    color: #212529;
+    font-weight: 500;
+}
+
+.professional-title {
+    margin: 4px 0 0 0;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.modal-footer {
+    border-top: none;
+    padding: 15px 20px 20px;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+}
+
+.show {
+    display: block;
+}

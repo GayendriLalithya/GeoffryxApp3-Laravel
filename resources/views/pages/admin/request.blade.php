@@ -14,7 +14,7 @@
 
 <!-- Request Cards -->
 <div class="requests-container">
-    @forelse ($verifications as $verify) <!-- $verifications is plural -->
+    @forelse ($verifications as $verify)
         <div class="request-card">
             <div class="request-header">
                 <div class="request-user">
@@ -92,7 +92,9 @@
                 </form>
             </div>
         </div>
-   
+    @empty
+        <p>No verification requests found.</p>
+    @endforelse
 </div>
 
 
@@ -126,8 +128,6 @@
         </div>
     </div>
 </form>
-
-@endforeach
 
 @section('additional-css')
     <script src="{{ asset('resources/js/verify.js') }}"></script>
