@@ -1,7 +1,6 @@
-
 <link rel="stylesheet" href="{{ asset('resources/css/project-modal.css') }}">
 
-<!-- Add Member Section -->
+<!-- Refer professional Section -->
 <div class="row mt-2">
     <div class="col">
         <div class="search-container">
@@ -25,7 +24,7 @@
              data-professional-id="{{ $professional->professional_id }}"
              data-user-id="{{ $professional->user->id }}">
             <img class="professional-img" 
-                 src="{{ asset($professional->profile_picture_url ? 'storage/app/public/images/profile_pic/' . $professional->profile_picture_url : 'resources/images/sample.png') }}" 
+                src="{{ asset('storage/app/public/images/profile_pic/' . $professional->user->profilePicture->profile_pic) }}"
                  alt="Professional photo">
             <div class="professional-info">
                 <p class="professional-name">{{ $professional->user->name }}</p>
