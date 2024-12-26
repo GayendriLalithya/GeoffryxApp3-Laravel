@@ -4,6 +4,7 @@ use App\Models\PendingProfessional;
 use App\Models\WorkHistory;
 use App\Models\Payment;
 use App\Models\Professional;
+use App\Models\Referal;
 
 // Fetch team members for the given work ID
 $team = \App\Models\Team::where('work_id', $workId)->first();
@@ -14,11 +15,15 @@ if ($team) {
         ->get();
 }
 
-
 // Fetch pending professionals with specific statuses
 $pendingProfessionals = PendingProfessional::with(['professional.user']) // Ensure relationships are loaded
     ->where('work_id', $workId)
     ->whereIn('professional_status', ['accepted', 'rejected', 'pending'])
+    ->get();
+
+$referedProfessionals = Referal::with(['professional']) // Ensure relationships are loaded
+    ->where('work_id', $workId)
+    ->whereIn('status', ['pending'])
     ->get();
 
 // Check if the project is completed and if work history exists
@@ -196,6 +201,12 @@ $paymentExists = Payment::where('work_id', $workId)->exists();
 
                     @endif
 
+                    @if ($referedProfessionals->where('status', 'pending')->isNotEmpty())
+                        
+                        @include('pages.partials.mod.refered-professional')
+
+                    @endif
+
                     <!-- Add Member Section -->
                     <div class="row mt-2">
                         <div class="col">
@@ -341,3 +352,4 @@ $paymentExists = Payment::where('work_id', $workId)->exists();
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 
 <script src="{{ asset('resources/js/project-modal.js') }}"></script>
+<script src="{{ asset('resources/js/rating.js') }}"></script>

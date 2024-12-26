@@ -40,16 +40,27 @@ class Referal extends Model
      */
     public function work()
     {
-        return $this->belongsTo(Work::class, 'work_id', 'id');
+        return $this->belongsTo(Work::class, 'work_id', 'work_id');
     }
 
     public function professional()
     {
-        return $this->belongsTo(Professional::class, 'professional_id', 'id');
+        return $this->belongsTo(Professional::class, 'professional_id', 'professional_id');
     }
 
     public function reference()
     {
-        return $this->belongsTo(Reference::class, 'reference_id', 'id');
+        return $this->belongsTo(Reference::class, 'reference_id', 'reference_id');
     }
+
+    
+    // public function work()
+    // {
+    //     return $this->belongsTo(Work::class);
+    // }
+
+    // public function reference()
+    // {
+    //     return $this->belongsTo(Reference::class);
+    // }
 }

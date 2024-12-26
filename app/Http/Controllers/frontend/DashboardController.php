@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function showDashboard(Request $request)
     {
-        $defaultTab = 'profile';
+        $defaultTab = 'projects';
         $availableTabs = [
             'requests' => [
                 'view' => 'pages.admin.request',

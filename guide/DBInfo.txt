@@ -369,6 +369,96 @@ END $$
 
 DELIMITER ;
 
+11. Stord Procedure to do the refer work section cutomer approval
+
+DELIMITER //
+
+CREATE PROCEDURE sp_accept_referral(IN p_referral_id INT)
+BEGIN
+    DECLARE v_work_id INT;
+    DECLARE v_reference_id INT;
+    DECLARE v_professional_id INT;
+    DECLARE v_work_owner_id INT;
+    DECLARE v_work_name VARCHAR(255);
+    DECLARE v_referrer_name VARCHAR(255);
+    DECLARE v_professional_user_id INT;
+    
+    -- Get referral details
+    SELECT work_id, reference_id, professional_id 
+    INTO v_work_id, v_reference_id, v_professional_id
+    FROM referrals 
+    WHERE referral_id = p_referral_id;
+    
+    -- Get work details
+    SELECT user_id, name 
+    INTO v_work_owner_id, v_work_name
+    FROM work 
+    WHERE work_id = v_work_id;
+    
+    -- Get professional's user ID
+    SELECT user_id 
+    INTO v_professional_user_id
+    FROM professionals 
+    WHERE professional_id = (SELECT professional_id FROM reference WHERE reference_id = v_reference_id);
+    
+    -- Get referrer's name (through multiple joins)
+    SELECT users.name 
+    INTO v_referrer_name
+    FROM referrals 
+    JOIN professionals ON referrals.professional_id = professionals.professional_id
+    JOIN users ON professionals.user_id = users.id
+    WHERE referral_id = p_referral_id;
+    
+    -- Start transaction
+    START TRANSACTION;
+    
+    -- Update referral status
+    UPDATE referrals 
+    SET status = 'accepted',
+        updated_at = NOW()
+    WHERE referral_id = p_referral_id;
+    
+    -- Create pending professional record
+    INSERT INTO pending_professional (
+        user_id,
+        professional_id,
+        work_id,
+        professional_status,
+        created_at,
+        updated_at
+    ) VALUES (
+        v_work_owner_id,
+        (SELECT professional_id FROM reference WHERE reference_id = v_reference_id),
+        v_work_id,
+        'pending',
+        NOW(),
+        NOW()
+    );
+    
+    -- Create notification
+    INSERT INTO notifications (
+        user_id,
+        title,
+        message,
+        status,
+        created_at,
+        updated_at
+    ) VALUES (
+        v_professional_user_id,
+        'Referred Work',
+        CONCAT('You have been referred to the project ', v_work_name, ' by ', v_referrer_name, '. Visit the Project Requests Page.'),
+        'unread',
+        NOW(),
+        NOW()
+    );
+    
+    COMMIT;
+    
+END //
+
+DELIMITER ;
+
+
 
 
 * VIEWS *

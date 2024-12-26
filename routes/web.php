@@ -170,3 +170,16 @@ use App\Http\Controllers\Professional\ReferralController;
 // Route::post('/manage-referral-workflow', [ReferralController::class, 'manageWorkflow'])->name('manage-referral-workflow');
 
 Route::post('/refer-professional', [ReferralController::class, 'referProfessional'])->name('refer-professional');
+
+use App\Http\Controllers\User\ReferController;
+
+// Route::post('/referrals/accept/{id}', [ReferController::class, 'acceptReferral'])->name('referral.accept');
+// Route::put('/referral/{id}/reject', [ReferController::class, 'reject'])->name('referral.reject');
+
+
+
+Route::put('/referral/accept/{referral_id}', [ReferController::class, 'acceptReferral'])->name('referral.accept');
+
+// Route::put('/referral/accept/{referral_id}', [ReferController::class, 'acceptReferral'])->name('referral.accept');
+
+Route::put('/referral/reject/{id}', [ReferController::class, 'reject'])->name('referral.reject');
