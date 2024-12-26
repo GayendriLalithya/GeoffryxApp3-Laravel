@@ -353,4 +353,5 @@ $allProfessionals = Professional::with(['user.profilePicture'])->get();
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 
 <script src="{{ asset('resources/js/project-modal.js') }}"></script>
+<script src="{{ asset('resources/js/work-control.js') }}"></script>
 <script src="{{ asset('resources/js/rating.js') }}"></script>

@@ -124,36 +124,33 @@ use App\Models\Professional;
                         </form>
             </div>
         </div>
-        @empty
-            <p>No pending project requests found.</p>
-        @endforelse
+        
 
-    </div>
-</div> 
-
-<form action="{{ route('reject-work') }}" method="POST">
+    <form action="{{ route('reject-work') }}" method="POST">
     @csrf
-    <!-- Single Modal for all records -->
     <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="rejectModalLabel">
-                        <i class="fas fa-times-circle text-danger me-2"></i>
-                        Reason for rejection
-                    </h5>
+                    <h5 class="modal-title" id="rejectModalLabel">Reason for Rejection</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <input type="hidden" name="work_id" id="rejectWorkId">
-                        <textarea class="form-control" id="reasonTextarea" rows="4" placeholder="Please provide the reason for rejection..."></textarea>
+                        <textarea 
+                            class="form-control" 
+                            name="reason" 
+                            id="reasonTextarea" 
+                            rows="4" 
+                            placeholder="Please provide the reason for rejection..."
+                            required
+                        ></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-danger" onclick="submitRejection()">
-                        <i class="fas fa-paper-plane me-2"></i>
+                    <button type="submit" class="btn btn-danger">
                         Submit Rejection
                     </button>
                 </div>
@@ -161,6 +158,37 @@ use App\Models\Professional;
         </div>
     </div>
 </form>
+
+
+@empty
+            <p>No pending project requests found.</p>
+        @endforelse
+
+    </div>
+</div> 
+
+@section('additonal-js')
+
+<script>
+    document.querySelectorAll('.btn-reject').forEach(button => {
+    button.addEventListener('click', function () {
+        const workId = button.getAttribute('data-work-id');
+        document.getElementById('rejectWorkId').value = workId;
+    });
+});
+
+function validateAndSubmitRejection() {
+    const reason = document.getElementById('reasonTextarea').value.trim();
+    if (!reason) {
+        alert('Please provide a reason for rejection.');
+        return false;
+    }
+    return true;
+}
+
+</script>
+
+@endsection
 
 @section('additional-css')
     <script src="{{ asset('resources/js/verify.js') }}"></script>

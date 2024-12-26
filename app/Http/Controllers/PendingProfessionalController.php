@@ -39,43 +39,55 @@ class PendingProfessionalController extends Controller
     $professionalId = $validatedData['professional_id'];
     $workId = $validatedData['work_id'];
 
-    // Retrieve work
-    $work = Work::find($workId);
-    if (!$work) {
-        return back()->with('alert-error', 'Work not found.');
-    }
+    try {// Retrieve work
+        $work = Work::find($workId);
+        if (!$work) {
+            return back()->with('alert-error', 'Work not found.');
+        }
 
-    $userId = $work->user_id;
+        $userId = $work->user_id;
 
-    // Check if user is trying to add themselves
-    $professional = Professional::where('professional_id', $professionalId)->first();
-    if ($professional && $professional->user_id === $loggedInUserId) {
-        return back()->with('alert-error', 'Cannot select yourself as a professional for the project.');
-    }
+        // Check if user is trying to add themselves
+        $professional = Professional::where('professional_id', $professionalId)->first();
+        if ($professional && $professional->user_id === $loggedInUserId) {
+            return back()->with('alert-error', 'Cannot select yourself as a professional for the project.');
+        }
 
-    // Check for existing pending or rejected record
-    $existingRecord = PendingProfessional::where('work_id', $workId)
-        ->where('professional_id', $professionalId)
-        ->first();
+        // Check for existing pending or rejected record
+        $existingRecord = PendingProfessional::where('work_id', $workId)
+            ->where('professional_id', $professionalId)
+            ->first();
 
-    if ($existingRecord) {
-        if ($existingRecord->professional_status === 'pending') {
-            return back()->with('alert-error', 'This professional is already pending for this project.');
-        } elseif ($existingRecord->professional_status === 'rejected') {
-            return back()->with('alert-error', 'This professional has previously rejected this project.');
+        if ($existingRecord) {
+            if ($existingRecord->professional_status === 'pending') {
+                return back()->with('alert-error', 'This professional is already pending for this project.');
+            } elseif ($existingRecord->professional_status === 'rejected') {
+                return back()->with('alert-error', 'This professional has previously rejected this project.');
+            }
+        }
+
+        // If no existing record found, create new one
+        PendingProfessional::create([
+            'user_id' => $userId,
+            'professional_id' => $professionalId,
+            'work_id' => $workId,
+            'professional_status' => 'pending',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return back()->with('alert-success', 'Professional added to pending list successfully');
+    } catch (\Illuminate\Database\QueryException $e) {
+            // Handle duplicate entry error
+            if ($e->getCode() == 23000) { // SQLSTATE[23000]: Integrity constraint violation
+                return back()->with('alert-error', 'This professional is already assigned to this project.');
+            }
+
+            // Handle other database errors
+            return back()->with('alert-error', 'An unexpected database error occurred.');
+        } catch (\Exception $e) {
+            // Handle general exceptions
+            return back()->with('alert-error', 'An unexpected error occurred.');
         }
     }
-
-    // If no existing record found, create new one
-    PendingProfessional::create([
-        'user_id' => $userId,
-        'professional_id' => $professionalId,
-        'work_id' => $workId,
-        'professional_status' => 'pending',
-        'created_at' => now(),
-        'updated_at' => now(),
-    ]);
-
-    return back()->with('alert-success', 'Professional added to pending list successfully');
-}
 }

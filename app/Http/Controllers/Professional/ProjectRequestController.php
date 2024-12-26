@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+// use Illuminate\Support\Facades\Exception;
+use Illuminate\Support\Facades\Validator;
+
 
 class ProjectRequestController extends Controller
 {
@@ -52,7 +56,7 @@ class ProjectRequestController extends Controller
             // Redirect back with a success alert
             return redirect()->route('user.dashboard', ['tab' => 'manage_projects'])
                              ->with('alert-success', 'Work accepted and added to the team successfully.');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Log the exception for debugging
             Log::error('Error accepting work: ' . $e->getMessage());
 
@@ -101,7 +105,7 @@ class ProjectRequestController extends Controller
             // Redirect back with a success alert
             return redirect()->route('user.dashboard', ['tab' => 'professional'])
                              ->with('alert-success', 'The work was successfully rejected, and the notification was sent.');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Log the exception for debugging
             Log::error('Error rejecting work: ' . $e->getMessage());
 

@@ -13,6 +13,8 @@
 @endphp
 
 <!-- Request Cards -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <div class="requests-container">
     @forelse ($verifications as $verify)
         <div class="request-card">
@@ -92,42 +94,94 @@
                 </form>
             </div>
         </div>
-    @empty
-        <p>No verification requests found.</p>
-    @endforelse
-</div>
+    
 
 
 <form method="POST" action="{{ route('requests.reject', ['verify_id' => $verify->verify_id]) }}" id="rejectForm">
     @csrf
-    <!-- Single Modal for all records -->
     <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="rejectModalLabel">
-                        <i class="fas fa-times-circle text-danger me-2"></i>
-                        Reason for rejection
-                    </h5>
+                    <h5 class="modal-title" id="rejectModalLabel">Reason for rejection</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <input type="hidden" id="currentRecordId">
-                        <textarea class="form-control" id="reasonTextarea" rows="4" placeholder="Please provide the reason for rejection..."></textarea>
+                        <input type="hidden" id="currentRecordId" name="verify_id" value="{{ $verify->verify_id }}">
+                        <textarea
+                            class="form-control"
+                            id="reasonTextarea"
+                            name="reason"
+                            rows="4"
+                            placeholder="Please provide the reason for rejection..."
+                        ></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-danger" onclick="submitRejection()">
-                        <i class="fas fa-paper-plane me-2"></i>
-                        Submit Rejection
-                    </button>
+                    <button type="submit" class="btn btn-danger" onclick="submitRejection()">Submit Rejection</button>
                 </div>
             </div>
         </div>
     </div>
 </form>
+
+@empty
+        <p>No verification requests found.</p>
+    @endforelse
+</div>
+
+@section('additonal-js')
+
+<script>
+    // When the Reject Request button is clicked
+    function toggleRejectModal(button) {
+        var recordId = button.getAttribute('data-record-id');
+        document.getElementById('currentRecordId').value = recordId;
+        var modal = new bootstrap.Modal(document.getElementById('rejectModal'));
+        modal.show();
+    }
+
+    // Submit rejection
+    function submitRejection() {
+        const reason = document.getElementById('reasonTextarea').value; // Rejection reason
+        const recordId = document.getElementById('currentRecordId').value; // Current record ID
+
+        if (!reason) {
+            alert('Please provide a reason for rejection.');
+            return;
+        }
+
+        // Create FormData with CSRF token and rejection reason
+        const formData = new FormData();
+        formData.append('reason', reason); // Add the rejection reason
+        formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content')); // CSRF token
+
+        // Send the data via fetch
+        fetch(/requests/reject/${recordId}, {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('Request rejected successfully!');
+                const modal = bootstrap.Modal.getInstance(document.getElementById('rejectModal'));
+                modal.hide();
+                location.reload();
+            } else {
+                alert(An error occurred: ${data.message});
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            alert('Something went wrong. Please try again.');
+        });
+    }
+</script>
+
+@endsection
 
 @section('additional-css')
     <script src="{{ asset('resources/js/verify.js') }}"></script>

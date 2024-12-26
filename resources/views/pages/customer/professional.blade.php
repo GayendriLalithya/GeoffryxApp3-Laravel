@@ -36,7 +36,7 @@
                 <option value="all" {{ $type == 'all' ? 'selected' : '' }}>All</option>
                 <option value="charted architect" {{ $type == 'charted architect' ? 'selected' : '' }}>Chartered Architect</option>
                 <option value="structural engineer" {{ $type == 'structural engineer' ? 'selected' : '' }}>Structural Engineer</option>
-                <option value="constructor" {{ $type == 'constructor' ? 'selected' : '' }}>Constructor</option>
+                <option value="constructor" {{ $type == 'constructor' ? 'selected' : '' }}>Contractor</option>
             </select>
             <input type="text" name="name" class="form-control" placeholder="Search by Name">
             <button type="submit" class="btn search-btn">
