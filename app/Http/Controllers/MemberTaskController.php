@@ -46,7 +46,7 @@ class MemberTaskController extends Controller
         $task = MemberTask::where('member_task_id', $member_task_id)->firstOrFail();
 
         $validated = $request->validate([
-            'status' => 'required|in:not started,in progress,done',
+            'status' => 'required|in:not started,in progress,completed',
             'amount' => 'required|numeric|min:0',
         ]);
 

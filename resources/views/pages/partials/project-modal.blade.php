@@ -227,9 +227,7 @@ $allProfessionals = Professional::with(['user.profilePicture'])->get();
                             </form>
                         </div>
                     </div>
-
-                    
-                                        
+          
                     <!-- Professionals List Section -->
                     <div class="professionals-list" data-project-id="{{ $workId }}">
                         @foreach ($allProfessionals as $professional)

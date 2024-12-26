@@ -11,7 +11,6 @@
                    data-project-id="{{ $workId }}"
                    autocomplete="off">
             <input type="hidden" name="work_id" value="{{ $workId }}">
-            <!-- <button type="submit" class="btn btn-teal add-btn" id="addMemberBtn">Add</button> -->
         </div>
     </div>
 </div>
@@ -22,7 +21,7 @@
         <div class="professional-item" 
              data-name="{{ $professional->user->name }}"
              data-professional-id="{{ $professional->professional_id }}"
-             data-user-id="{{ $professional->user->id }}">
+             data-user-id="{{ $professional->user->user_id }}">
             <img class="professional-img" 
                 src="{{ asset('storage/app/public/images/profile_pic/' . $professional->user->profilePicture->profile_pic) }}"
                  alt="Professional photo">
