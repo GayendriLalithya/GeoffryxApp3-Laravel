@@ -17,8 +17,11 @@ class Work extends Model
         'user_id',
         'location',
         'budget',
-        'due_date',
+        'start_date',
+        'end_date',
+        'status',
     ];
+
 
     public function user()
     {
