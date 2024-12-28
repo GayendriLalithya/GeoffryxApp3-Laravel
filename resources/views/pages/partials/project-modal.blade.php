@@ -72,6 +72,7 @@ $allProfessionals = Professional::with(['user.profilePicture'])->get();
                             </button>
                         </div>
                     @endif
+                    
 
                     <!-- Success alert -->
                     <div class="alert alert-success d-none" id="completionSuccessAlert">
@@ -271,7 +272,8 @@ $allProfessionals = Professional::with(['user.profilePicture'])->get();
             </div>
             <div class="modal-body">
                 <!-- Repeating section for each member -->
-                <form method="POST" action="{{ route('professional.submitRatings') }}">
+                <!-- <form method="POST" action="{{ route('professional.submitRatings') }}"> -->
+                <form>
                     @csrf
                     <input type="hidden" name="work_id" value="{{ $project->work_id }}">
                     @foreach ($teamMembers as $teamMember)

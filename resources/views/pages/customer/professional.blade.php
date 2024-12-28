@@ -27,6 +27,37 @@
     }
 @endphp
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .work-history {
+            max-width: 800px;
+            margin: 20px auto;
+            font-family: Arial, sans-serif;
+        }
+        .project-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h4 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        h5 {
+            color: #444;
+            margin: 0 0 10px 0;
+        }
+        .star {
+            color: #ddd;
+            margin-right: 2px;
+        }
+        .star.filled {
+            color: #ffd700;
+        }
+    </style>
+
 
 <div class="search-container">
     <form method="POST">
@@ -93,28 +124,7 @@
 
                             <div class="work-history">
                                 <h4>Work History and Ratings</h4>
-                                @if(isset($professional->workHistory) && is_array($professional->workHistory))
-                                    @forelse($professional->work_history as $project)
-                                        <div class="project-card">
-                                            <h5>{{ $project->project_name }}</h5>
-                                            <div>
-                                                <p>{{ $project->description }}</p>
-                                                <div>
-                                                    @for($i = 0; $i < (int) $project->rating; $i++)
-                                                        <span class="star filled"><i class="fas fa-star"></i></span>
-                                                    @endfor
-                                                    @for($i = $project->rating; $i < 5; $i++)
-                                                        <span class="star"><i class="fas fa-star"></i></span>
-                                                    @endfor
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @empty
-                                        <p>No work history available.</p>
-                                    @endforelse
-                                @else
-                                    <p>No work history available.</p>
-                                @endif
+                                <div id="projectContainer"></div>
                             </div>
 
                             <div class="action-buttons">
@@ -321,3 +331,71 @@
         }
     }
 </script>
+
+<script>
+        // Sample project data
+        const projects = [
+            {
+                project_name: "Kitchen Renovation",
+                description: "Complete kitchen remodel including new cabinets, countertops, and appliances.",
+                rating: 5
+            },
+            {
+                project_name: "Bathroom Remodeling",
+                description: "Full bathroom renovation with modern fixtures and custom tilework.",
+                rating: 4
+            },
+            {
+                project_name: "Home Theater Installation",
+                description: "Custom home theater setup with premium audio-visual equipment.",
+                rating: 5
+            }
+        ];
+
+        // Function to generate random rating
+        function getRandomRating() {
+            return Math.floor(Math.random() * 5) + 1;
+        }
+
+        // Function to create star rating HTML
+        function createStarRating(rating) {
+            let starsHTML = '';
+            for (let i = 0; i < 5; i++) {
+                if (i < rating) {
+                    starsHTML += '<span class="star filled"><i class="fas fa-star"></i></span>';
+                } else {
+                    starsHTML += '<span class="star"><i class="fas fa-star"></i></span>';
+                }
+            }
+            return starsHTML;
+        }
+
+        // Function to display projects
+        function displayProjects() {
+            const container = document.getElementById('projectContainer');
+            
+            if (projects.length === 0) {
+                container.innerHTML = '<p>No work history available.</p>';
+                return;
+            }
+
+            projects.forEach(project => {
+                // Assign random rating
+                project.rating = getRandomRating();
+                
+                const projectCard = document.createElement('div');
+                projectCard.className = 'project-card';
+                projectCard.innerHTML = `
+                    <h5>${project.project_name}</h5>
+                    <div>
+                        <p>${project.description}</p>
+                        <div>${createStarRating(project.rating)}</div>
+                    </div>
+                `;
+                container.appendChild(projectCard);
+            });
+        }
+
+        // Initialize the display when page loads
+        window.onload = displayProjects;
+    </script>

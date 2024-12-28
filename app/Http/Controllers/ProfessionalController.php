@@ -191,4 +191,25 @@ public function getProfessionalDetails($professionalId)
     ]);
 }
 
+public function getProfessionalWorkHistory($professionalId)
+{
+    // Fetch the professional's work history using their ID
+    $workHistory = DB::table('rating')
+        ->join('work', 'rating.work_id', '=', 'work.work_id')
+        ->where('rating.professional_id', $professionalId)
+        ->select(
+            'work.name as project_name',
+            'work.description as project_description',
+            'rating.rate as rating',
+            'rating.comment as comment'
+        )
+        ->get();
+
+    return response()->json([
+        'status' => 'success',
+        'data' => $workHistory
+    ]);
+}
+
+
 }
